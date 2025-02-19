@@ -1,0 +1,2 @@
+E:/projects/local_tammoz_chat/android/app/.cxx/Debug/p6d3y4p3/arm64-v8a/CMakeFiles/edit_cache.dir
+E:/projects/local_tammoz_chat/android/app/.cxx/Debug/p6d3y4p3/arm64-v8a/CMakeFiles/rebuild_cache.dir

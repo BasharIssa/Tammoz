@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "342747963499",
+    "project_id": "localtammoz",
+    "storage_bucket": "localtammoz.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342747963499:android:aa2541f5f0b86b827ed12e",
+        "android_client_info": {
+          "package_name": "com.yourcompany.local_tammoz_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAak8mEFzBpGKE431TJsOdrzWOWji2zgzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
