@@ -9,6 +9,7 @@ import '../../presentation/bloc/setup_expense_bloc.dart';
 import '../../data/local/local_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../data/data_sources/firebase_expense_datasource.dart';
+//import 'package:connectivity_plus/connectivity_plus.dart'; // أضيفت حزمة جديدة
 
 
 final getIt = GetIt.instance;
@@ -40,6 +41,7 @@ void setupLocator() {
   getIt.registerLazySingleton(() => UpdateSetupExpense(getIt<SetupExpenseRepository>()));
 
   // تسجيل SetupExpenseBloc الذي يعتمد على SetupExpenseRepository
+
   getIt.registerFactory<SetupExpenseBloc>(
         () => SetupExpenseBloc(),
   );

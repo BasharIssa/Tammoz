@@ -55,6 +55,7 @@ dependencies:
   cloud_firestore: ^5.6.3
   #id generator
   uuid: ^4.5.1
+  connectivity_plus: ^6.1.3
 
 
 

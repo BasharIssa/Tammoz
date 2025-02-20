@@ -20,10 +20,12 @@ class SetupExpenseBloc extends Bloc<SetupExpenseEvent, SetupExpenseState> {
     on<AddSetupExpenseEvent>((event, emit) async {
       try {
         await getIt<SetupExpenseRepository>().addExpense(event.expense);
+        // يمكن إضافة حالة Loading أثناء التحديث*1
+        emit(SetupExpenseLoading());
         final expenses = await getIt<SetupExpenseRepository>().getAllExpenses();
         emit(SetupExpenseLoaded(expenses));
       } catch (e) {
-        emit(SetupExpenseError(e.toString()));
+        emit(SetupExpenseError('فشل الإضافة: ${e.toString()}'));
       }
     });
 
