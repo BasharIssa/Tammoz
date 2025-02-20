@@ -10,6 +10,7 @@ class SetupExpense extends Equatable {
   final double cost;
   final DateTime date;
 
+
   const SetupExpense({
     this.id,
     required this.globalId,
@@ -19,6 +20,7 @@ class SetupExpense extends Equatable {
     this.materialName,
     required this.cost,
     required this.date,
+
   });
 
   @override
