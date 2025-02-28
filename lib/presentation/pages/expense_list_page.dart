@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 // استيراد ملف GetIt
+import '../../core/injection/service_locator.dart';
 import '../bloc/setup_expense_bloc.dart';
 import '../bloc/setup_expense_event.dart';
 import '../bloc/setup_expense_state.dart';
@@ -52,7 +53,7 @@ class ExpenseListPage extends StatelessWidget {
                       : 'بعض البيانات غير مزامنة - اضغط للمزامنة',
                   onPressed: () {
                     // عند الضغط، إطلاق حدث المزامنة اليدوية
-                    context.read<SetupExpenseBloc>().add(SyncExpensesEvent());
+                    getIt<SetupExpenseBloc>().add(SyncExpensesEvent());
                   },
                 );
               }

@@ -7,7 +7,7 @@ import '../../domain/repositories/setup_expense_repository.dart';
 import '../local/local_database.dart';
 import '../data_sources/firebase_expense_datasource.dart';
 import '../mappers/expense_mapper.dart'; // دوال التحويل بين ExpenseDTO والكيان
-import '../models/expense_dto.dart';     // نموذج ExpenseDTO
+//import '../models/expense_dto.dart';     // نموذج ExpenseDTO
 
 class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
   final LocalDatabase _localDb = getIt<LocalDatabase>();
@@ -44,12 +44,10 @@ class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
 
   @override
   Future<int> addExpense(SetupExpense expense) async {
-    // تحويل كيان Domain إلى ExpenseDTO باستخدام المابر (toDTO)
-    final expenseDTO = toDTO(expense);
     // إضافة المصروف محلياً أولاً
     final id = await _localDb.into(_localDb.setupExpenseTable).insert(_toCompanion(expense));
     // إرسال المصروف إلى Firestore
-    await _firebaseDS.addExpense(expenseDTO);
+    await _firebaseDS.addExpense(toDTO(expense));
     return id;
   }
 
