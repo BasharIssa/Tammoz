@@ -1,58 +1,42 @@
+// data/data_sources/firebase_expense_datasource.dart
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../domain/entities/setup_expense.dart';
-import 'package:local_tammoz_chat/core/injection/service_locator.dart';
+import '../../core/injection/service_locator.dart';
+import '../models/expense_dto.dart';
 
 class FirebaseExpenseDataSource {
-
-  /// إضافة مصروف جديد إلى Firestore
-  Future<void> addExpense(SetupExpense expense) async {
-    // استخدام globalId كمعرف المستند
-    final docRef = getIt<FirebaseFirestore>().collection('expenses').doc(expense.globalId);
-    await docRef.set({
-      'globalId': expense.globalId,
-      'syncStatus': expense.syncStatus,
-      'categoryType': expense.categoryType,
-      'expenseType': expense.expenseType,
-      'materialName': expense.materialName,
-      'cost': expense.cost,
-      'date': expense.date.toIso8601String(),
-      'createdAt': DateTime.now().toIso8601String(),
-      'updatedAt': DateTime.now().toIso8601String(),
-    });
+  /// إضافة مصروف إلى Firestore باستخدام ExpenseDTO
+  Future<void> addExpense(ExpenseDTO expenseDTO) async {
+    final docRef = getIt<FirebaseFirestore>()
+        .collection('expenses')
+        .doc(expenseDTO.globalId);
+    await docRef.set(expenseDTO.toMap());
   }
 
-  /// جلب كل المصروفات من Firestore
-  Future<List<SetupExpense>> getAllExpenses() async {
-    final snapshot = await getIt<FirebaseFirestore>().collection('expenses').get();
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return SetupExpense(
-        id: null, // لا يتم استخدام id المحلي هنا
-        globalId: data['globalId'] as String,
-        syncStatus: data['syncStatus'] as String,
-        categoryType: data['categoryType'] as String,
-        expenseType: data['expenseType'] as String,
-        materialName: data['materialName'] as String?,
-        cost: (data['cost'] as num).toDouble(),
-        date: DateTime.parse(data['date'] as String),
-      );
-    }).toList();
-  }
-
-  /// تحديث مصروف في Firestore
-  Future<void> updateExpense(String globalId, SetupExpense expense) async {
-    await getIt<FirebaseFirestore>().collection('expenses').doc(globalId).update({
-      'categoryType': expense.categoryType,
-      'expenseType': expense.expenseType,
-      'materialName': expense.materialName,
-      'cost': expense.cost,
-      'date': expense.date.toIso8601String(),
-      'updatedAt': DateTime.now().toIso8601String(),
-    });
+  /// تحديث مصروف في Firestore باستخدام ExpenseDTO
+  Future<void> updateExpense(String globalId, ExpenseDTO expenseDTO) async {
+    await getIt<FirebaseFirestore>()
+        .collection('expenses')
+        .doc(globalId)
+        .update(expenseDTO.toMap());
   }
 
   /// حذف مصروف من Firestore
   Future<void> deleteExpense(String globalId) async {
-    await getIt<FirebaseFirestore>().collection('expenses').doc(globalId).delete();
+    await getIt<FirebaseFirestore>()
+        .collection('expenses')
+        .doc(globalId)
+        .delete();
+  }
+
+  /// دالة استماع للتغييرات في Firestore تُعيد Stream من ExpenseDTO
+  Stream<List<ExpenseDTO>> streamExpenseDTOs() {
+    return getIt<FirebaseFirestore>()
+        .collection('expenses')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+      final data = doc.data();
+      return ExpenseDTO.fromMap(data);
+    }).toList());
   }
 }

@@ -12,8 +12,8 @@ class LoadSetupExpenses extends SetupExpenseEvent {}
 class AddSetupExpenseEvent extends SetupExpenseEvent {
   final SetupExpense expense;
   const AddSetupExpenseEvent(this.expense);
-  @override
-  List<Object?> get props => [expense];
+  //@override
+  //List<Object?> get props => [expense];
 }
 
 class UpdateSetupExpenseEvent extends SetupExpenseEvent {

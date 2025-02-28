@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:local_tammoz_chat/presentation/bloc/setup_expense_event.dart';
-import 'package:local_tammoz_chat/presentation/pages/expense_list_page.dart' as expense_list;
+import 'package:local_tammoz_chat/presentation/pages/expense_list_page.dart' ;
 // إخفاء التكرار
 
 
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'اختبار قاعدة البيانات',
         theme: ThemeData(primarySwatch: Colors.green),
-        home: expense_list.ExpenseListPage(),
+        home: ExpenseListPage(),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_tammoz_chat/domain/use_cases/get_all_setup_expenses.dart';
 import 'setup_expense_event.dart';
 import 'setup_expense_state.dart';
 import '../../domain/repositories/setup_expense_repository.dart';
@@ -10,7 +11,7 @@ class SetupExpenseBloc extends Bloc<SetupExpenseEvent, SetupExpenseState> {
     on<LoadSetupExpenses>((event, emit) async {
       emit(SetupExpenseLoading());
       try {
-        final expenses = await getIt<SetupExpenseRepository>().getAllExpenses();
+        final expenses = await getIt<GetAllSetupExpenses>().call();
         emit(SetupExpenseLoaded(expenses));
       } catch (e) {
         emit(SetupExpenseError(e.toString()));
@@ -20,10 +21,12 @@ class SetupExpenseBloc extends Bloc<SetupExpenseEvent, SetupExpenseState> {
     on<AddSetupExpenseEvent>((event, emit) async {
       try {
         await getIt<SetupExpenseRepository>().addExpense(event.expense);
+        // يمكن إضافة حالة Loading أثناء التحديث*1
+        emit(SetupExpenseLoading());
         final expenses = await getIt<SetupExpenseRepository>().getAllExpenses();
         emit(SetupExpenseLoaded(expenses));
       } catch (e) {
-        emit(SetupExpenseError(e.toString()));
+        emit(SetupExpenseError('فشل الإضافة: ${e.toString()}'));
       }
     });
 

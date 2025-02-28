@@ -56,3 +56,4 @@ app.*.map.json
 #ولا مرة عدلناهاظlib/firebase_options.dart
 
 # git remote add origin git@gitlab.com:hi5331704/mu_tammoz.git
+#git branch -m master main      branch rename
