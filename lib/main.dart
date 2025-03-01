@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:local_tammoz_chat/presentation/bloc/setup_expense_event.dart';
 import 'package:local_tammoz_chat/presentation/pages/expense_list_page.dart' ;
+import 'package:shadcn_ui/shadcn_ui.dart';
 // إخفاء التكرار
 
 
@@ -27,11 +28,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
+
       create: (context) => getIt<SetupExpenseBloc>()..add(LoadSetupExpenses()),
-      child: MaterialApp(
+      child: ShadApp.material(
         debugShowCheckedModeBanner: false,
         title: 'اختبار قاعدة البيانات',
-        theme: ThemeData(primarySwatch: Colors.green),
+
         home: ExpenseListPage(),
       ),
     );
