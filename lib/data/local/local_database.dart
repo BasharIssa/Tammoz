@@ -1,13 +1,11 @@
-// data/local/local_database.dart
+// lib/data/local/local_database.dart
 
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import '../models/expense_dto.dart';
 import '../models/setup_expense_model.dart'; // يحتوي على تعريف SetupExpenseTable
-
 part 'local_database.g.dart';
 
 @DriftDatabase(tables: [SetupExpenseTable])
@@ -15,22 +13,16 @@ class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1; // رقم النسخة الجديد
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    // عند الترقية للنسخة 2، يتم إضافة أعمدة global_id و sync_status
-    onUpgrade: (Migrator m, int from, int to) async {
-      if (from < 2) {
-        await customStatement(
-          "ALTER TABLE setup_expense_table ADD COLUMN global_id TEXT NOT NULL DEFAULT ''",
-        );
-        await customStatement(
-          "ALTER TABLE setup_expense_table ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'pending'",
-        );
-      }
-    },
     onCreate: (Migrator m) async {
+      await m.createAllTables();
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      // حذف الجدول وإعادة إنشائه بشكل تدميري
+      await m.deleteTable('setup_expense_table');
       await m.createAllTables();
     },
   );
