@@ -1,6 +1,9 @@
 // lib/data/mappers/expense_mapper.dart
 
+import 'package:drift/drift.dart';
+
 import '../../domain/entities/setup_expense.dart';
+import '../local/local_database.dart';
 import '../models/expense_dto.dart';
 
 /// يحوّل ExpenseDTO إلى كيان Domain (SetupExpense)
@@ -32,3 +35,33 @@ ExpenseDTO toDTO(SetupExpense expense, {required DateTime updatedAt}) {
     updatedAt: updatedAt,
   );
 }
+
+
+// تحويل بيانات الجدول المحلي (SetupExpenseTableData) إلى كيان Domain (SetupExpense)
+SetupExpense toEntity(SetupExpenseTableData data) => SetupExpense(
+  id: data.id,
+  globalId: data.globalId,
+  syncStatus: data.syncStatus,
+  categoryType: data.categoryType,
+  expenseType: data.expenseType,
+  materialName: data.materialName,
+  cost: data.cost,
+  date: data.date,
+  // لاحظ أننا لا نمرر updatedAt إلى كيان الـ Domain
+);
+
+// تحويل كيان Domain (SetupExpense) إلى Companion لإدخال البيانات في قاعدة البيانات المحلية
+SetupExpenseTableCompanion toCompanion(SetupExpense expense) =>
+    SetupExpenseTableCompanion(
+      id: expense.id == null ? const Value.absent() : Value(expense.id!),
+      globalId: Value(expense.globalId),
+      syncStatus: Value(expense.syncStatus),
+      categoryType: Value(expense.categoryType),
+      expenseType: Value(expense.expenseType),
+      materialName: Value(expense.materialName),
+      cost: Value(expense.cost),
+      date: Value(expense.date),
+      createdAt: Value(DateTime.now()),
+      updatedAt: Value(DateTime.now()),
+    );
+

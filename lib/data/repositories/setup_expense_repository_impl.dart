@@ -12,7 +12,8 @@ import '../mappers/expense_mapper.dart'; // دوال التحويل بين Expen
 
 class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
   final LocalDatabase _localDb = getIt<LocalDatabase>();
-  final FirebaseExpenseDataSource _firebaseDS = getIt<FirebaseExpenseDataSource>();
+  final FirebaseExpenseDataSource _firebaseDS = getIt<
+      FirebaseExpenseDataSource>();
 
   SetupExpenseRepositoryImpl() {
     // الاشتراك في الـ Stream الخاص ببيانات Firestore (ExpenseDTO) لتحديث القاعدة المحلية بشكل ثنائي الاتجاه
@@ -23,7 +24,8 @@ class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
       // الآن نقوم بفحص السجلات المحلية وحذف تلك التي لم تعد موجودة في بيانات Firestore
       // (أي أنه تم حذفها من السحابة)
       final remoteGlobalIds = remoteDTOs.map((dto) => dto.globalId).toSet();
-      final localExpenses = await _localDb.select(_localDb.setupExpenseTable).get();
+      final localExpenses = await _localDb.select(_localDb.setupExpenseTable)
+          .get();
       for (var localExpense in localExpenses) {
         // إذا كان globalId للسجل المحلي غير موجود في مجموعة الـ remoteGlobalIds،
         // فهذا يعني أن المصروف تم حذفه من Firestore؛ لذا نقوم بحذفه محلياً.
@@ -38,15 +40,17 @@ class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
 
   @override
   Future<List<SetupExpense>> getAllExpenses() async {
-    final localExpenses = await _localDb.select(_localDb.setupExpenseTable).get();
+    final localExpenses = await _localDb.select(_localDb.setupExpenseTable)
+        .get();
     // تحويل بيانات الجدول المحلي إلى كيان Domain (SetupExpense)
-    return localExpenses.map(_toEntity).toList();
+    return localExpenses.map(toEntity).toList();
   }
 
   @override
   Future<int> addExpense(SetupExpense expense) async {
     // إضافة المصروف محلياً أولاً
-    final id = await _localDb.into(_localDb.setupExpenseTable).insert(_toCompanion(expense));
+    final id = await _localDb.into(_localDb.setupExpenseTable).insert(
+        toCompanion(expense));
     // إرسال المصروف إلى Firestore
     await _firebaseDS.addExpense(toDTO(expense, updatedAt: DateTime.now()));
     return id;
@@ -92,7 +96,7 @@ class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
       ..where((tbl) => tbl.syncStatus.equals('synced').not());
     final pendingExpenses = await query.get();
     for (var expenseData in pendingExpenses) {
-      final expense = _toEntity(expenseData);
+      final expense = toEntity(expenseData);
       final expenseDTO = toDTO(expense, updatedAt: DateTime.now());
       try {
         await _firebaseDS.addExpense(expenseDTO);
@@ -117,32 +121,4 @@ class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
       }
     }
   }
-
-  // تحويل بيانات الجدول المحلي (SetupExpenseTableData) إلى كيان Domain (SetupExpense)
-  SetupExpense _toEntity(SetupExpenseTableData data) => SetupExpense(
-    id: data.id,
-    globalId: data.globalId,
-    syncStatus: data.syncStatus,
-    categoryType: data.categoryType,
-    expenseType: data.expenseType,
-    materialName: data.materialName,
-    cost: data.cost,
-    date: data.date,
-    // لاحظ أننا لا نمرر updatedAt إلى كيان الـ Domain
-  );
-
-  // تحويل كيان Domain (SetupExpense) إلى Companion لإدخال البيانات في قاعدة البيانات المحلية
-  SetupExpenseTableCompanion _toCompanion(SetupExpense expense) =>
-      SetupExpenseTableCompanion(
-        id: expense.id == null ? const Value.absent() : Value(expense.id!),
-        globalId: Value(expense.globalId),
-        syncStatus: Value(expense.syncStatus),
-        categoryType: Value(expense.categoryType),
-        expenseType: Value(expense.expenseType),
-        materialName: Value(expense.materialName),
-        cost: Value(expense.cost),
-        date: Value(expense.date),
-        createdAt: Value(DateTime.now()),
-        updatedAt: Value(DateTime.now()),
-      );
 }
