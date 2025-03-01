@@ -48,13 +48,13 @@ class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
     // إضافة المصروف محلياً أولاً
     final id = await _localDb.into(_localDb.setupExpenseTable).insert(_toCompanion(expense));
     // إرسال المصروف إلى Firestore
-    await _firebaseDS.addExpense(toDTO(expense));
+    await _firebaseDS.addExpense(toDTO(expense, updatedAt: DateTime.now()));
     return id;
   }
 
   @override
   Future<void> updateExpense(SetupExpense expense) async {
-    final expenseDTO = toDTO(expense);
+    final expenseDTO = toDTO(expense, updatedAt: DateTime.now());
     await (_localDb.update(_localDb.setupExpenseTable)
       ..where((tbl) => tbl.id.equals(expense.id!)))
         .write(
@@ -93,7 +93,7 @@ class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
     final pendingExpenses = await query.get();
     for (var expenseData in pendingExpenses) {
       final expense = _toEntity(expenseData);
-      final expenseDTO = toDTO(expense);
+      final expenseDTO = toDTO(expense, updatedAt: DateTime.now());
       try {
         await _firebaseDS.addExpense(expenseDTO);
         await (_localDb.update(_localDb.setupExpenseTable)
