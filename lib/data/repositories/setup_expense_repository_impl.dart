@@ -1,6 +1,7 @@
 // data/repositories/setup_expense_repository_impl.dart
 
 import 'package:drift/drift.dart';
+import 'package:local_tammoz_chat/data/sync/expense_upsert.dart';
 import '../../core/injection/service_locator.dart';
 import '../../domain/entities/setup_expense.dart';
 import '../../domain/repositories/setup_expense_repository.dart';
