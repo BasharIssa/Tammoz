@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 // استيراد ملف GetIt
-import '../../core/injection/service_locator.dart';
-import '../bloc/setup_expense_bloc.dart';
-import '../bloc/setup_expense_event.dart';
-import '../bloc/setup_expense_state.dart';
+import 'package:local_tammoz_chat/core/injection/service_locator.dart';
+import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_bloc.dart';
+import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_event.dart';
+import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_state.dart';
 import 'add_expense_page.dart';
 import 'edit_expense_page.dart';
 

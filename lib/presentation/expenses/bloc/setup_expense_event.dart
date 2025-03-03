@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/setup_expense.dart';
+import 'package:local_tammoz_chat/domain/entities/setup_expense.dart';
 
 abstract class SetupExpenseEvent extends Equatable {
   const SetupExpenseEvent();

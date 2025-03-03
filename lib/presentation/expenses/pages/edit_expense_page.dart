@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart'; // مكتبة UUID
-import '../../domain/entities/setup_expense.dart';
-import '../bloc/setup_expense_bloc.dart';
-import '../bloc/setup_expense_event.dart';
+import 'package:intl/intl.dart';
+import 'package:local_tammoz_chat/domain/entities/setup_expense.dart';
+import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_bloc.dart';
+import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_event.dart';
 
-class AddExpensePage extends StatefulWidget {
-  const AddExpensePage({super.key});
+class EditExpensePage extends StatefulWidget {
+  final SetupExpense expense;
+  const EditExpensePage({super.key, required this.expense});
 
   @override
-  _AddExpensePageState createState() => _AddExpensePageState();
+  _EditExpensePageState createState() => _EditExpensePageState();
 }
 
-class _AddExpensePageState extends State<AddExpensePage> {
+class _EditExpensePageState extends State<EditExpensePage> {
   final _formKey = GlobalKey<FormState>();
 
-  // قائمة الفئات الثابتة
   final List<String> _categoryOptions = [
     "نايلون",
     "ناموسيات",
@@ -24,7 +24,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
     "تعقيم"
   ];
 
-  // تعريف mapping بين كل فئة وخيارات المصروف الخاصة بها
   final Map<String, List<String>> _expenseTypeMapping = {
     "نايلون": [
       "أجور يد عاملة",
@@ -52,28 +51,34 @@ class _AddExpensePageState extends State<AddExpensePage> {
     ],
   };
 
-  // المتغيرات لتخزين القيم المحددة
   String? _selectedCategory;
   String? _selectedExpenseType;
-
   final TextEditingController _costController = TextEditingController();
   DateTime? _selectedDate;
-
-  // كائن UUID لتوليد المعرفات
-  final Uuid uuid = Uuid();
 
   @override
   void initState() {
     super.initState();
-    _selectedCategory = _categoryOptions[0];
-    _selectedExpenseType = _expenseTypeMapping[_selectedCategory!]![0];
+    _selectedCategory = widget.expense.categoryType;
+    if (_expenseTypeMapping.containsKey(_selectedCategory)) {
+      List<String> expenseTypes = _expenseTypeMapping[_selectedCategory]!;
+      if (expenseTypes.contains(widget.expense.expenseType)) {
+        _selectedExpenseType = widget.expense.expenseType;
+      } else {
+        _selectedExpenseType = expenseTypes[0];
+      }
+    } else {
+      _selectedExpenseType = null;
+    }
+    _costController.text = widget.expense.cost.toString();
+    _selectedDate = widget.expense.date;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('إضافة مصروف'),
+        title: const Text('تحرير المصروف'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -82,7 +87,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // قائمة منسدلة لاختيار نوع الفئة
                 DropdownButtonFormField<String>(
                   value: _selectedCategory,
                   decoration: const InputDecoration(
@@ -109,7 +113,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   },
                 ),
                 const SizedBox(height: 10),
-                // قائمة منسدلة لاختيار نوع المصروف
                 DropdownButtonFormField<String>(
                   value: _selectedExpenseType,
                   decoration: const InputDecoration(
@@ -136,7 +139,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   },
                 ),
                 const SizedBox(height: 10),
-                // حقل إدخال التكلفة مع تقييد الإدخال على الأرقام فقط
                 TextFormField(
                   controller: _costController,
                   decoration: const InputDecoration(
@@ -158,21 +160,20 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   },
                 ),
                 const SizedBox(height: 10),
-                // اختيار التاريخ
                 Row(
                   children: [
                     Expanded(
                       child: Text(
                         _selectedDate == null
                             ? 'لم يتم اختيار تاريخ'
-                            : 'التاريخ: ${_selectedDate!.toLocal().toString().split(" ")[0]}',
+                            : 'التاريخ: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
                       ),
                     ),
                     ElevatedButton(
                       onPressed: () async {
                         final DateTime? picked = await showDatePicker(
                           context: context,
-                          initialDate: DateTime.now(),
+                          initialDate: _selectedDate ?? DateTime.now(),
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2100),
                         );
@@ -187,22 +188,21 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                // زر الإضافة
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate() && _selectedDate != null) {
-                      // توليد UUID جديد للسجل
-                      final String newGlobalId = uuid.v4();
-                      // إنشاء كائن المصروف مع تعيين globalId وحالة المزامنة "pending"
-                      final expense = SetupExpense(
-                        globalId: newGlobalId,
+                      // عند التعديل، لا نقوم بتوليد UUID جديد؛ نستخدم الموجود مسبقاً
+                      final updatedExpense = SetupExpense(
+                        id: widget.expense.id,
+                        globalId: widget.expense.globalId,
+                        syncStatus: widget.expense.syncStatus,
                         categoryType: _selectedCategory!,
                         expenseType: _selectedExpenseType!,
                         materialName: null,
                         cost: double.parse(_costController.text),
                         date: _selectedDate!,
                       );
-                      context.read<SetupExpenseBloc>().add(AddSetupExpenseEvent(expense));
+                      context.read<SetupExpenseBloc>().add(UpdateSetupExpenseEvent(updatedExpense));
                       Navigator.pop(context);
                     } else if (_selectedDate == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -210,7 +210,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       );
                     }
                   },
-                  child: const Text('أضف المصروف'),
+                  child: const Text('حفظ التعديلات'),
                 ),
               ],
             ),
