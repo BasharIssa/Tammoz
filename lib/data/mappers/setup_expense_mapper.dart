@@ -1,4 +1,4 @@
-// lib/data/mappers/expense_mapper.dart
+// lib/data/mappers/setup_expense_mapper.dart
 
 import 'package:drift/drift.dart';
 

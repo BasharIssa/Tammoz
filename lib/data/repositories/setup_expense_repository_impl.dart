@@ -7,7 +7,7 @@ import '../../domain/entities/setup_expense.dart';
 import '../../domain/repositories/setup_expense_repository.dart';
 import '../local/local_database.dart';
 import '../data_sources/firebase_expense_datasource.dart';
-import '../mappers/expense_mapper.dart'; // دوال التحويل بين ExpenseDTO والكيان
+import '../mappers/setup_expense_mapper.dart'; // دوال التحويل بين ExpenseDTO والكيان
 //import '../models/expense_dto.dart';     // نموذج ExpenseDTO
 
 class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
