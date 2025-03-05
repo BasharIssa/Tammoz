@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:local_tammoz_chat/domain/entities/setup_expense.dart';
-import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_bloc.dart';
-import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_event.dart';
+
+import '../../../domain/entities/setup_expense.dart';
+import '../bloc/setup_expense_bloc.dart';
+import '../bloc/setup_expense_event.dart';
 
 class EditExpensePage extends StatefulWidget {
   final SetupExpense expense;

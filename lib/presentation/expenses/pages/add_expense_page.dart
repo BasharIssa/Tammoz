@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart'; // مكتبة UUID
-import 'package:local_tammoz_chat/domain/entities/setup_expense.dart';
-import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_bloc.dart';
+import '../../../domain/entities/setup_expense.dart';
+import '../bloc/setup_expense_bloc.dart';
 import '../bloc/setup_expense_event.dart';
 
 class AddExpensePage extends StatefulWidget {
