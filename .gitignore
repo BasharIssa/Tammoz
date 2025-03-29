@@ -44,14 +44,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# لمنع التعارض عند الرفع كل مرة حيث مسار السي ميك عند بشار مختلف عنه عند محمد
-/windows/CMakeLists.txt
-
-# كون اعدادات الغرادل ممكن تختلف بين بشار ومحمد
-/android/build.gradle
-/android/settings.gradle
-/android/gradle
-/android/app/build.gradle
 
 #ولا مرة عدلناهاظlib/firebase_options.dart
 
