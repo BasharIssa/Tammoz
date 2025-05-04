@@ -13,6 +13,7 @@ class FirebaseExpenseDataSource {
 
   /// تحديث مصروف في Firestore باستخدام ExpenseDTO
   Future<void> updateExpense(String globalId, ExpenseDTO expenseDTO) async {
+
     await getIt<FirebaseFirestore>()
         .collection('expenses')
         .doc(globalId)

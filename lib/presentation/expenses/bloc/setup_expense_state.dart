@@ -33,3 +33,10 @@ class SetupExpenseError extends SetupExpenseState {
   @override
   List<Object?> get props => [message];
 }
+
+class SetupExpenseUpdated extends SetupExpenseState {
+  final List<SetupExpense> expenses;
+  const SetupExpenseUpdated(this.expenses);
+  @override
+  List<Object?> get props => [expenses];
+}

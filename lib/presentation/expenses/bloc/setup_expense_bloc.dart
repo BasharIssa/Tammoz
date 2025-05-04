@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_tammoz_chat/domain/use_cases/get_all_setup_expenses.dart';
 import 'setup_expense_event.dart';
@@ -35,8 +36,11 @@ class SetupExpenseBloc extends Bloc<SetupExpenseEvent, SetupExpenseState> {
         await getIt<SetupExpenseRepository>().updateExpense(event.expense);
         final expenses = await getIt<SetupExpenseRepository>().getAllExpenses();
         emit(SetupExpenseLoaded(expenses));
-      } catch (e) {
+        emit(SetupExpenseUpdated(expenses)); // استخدم الحالة الجديدة
+      } catch (e, stackTrace) {
         emit(SetupExpenseError(e.toString()));
+        debugPrint('🔥 Firebase Error: $e');
+        debugPrint('📌 StackTrace: $stackTrace');
       }
     });
 

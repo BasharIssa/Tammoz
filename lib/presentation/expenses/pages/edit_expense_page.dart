@@ -163,11 +163,21 @@ class _EditExpensePageState extends State<EditExpensePage> {
                 const SizedBox(height: 10),
                 Row(
                   children: [
+                    // Expanded(
+                    //   child: CalendarDatePicker(
+                    //     initialDate: _selectedDate ?? DateTime.now(),
+                    //     firstDate: DateTime(2000),
+                    //     lastDate: DateTime(2100),
+                    //     onDateChanged: (DateTime newDate) {
+                    //       setState(() {
+                    //         _selectedDate = newDate;
+                    //       });
+                    //     },
+                    //   ),
+                    // ),
                     Expanded(
                       child: Text(
-                        _selectedDate == null
-                            ? 'لم يتم اختيار تاريخ'
-                            : 'التاريخ: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
+                         'التاريخ: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
                       ),
                     ),
                     ElevatedButton(
@@ -175,8 +185,8 @@ class _EditExpensePageState extends State<EditExpensePage> {
                         final DateTime? picked = await showDatePicker(
                           context: context,
                           initialDate: _selectedDate ?? DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
+                          firstDate: DateTime(2025),
+                          lastDate: DateTime(2050),
                         );
                         if (picked != null) {
                           setState(() {
@@ -204,6 +214,7 @@ class _EditExpensePageState extends State<EditExpensePage> {
                         date: _selectedDate!,
                       );
                       context.read<SetupExpenseBloc>().add(UpdateSetupExpenseEvent(updatedExpense));
+
                       Navigator.pop(context);
                     } else if (_selectedDate == null) {
                       ScaffoldMessenger.of(context).showSnackBar(

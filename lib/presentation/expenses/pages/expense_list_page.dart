@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
 // استيراد ملف GetIt
 import 'package:local_tammoz_chat/core/injection/service_locator.dart';
 import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_bloc.dart';
@@ -37,28 +38,45 @@ class ExpenseListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('قائمة المصروفات'),
         actions: [
-          // عرض أيقونة توضح حالة المزامنة العامة:
-          BlocBuilder<SetupExpenseBloc, SetupExpenseState>(
-            builder: (context, state) {
-              if (state is SetupExpenseLoaded) {
-                // إذا كانت كل السجلات متزامنة
-                bool allSynced = state.expenses.every((expense) => expense.syncStatus == 'synced');
-                return IconButton(
-                  icon: Icon(
-                    Icons.cloud,
-                    color: allSynced ? Colors.green : Colors.red,
-                  ),
-                  tooltip: allSynced
-                      ? 'جميع البيانات مزامنة'
-                      : 'بعض البيانات غير مزامنة - اضغط للمزامنة',
-                  onPressed: () {
-                    // عند الضغط، إطلاق حدث المزامنة اليدوية
-                    getIt<SetupExpenseBloc>().add(SyncExpensesEvent());
-                  },
+          BlocListener<SetupExpenseBloc, SetupExpenseState>(
+            listener: (context, state) {
+              if (state is SetupExpenseUpdated) {
+                // يمكنك إضافة SnackBar للإشارة إلى نجاح التحديث
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('تم التحديث بنجاح!')),
                 );
               }
-              return const SizedBox();
-            },
+              else if (state is SetupExpenseError) {
+                // يمكنك إضافة SnackBar للإشارة إلى نجاح التحديث
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('فشل التحديث!')),
+                );
+
+              }
+            }, // عرض أيقونة توضح حالة المزامنة العامة:
+            child: BlocBuilder<SetupExpenseBloc, SetupExpenseState>(
+              builder: (context, state) {
+                if (state is SetupExpenseLoaded) {
+                  // إذا كانت كل السجلات متزامنة
+                  bool allSynced = state.expenses
+                      .every((expense) => expense.syncStatus == 'synced');
+                  return IconButton(
+                    icon: Icon(
+                      Icons.cloud,
+                      color: allSynced ? Colors.green : Colors.red,
+                    ),
+                    tooltip: allSynced
+                        ? 'جميع البيانات مزامنة'
+                        : 'بعض البيانات غير مزامنة - اضغط للمزامنة',
+                    onPressed: () {
+                      // عند الضغط، إطلاق حدث المزامنة اليدوية
+                      getIt<SetupExpenseBloc>().add(SyncExpensesEvent());
+                    },
+                  );
+                }
+                return const SizedBox();
+              },
+            ),
           ),
         ],
       ),
@@ -76,7 +94,8 @@ class ExpenseListPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final expense = expenses[index];
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: ListTile(
                     leading: _getSyncIcon(expense.syncStatus),
                     title: Text('الفئة: ${expense.categoryType}'),
@@ -84,7 +103,8 @@ class ExpenseListPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('نوع المصروف: ${expense.expenseType}'),
-                        Text('التاريخ: ${DateFormat('yyyy-MM-dd').format(expense.date)}'),
+                        Text(
+                            'التاريخ: ${DateFormat('yyyy-MM-dd').format(expense.date)}'),
                         Text('الكلفة: ${_formatCost(expense.cost)}'),
                       ],
                     ),
@@ -101,7 +121,8 @@ class ExpenseListPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditExpensePage(expense: expense),
+                          builder: (context) =>
+                              EditExpensePage(expense: expense),
                         ),
                       );
                     },

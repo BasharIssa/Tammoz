@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart'; // مكتبة UUID
 import '../../../domain/entities/setup_expense.dart';
 import '../bloc/setup_expense_bloc.dart';
@@ -57,7 +58,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   String? _selectedExpenseType;
 
   final TextEditingController _costController = TextEditingController();
-  DateTime? _selectedDate;
+  DateTime? _selectedDate = DateTime.now();
 
   // كائن UUID لتوليد المعرفات
   final Uuid uuid = Uuid();
@@ -163,18 +164,16 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   children: [
                     Expanded(
                       child: Text(
-                        _selectedDate == null
-                            ? 'لم يتم اختيار تاريخ'
-                            : 'التاريخ: ${_selectedDate!.toLocal().toString().split(" ")[0]}',
+                             'التاريخ: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
                       ),
                     ),
                     ElevatedButton(
                       onPressed: () async {
                         final DateTime? picked = await showDatePicker(
                           context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
+                          initialDate: _selectedDate ?? DateTime.now(),
+                          firstDate: DateTime(2025),
+                          lastDate: DateTime(2050),
                         );
                         if (picked != null) {
                           setState(() {
