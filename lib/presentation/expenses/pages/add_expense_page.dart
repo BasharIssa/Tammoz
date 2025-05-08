@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:local_tammoz_chat/data/models/db_lists.dart';
 import 'package:uuid/uuid.dart'; // مكتبة UUID
 import '../../../domain/entities/setup_expense.dart';
 import '../bloc/setup_expense_bloc.dart';
 import '../bloc/setup_expense_event.dart';
+
 
 class AddExpensePage extends StatefulWidget {
   const AddExpensePage({super.key});
@@ -18,40 +20,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   final _formKey = GlobalKey<FormState>();
 
   // قائمة الفئات الثابتة
-  final List<String> _categoryOptions = [
-    "نايلون",
-    "ناموسيات",
-    "صقيع",
-    "تعقيم"
-  ];
 
-  // تعريف mapping بين كل فئة وخيارات المصروف الخاصة بها
-  final Map<String, List<String>> _expenseTypeMapping = {
-    "نايلون": [
-      "أجور يد عاملة",
-      "ثمن نايلون",
-      "ثمن خشب",
-      "شريط صالات",
-      "شريط تربيط",
-      "أخرى"
-    ],
-    "ناموسيات": [
-      "أجور يد عاملة",
-      "ثمن ناموسيات",
-      "شريط تربيط",
-      "أخرى"
-    ],
-    "صقيع": [
-      "أجور يد عاملة",
-      "ثمن مواد",
-      "أخرى"
-    ],
-    "تعقيم": [
-      "أجور يد عاملة",
-      "أخرى",
-      "ثمن مواد"
-    ],
-  };
 
   // المتغيرات لتخزين القيم المحددة
   String? _selectedCategory;
@@ -66,8 +35,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
   @override
   void initState() {
     super.initState();
-    _selectedCategory = _categoryOptions[0];
-    _selectedExpenseType = _expenseTypeMapping[_selectedCategory!]![0];
+    _selectedCategory = CategoryOptions[0];
+    _selectedExpenseType = ExpenseTypeMapping[_selectedCategory!]![0];
   }
 
   @override
@@ -90,7 +59,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     labelText: 'نوع الفئة',
                     border: OutlineInputBorder(),
                   ),
-                  items: _categoryOptions.map((String category) {
+                  items: CategoryOptions.map((String category) {
                     return DropdownMenuItem<String>(
                       value: category,
                       child: Text(category),
@@ -99,7 +68,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   onChanged: (value) {
                     setState(() {
                       _selectedCategory = value;
-                      _selectedExpenseType = _expenseTypeMapping[_selectedCategory!]![0];
+                      _selectedExpenseType = ExpenseTypeMapping[_selectedCategory!]![0];
                     });
                   },
                   validator: (value) {
@@ -117,7 +86,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     labelText: 'نوع المصروف',
                     border: OutlineInputBorder(),
                   ),
-                  items: (_expenseTypeMapping[_selectedCategory!] ?? [])
+                  items: (ExpenseTypeMapping[_selectedCategory!] ?? [])
                       .map((String expenseType) {
                     return DropdownMenuItem<String>(
                       value: expenseType,
