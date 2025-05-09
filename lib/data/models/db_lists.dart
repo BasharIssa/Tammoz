@@ -1,5 +1,11 @@
 final List<String> SyncStatus = ["متزامن","فشل","ينتظر"];
 
+class SyncStatusArabicNames{
+  static const String synced = "متزامن";
+  static const String failed = "فشل";
+  static const String pending = "ينتظر";
+}
+
 final List<String> CategoryOptions = [
   "نايلون",
   "ناموسيات",
