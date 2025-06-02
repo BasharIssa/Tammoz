@@ -6,8 +6,8 @@ import '../../domain/entities/setup_expense.dart';
 import '../local/local_database.dart';
 import '../models/expense_dto.dart';
 
-/// يحوّل ExpenseDTO إلى كيان Domain (SetupExpense)
-SetupExpense toDomain(ExpenseDTO dto) {
+/// يحوّل ExpenseDto إلى كيان Domain (SetupExpense)
+SetupExpense toDomain(ExpenseDto dto) {
   return SetupExpense(
     id: null, // سيتم تعيينه عند التخزين محليًا
     globalId: dto.globalId,
@@ -21,10 +21,10 @@ SetupExpense toDomain(ExpenseDTO dto) {
   );
 }
 
-/// يحوّل كيان Domain (SetupExpense) إلى ExpenseDTO (للتخزين في Firestore)
+/// يحوّل كيان Domain (SetupExpense) إلى ExpenseDto (للتخزين في Firestore)
 /// يجب تمرير قيمة updatedAt من طبقة أعلى (مثلاً Repository) بدلاً من تعيينها داخليًا.
-ExpenseDTO toDTO(SetupExpense expense, {required DateTime updatedAt}) {
-  return ExpenseDTO(
+ExpenseDto toDTO(SetupExpense expense, {required DateTime updatedAt}) {
+  return ExpenseDto(
     globalId: expense.globalId,
     syncStatus: expense.syncStatus,
     categoryType: expense.categoryType,

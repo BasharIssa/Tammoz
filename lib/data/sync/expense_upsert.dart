@@ -4,9 +4,9 @@ import 'package:drift/drift.dart';
 import '../models/expense_dto.dart';
 import '../local/local_database.dart';
 
-/// امتداد لإضافة دالة upsertExpensesFromDTO لحل التعارضات وتحديث/إدخال السجلات من بيانات ExpenseDTO
+/// امتداد لإضافة دالة upsertExpensesFromDTO لحل التعارضات وتحديث/إدخال السجلات من بيانات ExpenseDto
 extension ExpenseUpsert on LocalDatabase {
-  Future<void> upsertExpensesFromDTO(List<ExpenseDTO> remoteExpenses) async {
+  Future<void> upsertExpensesFromDTO(List<ExpenseDto> remoteExpenses) async {
     for (var dto in remoteExpenses) {
       // البحث عن سجل محلي باستخدام globalId
       final query = (select(setupExpenseTable)

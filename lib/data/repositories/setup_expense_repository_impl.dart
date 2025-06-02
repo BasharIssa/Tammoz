@@ -17,7 +17,7 @@ class SetupExpenseRepositoryImpl implements SetupExpenseRepository {
 
   SetupExpenseRepositoryImpl() {
     // الاشتراك في الـ Stream الخاص ببيانات Firestore (ExpenseDTO) لتحديث القاعدة المحلية بشكل ثنائي الاتجاه
-    _firebaseDS.streamExpenseDTOs().listen((remoteDTOs) async {
+    _firebaseDS.streamExpenseDtos().listen((remoteDTOs) async {
       // أولاً، نقوم بتحديث أو إدخال السجلات الموجودة (upsert) من بيانات Firestore
       await _localDb.upsertExpensesFromDTO(remoteDTOs);
 

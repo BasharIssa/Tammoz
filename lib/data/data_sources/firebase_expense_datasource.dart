@@ -3,21 +3,21 @@ import '../../core/injection/service_locator.dart';
 import '../models/expense_dto.dart';
 
 class FirebaseExpenseDataSource {
-  /// إضافة مصروف إلى Firestore باستخدام ExpenseDTO
-  Future<void> addExpense(ExpenseDTO expenseDTO) async {
+  /// إضافة مصروف إلى Firestore باستخدام ExpenseDto
+  Future<void> addExpense(ExpenseDto ExpenseDto) async {
     final docRef = getIt<FirebaseFirestore>()
         .collection('expenses')
-        .doc(expenseDTO.globalId);
-    await docRef.set(expenseDTO.toMap());
+        .doc(ExpenseDto.globalId);
+    await docRef.set(ExpenseDto.toJson());
   }
 
-  /// تحديث مصروف في Firestore باستخدام ExpenseDTO
-  Future<void> updateExpense(String globalId, ExpenseDTO expenseDTO) async {
+  /// تحديث مصروف في Firestore باستخدام ExpenseDto
+  Future<void> updateExpense(String globalId, ExpenseDto ExpenseDto) async {
 
     await getIt<FirebaseFirestore>()
         .collection('expenses')
         .doc(globalId)
-        .update(expenseDTO.toMap());
+        .update(ExpenseDto.toJson());
   }
 
   /// حذف مصروف من Firestore
@@ -28,14 +28,14 @@ class FirebaseExpenseDataSource {
         .delete();
   }
 
-  /// دالة استماع للتغييرات في Firestore تُعيد Stream من ExpenseDTO
-  Stream<List<ExpenseDTO>> streamExpenseDTOs() {
+  /// دالة استماع للتغييرات في Firestore تُعيد Stream من ExpenseDto
+  Stream<List<ExpenseDto>> streamExpenseDtos() {
     return getIt<FirebaseFirestore>()
         .collection('expenses')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
       final data = doc.data();
-      return ExpenseDTO.fromMap(data);
+      return ExpenseDto.fromJson(data);
     }).toList());
   }
 }

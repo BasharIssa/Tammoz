@@ -513,16 +513,319 @@ class SetupExpenseTableCompanion
   }
 }
 
+class $PlantingTableTable extends PlantingTable
+    with TableInfo<$PlantingTableTable, PlantingTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PlantingTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _quantityMeta =
+      const VerificationMeta('quantity');
+  @override
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+      'date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _initialCostMeta =
+      const VerificationMeta('initialCost');
+  @override
+  late final GeneratedColumn<double> initialCost = GeneratedColumn<double>(
+      'initial_cost', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [id, type, quantity, date, initialCost];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'planting_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<PlantingTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('initial_cost')) {
+      context.handle(
+          _initialCostMeta,
+          initialCost.isAcceptableOrUnknown(
+              data['initial_cost']!, _initialCostMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PlantingTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PlantingTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      quantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
+      date: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
+      initialCost: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}initial_cost']),
+    );
+  }
+
+  @override
+  $PlantingTableTable createAlias(String alias) {
+    return $PlantingTableTable(attachedDatabase, alias);
+  }
+}
+
+class PlantingTableData extends DataClass
+    implements Insertable<PlantingTableData> {
+  final int id;
+  final String type;
+  final int quantity;
+  final DateTime date;
+  final double? initialCost;
+  const PlantingTableData(
+      {required this.id,
+      required this.type,
+      required this.quantity,
+      required this.date,
+      this.initialCost});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['type'] = Variable<String>(type);
+    map['quantity'] = Variable<int>(quantity);
+    map['date'] = Variable<DateTime>(date);
+    if (!nullToAbsent || initialCost != null) {
+      map['initial_cost'] = Variable<double>(initialCost);
+    }
+    return map;
+  }
+
+  PlantingTableCompanion toCompanion(bool nullToAbsent) {
+    return PlantingTableCompanion(
+      id: Value(id),
+      type: Value(type),
+      quantity: Value(quantity),
+      date: Value(date),
+      initialCost: initialCost == null && nullToAbsent
+          ? const Value.absent()
+          : Value(initialCost),
+    );
+  }
+
+  factory PlantingTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PlantingTableData(
+      id: serializer.fromJson<int>(json['id']),
+      type: serializer.fromJson<String>(json['type']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      initialCost: serializer.fromJson<double?>(json['initialCost']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'type': serializer.toJson<String>(type),
+      'quantity': serializer.toJson<int>(quantity),
+      'date': serializer.toJson<DateTime>(date),
+      'initialCost': serializer.toJson<double?>(initialCost),
+    };
+  }
+
+  PlantingTableData copyWith(
+          {int? id,
+          String? type,
+          int? quantity,
+          DateTime? date,
+          Value<double?> initialCost = const Value.absent()}) =>
+      PlantingTableData(
+        id: id ?? this.id,
+        type: type ?? this.type,
+        quantity: quantity ?? this.quantity,
+        date: date ?? this.date,
+        initialCost: initialCost.present ? initialCost.value : this.initialCost,
+      );
+  PlantingTableData copyWithCompanion(PlantingTableCompanion data) {
+    return PlantingTableData(
+      id: data.id.present ? data.id.value : this.id,
+      type: data.type.present ? data.type.value : this.type,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      date: data.date.present ? data.date.value : this.date,
+      initialCost:
+          data.initialCost.present ? data.initialCost.value : this.initialCost,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlantingTableData(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('quantity: $quantity, ')
+          ..write('date: $date, ')
+          ..write('initialCost: $initialCost')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, type, quantity, date, initialCost);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PlantingTableData &&
+          other.id == this.id &&
+          other.type == this.type &&
+          other.quantity == this.quantity &&
+          other.date == this.date &&
+          other.initialCost == this.initialCost);
+}
+
+class PlantingTableCompanion extends UpdateCompanion<PlantingTableData> {
+  final Value<int> id;
+  final Value<String> type;
+  final Value<int> quantity;
+  final Value<DateTime> date;
+  final Value<double?> initialCost;
+  const PlantingTableCompanion({
+    this.id = const Value.absent(),
+    this.type = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.date = const Value.absent(),
+    this.initialCost = const Value.absent(),
+  });
+  PlantingTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String type,
+    required int quantity,
+    required DateTime date,
+    this.initialCost = const Value.absent(),
+  })  : type = Value(type),
+        quantity = Value(quantity),
+        date = Value(date);
+  static Insertable<PlantingTableData> custom({
+    Expression<int>? id,
+    Expression<String>? type,
+    Expression<int>? quantity,
+    Expression<DateTime>? date,
+    Expression<double>? initialCost,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (type != null) 'type': type,
+      if (quantity != null) 'quantity': quantity,
+      if (date != null) 'date': date,
+      if (initialCost != null) 'initial_cost': initialCost,
+    });
+  }
+
+  PlantingTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? type,
+      Value<int>? quantity,
+      Value<DateTime>? date,
+      Value<double?>? initialCost}) {
+    return PlantingTableCompanion(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      quantity: quantity ?? this.quantity,
+      date: date ?? this.date,
+      initialCost: initialCost ?? this.initialCost,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (initialCost.present) {
+      map['initial_cost'] = Variable<double>(initialCost.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlantingTableCompanion(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('quantity: $quantity, ')
+          ..write('date: $date, ')
+          ..write('initialCost: $initialCost')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$LocalDatabase extends GeneratedDatabase {
   _$LocalDatabase(QueryExecutor e) : super(e);
   $LocalDatabaseManager get managers => $LocalDatabaseManager(this);
   late final $SetupExpenseTableTable setupExpenseTable =
       $SetupExpenseTableTable(this);
+  late final $PlantingTableTable plantingTable = $PlantingTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [setupExpenseTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [setupExpenseTable, plantingTable];
 }
 
 typedef $$SetupExpenseTableTableCreateCompanionBuilder
@@ -773,10 +1076,180 @@ typedef $$SetupExpenseTableTableProcessedTableManager = ProcessedTableManager<
     ),
     SetupExpenseTableData,
     PrefetchHooks Function()>;
+typedef $$PlantingTableTableCreateCompanionBuilder = PlantingTableCompanion
+    Function({
+  Value<int> id,
+  required String type,
+  required int quantity,
+  required DateTime date,
+  Value<double?> initialCost,
+});
+typedef $$PlantingTableTableUpdateCompanionBuilder = PlantingTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> type,
+  Value<int> quantity,
+  Value<DateTime> date,
+  Value<double?> initialCost,
+});
+
+class $$PlantingTableTableFilterComposer
+    extends Composer<_$LocalDatabase, $PlantingTableTable> {
+  $$PlantingTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get initialCost => $composableBuilder(
+      column: $table.initialCost, builder: (column) => ColumnFilters(column));
+}
+
+class $$PlantingTableTableOrderingComposer
+    extends Composer<_$LocalDatabase, $PlantingTableTable> {
+  $$PlantingTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get initialCost => $composableBuilder(
+      column: $table.initialCost, builder: (column) => ColumnOrderings(column));
+}
+
+class $$PlantingTableTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $PlantingTableTable> {
+  $$PlantingTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<int> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<double> get initialCost => $composableBuilder(
+      column: $table.initialCost, builder: (column) => column);
+}
+
+class $$PlantingTableTableTableManager extends RootTableManager<
+    _$LocalDatabase,
+    $PlantingTableTable,
+    PlantingTableData,
+    $$PlantingTableTableFilterComposer,
+    $$PlantingTableTableOrderingComposer,
+    $$PlantingTableTableAnnotationComposer,
+    $$PlantingTableTableCreateCompanionBuilder,
+    $$PlantingTableTableUpdateCompanionBuilder,
+    (
+      PlantingTableData,
+      BaseReferences<_$LocalDatabase, $PlantingTableTable, PlantingTableData>
+    ),
+    PlantingTableData,
+    PrefetchHooks Function()> {
+  $$PlantingTableTableTableManager(
+      _$LocalDatabase db, $PlantingTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PlantingTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PlantingTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PlantingTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> type = const Value.absent(),
+            Value<int> quantity = const Value.absent(),
+            Value<DateTime> date = const Value.absent(),
+            Value<double?> initialCost = const Value.absent(),
+          }) =>
+              PlantingTableCompanion(
+            id: id,
+            type: type,
+            quantity: quantity,
+            date: date,
+            initialCost: initialCost,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String type,
+            required int quantity,
+            required DateTime date,
+            Value<double?> initialCost = const Value.absent(),
+          }) =>
+              PlantingTableCompanion.insert(
+            id: id,
+            type: type,
+            quantity: quantity,
+            date: date,
+            initialCost: initialCost,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$PlantingTableTableProcessedTableManager = ProcessedTableManager<
+    _$LocalDatabase,
+    $PlantingTableTable,
+    PlantingTableData,
+    $$PlantingTableTableFilterComposer,
+    $$PlantingTableTableOrderingComposer,
+    $$PlantingTableTableAnnotationComposer,
+    $$PlantingTableTableCreateCompanionBuilder,
+    $$PlantingTableTableUpdateCompanionBuilder,
+    (
+      PlantingTableData,
+      BaseReferences<_$LocalDatabase, $PlantingTableTable, PlantingTableData>
+    ),
+    PlantingTableData,
+    PrefetchHooks Function()>;
 
 class $LocalDatabaseManager {
   final _$LocalDatabase _db;
   $LocalDatabaseManager(this._db);
   $$SetupExpenseTableTableTableManager get setupExpenseTable =>
       $$SetupExpenseTableTableTableManager(_db, _db.setupExpenseTable);
+  $$PlantingTableTableTableManager get plantingTable =>
+      $$PlantingTableTableTableManager(_db, _db.plantingTable);
 }
