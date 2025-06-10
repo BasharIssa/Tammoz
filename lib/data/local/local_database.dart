@@ -8,14 +8,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'tables/planting_table.dart';
 import 'tables/setup_expense_table.dart'; // يحتوي على تعريف SetupExpenseTable
+import 'tables/plant_types_table.dart';
 part 'local_database.g.dart';
 
-@DriftDatabase(tables: [SetupExpenseTable, PlantingTable])
+@DriftDatabase(tables: [SetupExpenseTable, PlantingTable, PlantTypesTable])
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1; // رقم النسخة الجديد
+  int get schemaVersion => 3; // رقم النسخة الجديد
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

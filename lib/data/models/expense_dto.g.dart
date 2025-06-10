@@ -6,7 +6,7 @@ part of 'expense_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ExpenseDto _$ExpenseDtoFromJson(Map<String, dynamic> json) => _ExpenseDto(
+ExpenseDto _$ExpenseDtoFromJson(Map<String, dynamic> json) => ExpenseDto(
       globalId: json['globalId'] as String,
       syncStatus: json['syncStatus'] as String,
       categoryType: json['categoryType'] as String,
@@ -17,7 +17,7 @@ _ExpenseDto _$ExpenseDtoFromJson(Map<String, dynamic> json) => _ExpenseDto(
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$ExpenseDtoToJson(_ExpenseDto instance) =>
+Map<String, dynamic> _$ExpenseDtoToJson(ExpenseDto instance) =>
     <String, dynamic>{
       'globalId': instance.globalId,
       'syncStatus': instance.syncStatus,
