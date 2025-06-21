@@ -62,6 +62,7 @@ dependencies:
   # Data To Object
   json_serializable: ^6.9.5
   json_annotation: ^4.9.0
+  dartz: ^0.10.1
 
 
 

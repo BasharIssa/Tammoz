@@ -12,6 +12,9 @@ import 'package:local_tammoz_chat/domain/repositories/setup_expense_repository.d
 import 'package:local_tammoz_chat/data/repositories/setup_expense_repository_impl.dart';
 import 'package:local_tammoz_chat/domain/repositories/planting_repository.dart';
 import 'package:local_tammoz_chat/data/repositories/planting_repository_impl.dart';
+
+import '../../data/repositories/storage_repository_impl.dart';
+import '../../domain/repositories/storage_repository.dart';
 //import 'package:connectivity_plus/connectivity_plus.dart'; // أضيفت حزمة جديدة
 
 
@@ -39,7 +42,9 @@ void setupLocator() {
   getIt.registerLazySingleton<PlantingRepository>(
         () => PlantingRepositoryImpl(),
   );
-
+getIt.registerLazySingleton<StorageRepository>(
+    () => StorageRepositoryImpl(getIt<LocalDatabase>())
+);
   // تسجيل حالات الاستخدام
   getIt.registerLazySingleton(() => AddSetupExpense(getIt<SetupExpenseRepository>()));
   getIt.registerLazySingleton(() => DeleteSetupExpense(getIt<SetupExpenseRepository>()));

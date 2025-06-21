@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_tammoz_chat/presentation/plantings/pages/add_edit_planting_page.dart';
 import 'package:local_tammoz_chat/presentation/plantings/pages/plantings_page.dart';
+import 'package:local_tammoz_chat/presentation/storage/pages/storage_page.dart';
 
 // استيراد البلوكات و ال Events الخاصة بالتطبيق
 
@@ -48,6 +48,16 @@ class MainPage extends StatelessWidget {
                 Navigator.pop(context); // إغلاق الدرج
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => PlantingsPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.local_florist),
+              title: Text('المخزن'),
+              onTap: () {
+                Navigator.pop(context); // إغلاق الدرج
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => StoragePage()),
                 );
               },
             ),
