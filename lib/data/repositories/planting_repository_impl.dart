@@ -88,12 +88,12 @@ class PlantingRepositoryImpl implements PlantingRepository {
         .map((data) => PlantTypeDto(id: data.id, name: data.name))
         .toList();
 
-    return dtos.map(toDomainPlantType).toList();
+    return dtos.map(PlantTypeMapper.toEntity).toList();
   }
 
   @override
   Future<int> addPlantType(PlantType plantType) {
-    final dto = toDtoPlantType(plantType);
+    final dto = PlantTypeMapper.fromEntity(plantType);
     final companion = PlantTypesTableCompanion(
       id: dto.id != null ? Value(dto.id!) : const Value.absent(),
       name: Value(dto.name),

@@ -1,8 +1,7 @@
 // lib/domain/entities/planting.dart
 
 import 'package:equatable/equatable.dart';
-
-class Storage  extends Equatable{
+class Storage extends Equatable {
   final int? id;
   final String plantType;
   final String plantShape;
@@ -20,6 +19,27 @@ class Storage  extends Equatable{
     required this.parentOperationDate,
     this.notes,
   });
+
+  Storage copyWith({
+    int? id,
+    String? plantType,
+    String? plantShape,
+    int? quantity,
+    DateTime? parentOperationDate,
+    String? parentOperationName,
+    String? notes,
+  }) {
+    return Storage(
+      id: id ?? this.id,
+      plantType: plantType ?? this.plantType,
+      plantShape: plantShape ?? this.plantShape,
+      quantity: quantity ?? this.quantity,
+      parentOperationDate: parentOperationDate ?? this.parentOperationDate,
+      parentOperationName: parentOperationName ?? this.parentOperationName,
+      notes: notes ?? this.notes,
+    );
+  }
+
   @override
   List<Object?> get props => [
     id,
@@ -27,6 +47,7 @@ class Storage  extends Equatable{
     plantShape,
     quantity,
     parentOperationDate,
-  parentOperationName,
-    notes];
+    parentOperationName,
+    notes,
+  ];
 }

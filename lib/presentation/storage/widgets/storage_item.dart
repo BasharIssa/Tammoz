@@ -1,6 +1,7 @@
 // lib/presentation/widgets/storage/storage_item.dart
 
 import 'package:flutter/material.dart';
+import 'package:local_tammoz_chat/constants.dart';
 import 'package:local_tammoz_chat/domain/entities/storage.dart';
 
 class StorageItem extends StatelessWidget {
@@ -19,18 +20,18 @@ class StorageItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
         leading: const Icon(Icons.inventory_2),
-        title: Text('${storage.plantType} - ${storage.plantShape}'),
+        title: Text('${storage.plantType} - ${storage.plantShape} -${storage.parentOperationDate.toIso8601String()}'),
         subtitle: Text('الكمية: ${storage.quantity}'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () => _showIncreaseDialog(context),
+              icon: const Icon(Icons.cut_sharp),
+              onPressed: () => _showAddPruningPage(context),
             ),
             IconButton(
-              icon: const Icon(Icons.remove),
-              onPressed: () => _showDecreaseDialog(context),
+              icon: const Icon(Icons.merge_sharp),
+              onPressed: () => _showNextStoragePage(context),
             ),
           ],
         ),
@@ -39,11 +40,33 @@ class StorageItem extends StatelessWidget {
     );
   }
 
-  void _showIncreaseDialog(BuildContext context) {
-    // Implementation for increase quantity dialog
+  void _showAddPruningPage(BuildContext context) {
+    //.pop(context); // لإغلاق الـ Drawer أو Dialog إذا كنت تستخدمه
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      PagesRoutesConstants.addPruning,
+      ModalRoute.withName(PagesRoutesConstants.storage),
+      arguments: {
+          'preselectedOperationName': OperationTypesConstants.pruning,
+          'firstStorageId': storage.id,
+          'plantTypeName': storage.plantType,
+          'plantShapeName': storage.plantShape,
+          'maxQuantity': storage.quantity,
+        },
+
+    );
   }
 
-  void _showDecreaseDialog(BuildContext context) {
-    // Implementation for decrease quantity dialog
+  void _showNextStoragePage( BuildContext context ) {
+    Navigator.pushNamedAndRemoveUntil(
+        context,
+        PagesRoutesConstants.selectSecondStorage,
+        ModalRoute.withName(PagesRoutesConstants.storage),
+        arguments: {
+          'preselectedOperationName': OperationTypesConstants.grafting,
+          'firstStorage': storage,
+        }
+    );
   }
 }

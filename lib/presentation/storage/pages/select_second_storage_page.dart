@@ -1,29 +1,35 @@
-// في ملف presentation/storage/pages/storage_page.dart
 
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_tammoz_chat/constants.dart';
+import 'package:local_tammoz_chat/domain/entities/storage.dart';
+import 'package:local_tammoz_chat/presentation/storage/widgets/storage_item_for_next_select.dart';
 
-import '../../../domain/entities/storage.dart';
 import '../bloc/storage_bloc.dart';
-import '../widgets/storage_details_dialog.dart';
-import '../widgets/storage_edit_dialog.dart';
-import '../widgets/storage_item.dart';
 import '../widgets/storage_search_bar.dart';
 
-class StoragePage extends StatelessWidget {
-  const StoragePage({super.key});
+class SelectSecondStoragePage extends StatelessWidget {
+  final String preselectedOperationName;
+  final Storage firstStorage;
+  const SelectSecondStoragePage(
+  {
+      super.key,
+      required this.preselectedOperationName,
+      required this.firstStorage,
+
+});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('المخزن'),
+        title: const Text('اختيار نوع ثان للعملية'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => context.read<StorageBloc>().add(const LoadAllStorages())
-            ),
+              icon: const Icon(Icons.refresh),
+              onPressed: () => context.read<StorageBloc>().add(const LoadAllStorages())
+          ),
         ],
       ),
       body: BlocConsumer<StorageBloc, StorageState>(
@@ -38,10 +44,14 @@ class StoragePage extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     itemCount: state.storages.length,
-                    itemBuilder: (context, index) => StorageItem(
-                      storage: state.storages[index],
-                      onTap: () => _showStorageDetails(context, state.storages[index]),
-                    ),
+                    itemBuilder: (context, index) {
+                      final currentStorage = state.storages[index];
+                      return SecondStorageItem
+                        (
+                        storage: currentStorage,
+                        onLongPress: ()=>moveToGraftingPage(context, currentStorage),
+                      );
+                    }
                   ),
                 ),
               ],
@@ -55,6 +65,10 @@ class StoragePage extends StatelessWidget {
             return const Center(child: Text('حالة غير معروفة'));
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.refresh),
+        onPressed: () => context.read<StorageBloc>().add(const LoadAllStorages()),
       ),
     );
   }
@@ -70,10 +84,16 @@ class StoragePage extends StatelessWidget {
     }
   }
 
-  void _showStorageDetails(BuildContext context, Storage storage) {
-    showDialog(
-      context: context,
-      builder: (context) => StorageDetailsDialog(storage: storage),
+  void moveToGraftingPage(BuildContext context, Storage secondStorage){
+    Navigator.pushNamedAndRemoveUntil(
+        context,
+        PagesRoutesConstants.addGrafting,
+        ModalRoute.withName(PagesRoutesConstants.selectSecondStorage),
+        arguments: {
+          'preselectedOperationName': preselectedOperationName,
+          'firstStorage': firstStorage,
+          'secondStorage' : secondStorage,
+        }
     );
   }
 }

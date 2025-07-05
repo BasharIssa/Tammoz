@@ -10,9 +10,11 @@ import 'package:local_tammoz_chat/data/local/tables/scheduled_storage.dart';
 import 'package:local_tammoz_chat/data/local/tables/storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import '../../constants.dart';
 import 'tables/planting.dart';
 import 'tables/setup_expense.dart'; // يحتوي على تعريف SetupExpenseTable
 import 'tables/plant_types.dart';
+// ... (بقية الاستيرادات)
 
 part 'local_database.g.dart';
 
@@ -23,42 +25,57 @@ part 'local_database.g.dart';
   StorageTable,
   ScheduledStorageTable,
   PlantShapesTable,
- // OperationsTable,
   OperationTypesTable
 ])
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 14; // رقم النسخة الجديد
+  int get schemaVersion => 1; // تم تغيير إلى 1
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate : migrate,
-        onUpgrade: (Migrator m, int from, int to) async {
-          // حذف الجدول وإعادة إنشائه بشكل تدميري
-          await m.deleteTable('plant_shapes');
-          await m.deleteTable('plant_types');
-          await m.deleteTable('storage');
-          await m.deleteTable('setup_expense');
-          await m.deleteTable('planting');
-          await m.deleteTable('operations');
-          await m.deleteTable('operation_types');
-          await m.deleteTable('scheduled_storage');
+    onCreate: (Migrator m) async {
+      await m.createAll();
+      await _insertInitialData();
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      // حذف جميع الجداول بشكل كامل
+      await _deleteAllTables();
+      await m.createAll();
+      await _insertInitialData();
+    },
+  );
 
-          await m.createAll();
-
-          await _insertInitialData();
-        },
-      );
-
-  Future<void> migrate(Migrator m) async {
-    await m.createAll();
-    await _insertInitialData();
+  // دالة مساعدة لحذف جميع الجداول
+  Future<void> _deleteAllTables() async {
+    await transaction(() async {
+      await delete(setupExpenseTable).go();
+      await delete(plantingTable).go();
+      await delete(plantTypesTable).go();
+      await delete(storageTable).go();
+      await delete(scheduledStorageTable).go();
+      await delete(plantShapesTable).go();
+      await delete(operationTypesTable).go();
+    });
   }
+
+
+
+  Future<void> deleteDatabaseFile() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'nursery.db'));
+    if (await file.exists()) await file.delete();
+    final shmFile = File('${file.path}-shm');
+    final walFile = File('${file.path}-wal');
+    if (await shmFile.exists()) await shmFile.delete();
+    if (await walFile.exists()) await walFile.delete();
+  }
+
 
   Future<void> _insertInitialData() async {
     // التحقق من عدم وجود بيانات مسبقًا
+
 
     final operationsTypesCount =
     await select(operationTypesTable).get().then((list) => list.length);
@@ -66,30 +83,17 @@ class LocalDatabase extends _$LocalDatabase {
       await batch((batch) {
         batch.insertAll(operationTypesTable, [
           OperationTypesTableCompanion.insert(
-            name: 'زراعة',successRatio: Value(0.85)
+            name: OperationTypesConstants.planting,
+            successRatio: Value(OperationTypesConstants.plantingSuccessRatio),
           ),
           OperationTypesTableCompanion.insert(
-            name: 'قص', successRatio: Value(0.9)
+            name: OperationTypesConstants.pruning,
+            successRatio: Value(OperationTypesConstants.pruningSuccessRatio),
           ),
           OperationTypesTableCompanion.insert(
-            name: 'تطعيم', successRatio: Value(0.85)
-          )
-        ]);
-      });
-    }
-
-
-    final typesCount =
-        await select(plantTypesTable).get().then((list) => list.length);
-    if (typesCount == 0) {
-      await batch((batch) {
-        batch.insertAll(plantTypesTable, [
-          PlantTypesTableCompanion.insert(
-            name: 'مندلون',
+            name: OperationTypesConstants.grafting,
+            successRatio: Value(OperationTypesConstants.graftingSuccessRatio),
           ),
-          PlantTypesTableCompanion.insert(
-            name: 'بستونا',
-          )
         ]);
       });
     }
@@ -100,65 +104,89 @@ class LocalDatabase extends _$LocalDatabase {
       await batch((batch) {
         batch.insertAll(plantShapesTable, [
           PlantShapesTableCompanion.insert(
-            name: 'بذرة',nurseryPeriod: 0,
+            name: PlantShapesConstants.cultivatedSeed,
+            nurseryPeriod: NurseryPeriodConstants.seed,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'شتلة', nurseryPeriod: 30,
+            name: PlantShapesConstants.wildSeed,
+            nurseryPeriod: NurseryPeriodConstants.seed,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'راسية',nurseryPeriod: 7,
+            name: PlantShapesConstants.seedling,
+            nurseryPeriod: NurseryPeriodConstants.long,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'قرمة',nurseryPeriod: 7,
+            name: PlantShapesConstants.rasiya,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'راسية راسية',nurseryPeriod: 7,
+            name: PlantShapesConstants.qarmah,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'فلقة',nurseryPeriod: 7,
+            name: PlantShapesConstants.rasiyaRasiya,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'أصل',nurseryPeriod: 30,
+            name: PlantShapesConstants.falqa,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'زغفة',nurseryPeriod: 7,
+            name: PlantShapesConstants.origin,
+            nurseryPeriod: NurseryPeriodConstants.long,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'شتلة ع أصل',nurseryPeriod: 7,
+            name: PlantShapesConstants.zaghfa,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'شتلة ع زغفة',nurseryPeriod: 7,
+            name: PlantShapesConstants.seedlingOnOrigin,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'قرمة ع أصل',nurseryPeriod: 7,
+            name: PlantShapesConstants.seedlingOnZaghfa,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'قرمة ع زغفة',nurseryPeriod: 7,
+            name: PlantShapesConstants.qarmahOnOrigin,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'راسية ع أصل',nurseryPeriod: 7,
+            name: PlantShapesConstants.qarmahOnZaghfa,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'راسية ع زغفة',nurseryPeriod: 7,
+            name: PlantShapesConstants.rasiyaOnOrigin,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'راسية راسية ع أصل',nurseryPeriod: 7,
+            name: PlantShapesConstants.rasiyaOnZaghfa,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'راسية راسية ع زغفة',nurseryPeriod: 7,
+            name: PlantShapesConstants.rasiyaRasiyaOnOrigin,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'فلقة ع أصل',nurseryPeriod: 7,
+            name: PlantShapesConstants.rasiyaRasiyaOnZaghfa,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
           PlantShapesTableCompanion.insert(
-            name: 'فلقة ع زغفة',nurseryPeriod: 7,
+            name: PlantShapesConstants.falqaOnOrigin,
+            nurseryPeriod: NurseryPeriodConstants.short,
           ),
-
+          PlantShapesTableCompanion.insert(
+            name: PlantShapesConstants.falqaOnZaghfa,
+            nurseryPeriod: NurseryPeriodConstants.short,
+          ),
         ]);
       });
     }
   }
 }
+
+
+
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {

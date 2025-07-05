@@ -1540,6 +1540,13 @@ class $OperationsTableTable extends OperationsTable
   late final GeneratedColumn<int> reservationId = GeneratedColumn<int>(
       'reservation_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _costMeta = const VerificationMeta('cost');
+  @override
+  late final GeneratedColumn<double> cost = GeneratedColumn<double>(
+      'cost', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
@@ -1557,6 +1564,7 @@ class $OperationsTableTable extends OperationsTable
         secondShapeId,
         scheduled,
         reservationId,
+        cost,
         notes
       ];
   @override
@@ -1631,6 +1639,10 @@ class $OperationsTableTable extends OperationsTable
           reservationId.isAcceptableOrUnknown(
               data['reservation_id']!, _reservationIdMeta));
     }
+    if (data.containsKey('cost')) {
+      context.handle(
+          _costMeta, cost.isAcceptableOrUnknown(data['cost']!, _costMeta));
+    }
     if (data.containsKey('notes')) {
       context.handle(
           _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
@@ -1664,6 +1676,8 @@ class $OperationsTableTable extends OperationsTable
           .read(DriftSqlType.bool, data['${effectivePrefix}scheduled'])!,
       reservationId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}reservation_id']),
+      cost: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}cost'])!,
       notes: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
     );
@@ -1687,6 +1701,7 @@ class OperationsTableData extends DataClass
   final int? secondShapeId;
   final bool scheduled;
   final int? reservationId;
+  final double cost;
   final String? notes;
   const OperationsTableData(
       {required this.id,
@@ -1699,6 +1714,7 @@ class OperationsTableData extends DataClass
       this.secondShapeId,
       required this.scheduled,
       this.reservationId,
+      required this.cost,
       this.notes});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1719,6 +1735,7 @@ class OperationsTableData extends DataClass
     if (!nullToAbsent || reservationId != null) {
       map['reservation_id'] = Variable<int>(reservationId);
     }
+    map['cost'] = Variable<double>(cost);
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
     }
@@ -1743,6 +1760,7 @@ class OperationsTableData extends DataClass
       reservationId: reservationId == null && nullToAbsent
           ? const Value.absent()
           : Value(reservationId),
+      cost: Value(cost),
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
     );
@@ -1762,6 +1780,7 @@ class OperationsTableData extends DataClass
       secondShapeId: serializer.fromJson<int?>(json['secondShapeId']),
       scheduled: serializer.fromJson<bool>(json['scheduled']),
       reservationId: serializer.fromJson<int?>(json['reservationId']),
+      cost: serializer.fromJson<double>(json['cost']),
       notes: serializer.fromJson<String?>(json['notes']),
     );
   }
@@ -1779,6 +1798,7 @@ class OperationsTableData extends DataClass
       'secondShapeId': serializer.toJson<int?>(secondShapeId),
       'scheduled': serializer.toJson<bool>(scheduled),
       'reservationId': serializer.toJson<int?>(reservationId),
+      'cost': serializer.toJson<double>(cost),
       'notes': serializer.toJson<String?>(notes),
     };
   }
@@ -1794,6 +1814,7 @@ class OperationsTableData extends DataClass
           Value<int?> secondShapeId = const Value.absent(),
           bool? scheduled,
           Value<int?> reservationId = const Value.absent(),
+          double? cost,
           Value<String?> notes = const Value.absent()}) =>
       OperationsTableData(
         id: id ?? this.id,
@@ -1809,6 +1830,7 @@ class OperationsTableData extends DataClass
         scheduled: scheduled ?? this.scheduled,
         reservationId:
             reservationId.present ? reservationId.value : this.reservationId,
+        cost: cost ?? this.cost,
         notes: notes.present ? notes.value : this.notes,
       );
   OperationsTableData copyWithCompanion(OperationsTableCompanion data) {
@@ -1834,6 +1856,7 @@ class OperationsTableData extends DataClass
       reservationId: data.reservationId.present
           ? data.reservationId.value
           : this.reservationId,
+      cost: data.cost.present ? data.cost.value : this.cost,
       notes: data.notes.present ? data.notes.value : this.notes,
     );
   }
@@ -1851,6 +1874,7 @@ class OperationsTableData extends DataClass
           ..write('secondShapeId: $secondShapeId, ')
           ..write('scheduled: $scheduled, ')
           ..write('reservationId: $reservationId, ')
+          ..write('cost: $cost, ')
           ..write('notes: $notes')
           ..write(')'))
         .toString();
@@ -1868,6 +1892,7 @@ class OperationsTableData extends DataClass
       secondShapeId,
       scheduled,
       reservationId,
+      cost,
       notes);
   @override
   bool operator ==(Object other) =>
@@ -1883,6 +1908,7 @@ class OperationsTableData extends DataClass
           other.secondShapeId == this.secondShapeId &&
           other.scheduled == this.scheduled &&
           other.reservationId == this.reservationId &&
+          other.cost == this.cost &&
           other.notes == this.notes);
 }
 
@@ -1897,6 +1923,7 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
   final Value<int?> secondShapeId;
   final Value<bool> scheduled;
   final Value<int?> reservationId;
+  final Value<double> cost;
   final Value<String?> notes;
   const OperationsTableCompanion({
     this.id = const Value.absent(),
@@ -1909,6 +1936,7 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
     this.secondShapeId = const Value.absent(),
     this.scheduled = const Value.absent(),
     this.reservationId = const Value.absent(),
+    this.cost = const Value.absent(),
     this.notes = const Value.absent(),
   });
   OperationsTableCompanion.insert({
@@ -1922,6 +1950,7 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
     this.secondShapeId = const Value.absent(),
     this.scheduled = const Value.absent(),
     this.reservationId = const Value.absent(),
+    this.cost = const Value.absent(),
     this.notes = const Value.absent(),
   })  : operationTypeId = Value(operationTypeId),
         date = Value(date),
@@ -1939,6 +1968,7 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
     Expression<int>? secondShapeId,
     Expression<bool>? scheduled,
     Expression<int>? reservationId,
+    Expression<double>? cost,
     Expression<String>? notes,
   }) {
     return RawValuesInsertable({
@@ -1952,6 +1982,7 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
       if (secondShapeId != null) 'second_shape_id': secondShapeId,
       if (scheduled != null) 'scheduled': scheduled,
       if (reservationId != null) 'reservation_id': reservationId,
+      if (cost != null) 'cost': cost,
       if (notes != null) 'notes': notes,
     });
   }
@@ -1967,6 +1998,7 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
       Value<int?>? secondShapeId,
       Value<bool>? scheduled,
       Value<int?>? reservationId,
+      Value<double>? cost,
       Value<String?>? notes}) {
     return OperationsTableCompanion(
       id: id ?? this.id,
@@ -1979,6 +2011,7 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
       secondShapeId: secondShapeId ?? this.secondShapeId,
       scheduled: scheduled ?? this.scheduled,
       reservationId: reservationId ?? this.reservationId,
+      cost: cost ?? this.cost,
       notes: notes ?? this.notes,
     );
   }
@@ -2016,6 +2049,9 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
     if (reservationId.present) {
       map['reservation_id'] = Variable<int>(reservationId.value);
     }
+    if (cost.present) {
+      map['cost'] = Variable<double>(cost.value);
+    }
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
     }
@@ -2035,6 +2071,7 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
           ..write('secondShapeId: $secondShapeId, ')
           ..write('scheduled: $scheduled, ')
           ..write('reservationId: $reservationId, ')
+          ..write('cost: $cost, ')
           ..write('notes: $notes')
           ..write(')'))
         .toString();
@@ -4521,6 +4558,7 @@ typedef $$OperationsTableTableCreateCompanionBuilder = OperationsTableCompanion
   Value<int?> secondShapeId,
   Value<bool> scheduled,
   Value<int?> reservationId,
+  Value<double> cost,
   Value<String?> notes,
 });
 typedef $$OperationsTableTableUpdateCompanionBuilder = OperationsTableCompanion
@@ -4535,6 +4573,7 @@ typedef $$OperationsTableTableUpdateCompanionBuilder = OperationsTableCompanion
   Value<int?> secondShapeId,
   Value<bool> scheduled,
   Value<int?> reservationId,
+  Value<double> cost,
   Value<String?> notes,
 });
 
@@ -4663,6 +4702,9 @@ class $$OperationsTableTableFilterComposer
 
   ColumnFilters<int> get reservationId => $composableBuilder(
       column: $table.reservationId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get cost => $composableBuilder(
+      column: $table.cost, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get notes => $composableBuilder(
       column: $table.notes, builder: (column) => ColumnFilters(column));
@@ -4814,6 +4856,9 @@ class $$OperationsTableTableOrderingComposer
       column: $table.reservationId,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<double> get cost => $composableBuilder(
+      column: $table.cost, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get notes => $composableBuilder(
       column: $table.notes, builder: (column) => ColumnOrderings(column));
 
@@ -4942,6 +4987,9 @@ class $$OperationsTableTableAnnotationComposer
 
   GeneratedColumn<int> get reservationId => $composableBuilder(
       column: $table.reservationId, builder: (column) => column);
+
+  GeneratedColumn<double> get cost =>
+      $composableBuilder(column: $table.cost, builder: (column) => column);
 
   GeneratedColumn<String> get notes =>
       $composableBuilder(column: $table.notes, builder: (column) => column);
@@ -5109,6 +5157,7 @@ class $$OperationsTableTableTableManager extends RootTableManager<
             Value<int?> secondShapeId = const Value.absent(),
             Value<bool> scheduled = const Value.absent(),
             Value<int?> reservationId = const Value.absent(),
+            Value<double> cost = const Value.absent(),
             Value<String?> notes = const Value.absent(),
           }) =>
               OperationsTableCompanion(
@@ -5122,6 +5171,7 @@ class $$OperationsTableTableTableManager extends RootTableManager<
             secondShapeId: secondShapeId,
             scheduled: scheduled,
             reservationId: reservationId,
+            cost: cost,
             notes: notes,
           ),
           createCompanionCallback: ({
@@ -5135,6 +5185,7 @@ class $$OperationsTableTableTableManager extends RootTableManager<
             Value<int?> secondShapeId = const Value.absent(),
             Value<bool> scheduled = const Value.absent(),
             Value<int?> reservationId = const Value.absent(),
+            Value<double> cost = const Value.absent(),
             Value<String?> notes = const Value.absent(),
           }) =>
               OperationsTableCompanion.insert(
@@ -5148,6 +5199,7 @@ class $$OperationsTableTableTableManager extends RootTableManager<
             secondShapeId: secondShapeId,
             scheduled: scheduled,
             reservationId: reservationId,
+            cost: cost,
             notes: notes,
           ),
           withReferenceMapper: (p0) => p0

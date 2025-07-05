@@ -63,6 +63,7 @@ dependencies:
   json_serializable: ^6.9.5
   json_annotation: ^4.9.0
   dartz: ^0.10.1
+  optional: ^6.1.0+1
 
 
 

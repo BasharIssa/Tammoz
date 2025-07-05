@@ -11,4 +11,11 @@ class PlantType extends Equatable {
 
   @override
   List<Object?> get props => [id, name];
+
+  PlantType copyWith({int? id, String? name}){
+    return PlantType(
+      id: id?? this.id,
+      name: name?? this.name
+    );
+  }
 }

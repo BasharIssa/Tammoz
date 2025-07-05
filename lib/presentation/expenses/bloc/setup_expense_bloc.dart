@@ -1,6 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:local_tammoz_chat/domain/use_cases/get_all_setup_expenses.dart';
+import '../../../domain/usecases/get_all_setup_expenses.dart';
 import 'setup_expense_event.dart';
 import 'setup_expense_state.dart';
 import 'package:local_tammoz_chat/domain/repositories/setup_expense_repository.dart';

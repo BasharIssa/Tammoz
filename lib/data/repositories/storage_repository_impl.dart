@@ -11,18 +11,32 @@ import '../local/local_database.dart';
 import '../mappers/storage_mapper.dart';
 import 'package:drift/drift.dart' as drift;
 
-class StorageRepositoryImpl extends StorageRepository{
-  final LocalDatabase db ;
+class StorageRepositoryImpl extends StorageRepository {
+  final LocalDatabase db;
+
   StorageRepositoryImpl(this.db);
 
   @override
   Future<Either<StorageFailure, List<Storage>>> getAllStorages() async {
     try {
       final query = db.select(db.storageTable).join([
-        drift.innerJoin(db.plantTypesTable, db.plantTypesTable.id.equalsExp(db.storageTable.plantTypeId)),
-        drift.innerJoin(db.plantShapesTable, db.plantShapesTable.id.equalsExp(db.storageTable.plantShapeId)),
-        drift.leftOuterJoin(db.operationsTable, db.operationsTable.id.equalsExp(db.storageTable.parentOperationId)),
-        drift.leftOuterJoin(db.operationTypesTable, db.operationTypesTable.id.equalsExp(db.operationsTable.operationTypeId)),
+        drift.innerJoin(db.plantTypesTable,
+            db.plantTypesTable.id.equalsExp(db.storageTable.plantTypeId)),
+        drift.innerJoin(db.plantShapesTable,
+            db.plantShapesTable.id.equalsExp(db.storageTable.plantShapeId)),
+        drift.leftOuterJoin(db.operationsTable,
+            db.operationsTable.id.equalsExp(db.storageTable.parentOperationId)),
+        drift.leftOuterJoin(db.operationTypesTable,
+            db.operationTypesTable.id.equalsExp(
+                db.operationsTable.operationTypeId)),
+      ]);
+
+
+      query.orderBy([
+        OrderingTerm(
+          expression: db.operationsTable.date,
+          mode: OrderingMode.desc,
+        ),
       ]);
 
       final rows = await query.get();
@@ -39,15 +53,16 @@ class StorageRepositoryImpl extends StorageRepository{
             data: storageData,
             plantTypeName: typeData.name,
             plantShapeName: shapeData.name,
-            parentOperationDate: operationData?.date ,
-            parentOperationName: operationTypeData?.name ,
+            parentOperationDate: operationData?.date,
+            parentOperationName: operationTypeData?.name,
           ),
         );
       }).toList();
 
       return Right(storages);
     } catch (e, st) {
-      return Left(StorageFailure(message: 'فشل في جلب بيانات المخزن', stackTrace: st));
+      return Left(
+          StorageFailure(message: 'فشل في جلب بيانات المخزن', stackTrace: st));
     }
   }
 
@@ -56,10 +71,15 @@ class StorageRepositoryImpl extends StorageRepository{
   Future<Either<Failure, Storage>> getStorageById(int id) async {
     try {
       final query = db.select(db.storageTable).join([
-        innerJoin(db.plantTypesTable, db.plantTypesTable.id.equalsExp(db.storageTable.plantTypeId)),
-        innerJoin(db.plantShapesTable, db.plantShapesTable.id.equalsExp(db.storageTable.plantShapeId)),
-        leftOuterJoin(db.operationsTable, db.operationsTable.id.equalsExp(db.storageTable.parentOperationId)),
-        leftOuterJoin(db.operationTypesTable, db.operationTypesTable.id.equalsExp(db.operationsTable.operationTypeId)),
+        innerJoin(db.plantTypesTable,
+            db.plantTypesTable.id.equalsExp(db.storageTable.plantTypeId)),
+        innerJoin(db.plantShapesTable,
+            db.plantShapesTable.id.equalsExp(db.storageTable.plantShapeId)),
+        leftOuterJoin(db.operationsTable,
+            db.operationsTable.id.equalsExp(db.storageTable.parentOperationId)),
+        leftOuterJoin(db.operationTypesTable,
+            db.operationTypesTable.id.equalsExp(
+                db.operationsTable.operationTypeId)),
       ])
         ..where(db.storageTable.id.equals(id));
 
@@ -75,11 +95,11 @@ class StorageRepositoryImpl extends StorageRepository{
       final operationType = row.readTableOrNull(db.operationTypesTable);
 
       final dto = StorageMapper.fromTableData(
-          data: storageData,
-          plantTypeName: plantType.name,
-          plantShapeName: plantShape.name,
-          parentOperationDate: operation?.date,
-          parentOperationName: operationType?.name,
+        data: storageData,
+        plantTypeName: plantType.name,
+        plantShapeName: plantShape.name,
+        parentOperationDate: operation?.date,
+        parentOperationName: operationType?.name,
       );
 
       return Right(StorageMapper.toEntity(dto));
@@ -96,40 +116,41 @@ class StorageRepositoryImpl extends StorageRepository{
   Future<Either<Failure, int>> addStorage(Storage storage) async {
     try {
       if (storage.plantType.isEmpty) {
-        return Left(StorageInvalidDataFailure(message: 'نوع النبات مطلوب'));
+        return Left(StorageFailure(message: 'نوع النبات مطلوب'));
       }
       if (storage.quantity <= 0) {
-        return Left(StorageInvalidDataFailure(message: 'الكمية يجب أن تكون أكبر من الصفر'));
+        return Left(StorageFailure(
+            message: 'الكمية يجب أن تكون أكبر من الصفر'));
       }
       final typeIdResult = await _getPlantTypeIdByName(storage.plantType);
       final shapeIdResult = await _getPlantShapeIdByName(storage.plantShape);
 
       final parentOperationId = await _getParentOperationId(
-        storage.parentOperationName,
         storage.parentOperationDate,
       );
 
 
       return typeIdResult.fold(
             (failure) => Left(failure),
-            (plantTypeId) => shapeIdResult.fold(
-              (failure) => Left(failure),
-              (plantShapeId)  async {
-            final dto = StorageMapper.toDto(
-              storage,
-              plantTypeId: plantTypeId,
-              plantShapeId: plantShapeId,
-              parentOperationId: parentOperationId,
-              parentOperationDate: storage.parentOperationDate,
-              parentOperationName: storage.parentOperationName,
-            );
+            (plantTypeId) =>
+            shapeIdResult.fold(
+                  (failure) => Left(failure),
+                  (plantShapeId) async {
+                final dto = StorageMapper.toDto(
+                  storage,
+                  plantTypeId: plantTypeId,
+                  plantShapeId: plantShapeId,
+                  parentOperationId: parentOperationId,
+                  parentOperationDate: storage.parentOperationDate,
+                  parentOperationName: storage.parentOperationName,
+                );
 
-            final companion = StorageMapper.toTableCompanion(dto);
+                final companion = StorageMapper.toTableCompanion(dto);
 
-            final id = await db.into(db.storageTable).insert(companion);
-            return Right(id);
-          },
-        ),
+                final id = await db.into(db.storageTable).insert(companion);
+                return Right(id);
+              },
+            ),
 
       );
     } catch (e, stackTrace) {
@@ -145,47 +166,49 @@ class StorageRepositoryImpl extends StorageRepository{
   Future<Either<Failure, Unit>> updateStorage(Storage storage) async {
     try {
       if (storage.id == null) {
-        return Left(StorageInvalidDataFailure(message: 'معرف العنصر غير موجود'));
+        return Left(
+            StorageFailure(message: 'معرف العنصر غير موجود'));
       }
 
       final typeIdResult = await _getPlantTypeIdByName(storage.plantType);
       final shapeIdResult = await _getPlantShapeIdByName(storage.plantShape);
       final parentOperationId = await _getParentOperationId(
-        storage.parentOperationName,
         storage.parentOperationDate,
       );
 
       return typeIdResult.fold(
             (failure) => Left(failure),
-            (plantTypeId) => shapeIdResult.fold(
-              (failure) => Left(failure),
-              (plantShapeId)  async {
-              final dto = StorageMapper.toDto(
-                storage,
-                plantTypeId: plantTypeId,
-                plantShapeId: plantShapeId,
-                parentOperationId: parentOperationId,
-                parentOperationDate: storage.parentOperationDate,
-                parentOperationName: storage.parentOperationName,
-              );
+            (plantTypeId) =>
+            shapeIdResult.fold(
+                  (failure) => Left(failure),
+                  (plantShapeId) async {
+                final dto = StorageMapper.toDto(
+                  storage,
+                  plantTypeId: plantTypeId,
+                  plantShapeId: plantShapeId,
+                  parentOperationId: parentOperationId,
+                  parentOperationDate: storage.parentOperationDate,
+                  parentOperationName: storage.parentOperationName,
+                );
 
-              final companion = StorageMapper.toTableCompanion(dto);
+                final companion = StorageMapper.toTableCompanion(dto);
 
-              final updatedRows = await (db.update(db.storageTable)
-                ..where((tbl) => tbl.id.equals(storage.id!)))
-                  .write(companion);
+                final updatedRows = await (db.update(db.storageTable)
+                  ..where((tbl) => tbl.id.equals(storage.id!)))
+                    .write(companion);
 
-              if (updatedRows > 0) {
-                return Right(unit);
-              } else {
-                return Left(StorageNotFoundFailure());
-              }
-            },
-          ),
+                if (updatedRows > 0) {
+                  return Right(unit);
+                } else {
+                  return Left(StorageNotFoundFailure());
+                }
+              },
+            ),
 
       );
     } catch (e, st) {
-      return Left(DatabaseFailure(message: 'فشل في تحديث عنصر المخزن', stackTrace: st));
+      return Left(
+          DatabaseFailure(message: 'فشل في تحديث عنصر المخزن', stackTrace: st));
     }
   }
 
@@ -202,7 +225,8 @@ class StorageRepositoryImpl extends StorageRepository{
         return Left(StorageNotFoundFailure());
       }
     } catch (e, st) {
-      return Left(DatabaseFailure(message: 'فشل في حذف عنصر المخزن', stackTrace: st));
+      return Left(
+          DatabaseFailure(message: 'فشل في حذف عنصر المخزن', stackTrace: st));
     }
   }
 
@@ -214,7 +238,8 @@ class StorageRepositoryImpl extends StorageRepository{
   }) async {
     try {
       if (amount <= 0) {
-        return Left(StorageInvalidDataFailure(message: 'قيمة الزيادة يجب أن تكون موجبة'));
+        return Left(StorageFailure(
+            message: 'قيمة الزيادة يجب أن تكون موجبة'));
       }
 
       final storageResult = await getStorageById(storageId);
@@ -222,19 +247,21 @@ class StorageRepositoryImpl extends StorageRepository{
             (failure) => Left(failure),
             (storage) async {
           final newQuantity = storage.quantity + amount;
-          // إنشاء نسخة جديدة يدوياً بدون copyWith
-          // tider 18-6 : optimization needed: update db directly
-          final updatedStorage = Storage(
-            id: storage.id,
-            plantType: storage.plantType,
-            plantShape: storage.plantShape,
-            quantity: newQuantity,
-            
-            parentOperationDate: storage.parentOperationDate,
-            parentOperationName: storage.parentOperationName,
-            notes: storage.notes,
+
+          final query = db.update(db.storageTable)
+            ..where((s) => s.id.equals(storageId));
+
+          final affectedRows = await query.write(
+            StorageTableCompanion(
+              quantity: Value(newQuantity),
+            ),
           );
-          return await updateStorage(updatedStorage);
+
+          if (affectedRows == 1) {
+            return const Right(unit);
+          } else {
+            return Left(StorageFailure(message: 'فشل في تحديث الكمية'));
+          }
         },
       );
     } catch (e, stackTrace) {
@@ -245,6 +272,7 @@ class StorageRepositoryImpl extends StorageRepository{
     }
   }
 
+
   @override
   Future<Either<Failure, Unit>> decreaseQuantity({
     required int storageId,
@@ -252,30 +280,36 @@ class StorageRepositoryImpl extends StorageRepository{
   }) async {
     try {
       if (amount <= 0) {
-        return Left(StorageInvalidDataFailure(message: 'قيمة النقصان يجب أن تكون موجبة'));
+        return Left(StorageFailure(
+            message: 'قيمة النقصان يجب أن تكون موجبة'));
       }
 
       final storageResult = await getStorageById(storageId);
       return await storageResult.fold(
-            (failure) => Left(failure),
-            (storage) async {
-          if (storage.quantity < amount) {
-            return Left(StorageQuantityExceededFailure());
-          }
-          final newQuantity = storage.quantity - amount;
-          // إنشاء نسخة جديدة يدوياً بدون copyWith
-          final updatedStorage = Storage(
-            id: storage.id,
-            plantType: storage.plantType,
-            plantShape: storage.plantShape,
-            quantity: newQuantity,
+              (failure) => Left(failure),
+              (storage) async {
+            if (storage.quantity < amount) {
+              return Left(StorageQuantityExceededFailure());
+            }
+            final newQuantity = storage.quantity - amount;
+            // إنشاء نسخة جديدة يدوياً بدون copyWith
+            // 2. تنفيذ استعلام التحديث المباشر
+            final query = db.update(db.storageTable)
+              ..where((s) => s.id.equals(storageId));
 
-            parentOperationDate: storage.parentOperationDate,
-            parentOperationName: storage.parentOperationName,
-            notes: storage.notes,
-          );
-          return await updateStorage(updatedStorage);
-        },
+
+            final affectedRows = await query.write(
+                StorageTableCompanion( // استخدم companion للتحديث
+                    quantity: Value(newQuantity)));
+
+            // 3. التحقق من نجاح التحديث
+            if (affectedRows == 1) {
+              return const Right(unit);
+            } else {
+              return Left(
+                  StorageFailure(message: 'فشل في تحديث الكمية'));
+            }
+          }
       );
     } catch (e, stackTrace) {
       return Left(DatabaseFailure(
@@ -292,10 +326,15 @@ class StorageRepositoryImpl extends StorageRepository{
   }) async {
     try {
       final query = db.select(db.storageTable).join([
-        innerJoin(db.plantTypesTable, db.plantTypesTable.id.equalsExp(db.storageTable.plantTypeId)),
-        innerJoin(db.plantShapesTable, db.plantShapesTable.id.equalsExp(db.storageTable.plantShapeId)),
-        drift.leftOuterJoin(db.operationsTable, db.operationsTable.id.equalsExp(db.storageTable.parentOperationId)),
-        drift.leftOuterJoin(db.operationTypesTable, db.operationTypesTable.id.equalsExp(db.operationsTable.operationTypeId)),
+        innerJoin(db.plantTypesTable,
+            db.plantTypesTable.id.equalsExp(db.storageTable.plantTypeId)),
+        innerJoin(db.plantShapesTable,
+            db.plantShapesTable.id.equalsExp(db.storageTable.plantShapeId)),
+        drift.leftOuterJoin(db.operationsTable,
+            db.operationsTable.id.equalsExp(db.storageTable.parentOperationId)),
+        drift.leftOuterJoin(db.operationTypesTable,
+            db.operationTypesTable.id.equalsExp(
+                db.operationsTable.operationTypeId)),
 
       ]);
       if (plantType != null) {
@@ -307,7 +346,8 @@ class StorageRepositoryImpl extends StorageRepository{
       }
 
       query.orderBy([
-        OrderingTerm(expression: db.storageTable.plantTypeId, mode: OrderingMode.asc),
+        OrderingTerm(
+            expression: db.storageTable.plantTypeId, mode: OrderingMode.asc),
       ]);
 
       final rows = await query.get();
@@ -345,7 +385,8 @@ class StorageRepositoryImpl extends StorageRepository{
   }) async {
     try {
       if (requiredQuantity <= 0) {
-        return Left(StorageInvalidDataFailure(message: 'الكمية المطلوبة يجب أن تكون موجبة'));
+        return Left(StorageFailure(
+            message: 'الكمية المطلوبة يجب أن تكون موجبة'));
       }
 
       final storageResult = await getStorageById(storageId);
@@ -360,13 +401,12 @@ class StorageRepositoryImpl extends StorageRepository{
       ));
     }
   }
-  
-  
 
 
   // --- دوال مساعدة مع استخدام Either و StorageFailure ---
 
-  Future<Either<StorageFailure, int>> _getPlantTypeIdByName(String typeName) async {
+  Future<Either<StorageFailure, int>> _getPlantTypeIdByName(
+      String typeName) async {
     try {
       final plantType = await (db.select(db.plantTypesTable)
         ..where((tbl) => tbl.name.equals(typeName)))
@@ -375,14 +415,17 @@ class StorageRepositoryImpl extends StorageRepository{
       if (plantType != null) {
         return Right(plantType.id);
       } else {
-        return Left(StorageInvalidDataFailure(message: 'نوع النبات غير موجود: $typeName'));
+        return Left(StorageFailure(
+            message: 'نوع النبات غير موجود: $typeName'));
       }
     } catch (e, st) {
-      return Left(StorageFailure(message: 'فشل في جلب نوع النبات', stackTrace: st));
+      return Left(
+          StorageFailure(message: 'فشل في جلب نوع النبات', stackTrace: st));
     }
   }
 
-  Future<Either<StorageFailure, int>> _getPlantShapeIdByName(String shapeName) async {
+  Future<Either<StorageFailure, int>> _getPlantShapeIdByName(
+      String shapeName) async {
     try {
       final plantShape = await (db.select(db.plantShapesTable)
         ..where((tbl) => tbl.name.equals(shapeName)))
@@ -391,13 +434,17 @@ class StorageRepositoryImpl extends StorageRepository{
       if (plantShape != null) {
         return Right(plantShape.id);
       } else {
-        return Left(StorageInvalidDataFailure(message: 'شكل النبات غير موجود: $shapeName'));
+        return Left(StorageFailure(
+            message: 'شكل النبات غير موجود: $shapeName'));
       }
     } catch (e, st) {
-      return Left(StorageFailure(message: 'فشل في جلب شكل النبات', stackTrace: st));
+      return Left(
+          StorageFailure(message: 'فشل في جلب شكل النبات', stackTrace: st));
     }
   }
-  Future<Either<StorageFailure, int>> _getOperationTypeIdByName(String operationTypeName) async {
+
+  Future<Either<StorageFailure, int>> _getOperationTypeIdByName(
+      String operationTypeName) async {
     try {
       final operationType = await (db.select(db.operationTypesTable)
         ..where((tbl) => tbl.name.equals(operationTypeName)))
@@ -406,37 +453,30 @@ class StorageRepositoryImpl extends StorageRepository{
       if (operationType != null) {
         return Right(operationType.id);
       } else {
-        return Left(StorageInvalidDataFailure(message: 'نوع العملية غير موجود: $operationTypeName'));
+        return Left(StorageFailure(
+            message: 'نوع العملية غير موجود: $operationTypeName'));
       }
     } catch (e, st) {
-      return Left(StorageFailure(message: 'فشل في جلب نوع العملية', stackTrace: st));
+      return Left(
+          StorageFailure(message: 'فشل في جلب نوع العملية', stackTrace: st));
     }
   }
 
 
-  Future<int?> _getParentOperationId(String operationTypeName, DateTime date) async {
-    final operationTypeIdResult = await _getOperationTypeIdByName(
-        operationTypeName);
+  Future<int?> _getParentOperationId(DateTime date) async {
+    try {
+      final operation = await (db.select(db.operationsTable)
+        ..where((tbl) =>
+            tbl.date.equals(date)))
+          .getSingleOrNull();
 
-
-    return await operationTypeIdResult.fold(
-            (failure) => null,
-            (operationTypeId) async {
-          try {
-            final operation = await (db.select(db.operationsTable)
-              ..where((tbl) =>
-              tbl.operationTypeId.equals(operationTypeId) &
-              tbl.date.equals(date)))
-                .getSingleOrNull();
-
-            return operation?.id;
-          } catch (e) {
-            print('  فشل في جلب العملية الأم   $e  ');
-            return null;
-          }
-        }
-    );
+      return operation?.id;
+    } catch (e) {
+      print('  فشل في جلب العملية الأم   $e  ');
+      return null;
+    }
   }
+
 
 
   @override

@@ -13,7 +13,7 @@ class StorageNotFoundFailure extends StorageFailure {
 }
 
 class StorageInvalidDataFailure extends StorageFailure {
-  const StorageInvalidDataFailure({super.stackTrace, required String message})
+  const StorageInvalidDataFailure({super.stackTrace})
       : super(
     message: 'بيانات المخزن غير صالحة',
   );

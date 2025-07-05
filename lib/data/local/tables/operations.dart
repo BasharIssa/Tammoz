@@ -8,6 +8,7 @@ import 'package:local_tammoz_chat/data/local/tables/plant_types.dart';
 class OperationsTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get operationTypeId => integer().references(OperationTypesTable, #id)();
+
   DateTimeColumn get date => dateTime()();
 
   // النوع الأول (مع مفتاح خارجي)
@@ -30,5 +31,6 @@ class OperationsTable extends Table {
 
   BoolColumn get scheduled => boolean().withDefault(const Constant(false))();
   IntColumn get reservationId => integer().nullable()();
+ RealColumn get cost => real().withDefault(const Constant(0))();
   TextColumn get notes => text().nullable()();
 }
