@@ -10,7 +10,6 @@ import 'package:local_tammoz_chat/presentation/plant_types/bloc/plant_type_event
 class AddPlantingPage extends BaseAddOperationPage {
   const AddPlantingPage({
     super.key,
-    super.preselectedOperationName,
   });
 
   @override
@@ -25,16 +24,37 @@ class _AddPlantingPageState extends BaseAddOperationPageState<AddPlantingPage> {
   void initState() {
     super.initState();
 
-    final cubit = context.read<OperationRelatedDataCubit>();
-    cubit.loadFormData();
     _newPlantTypeController = TextEditingController();
   }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+    if (currentArgs == null) {
+      final args = ModalRoute
+          .of(context)
+          ?.settings
+          .arguments as Map<String, dynamic>?;
+      if (args != null) {
+        currentArgs = args;
+        // استخدم setState إذا تريد تحديث الواجهة بناءً على البيانات
+        setState(() {
+          operationTypeName = args['preselectedOperationName'];
+
+        });
+      }
+    }
+  }
+
 
   @override
   void dispose() {
     _newPlantTypeController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget buildAddOperationSpecificFields(OperationRelatedDataState state) {

@@ -1,19 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_tammoz_chat/domain/entities/storage.dart';
 import 'package:local_tammoz_chat/presentation/operation/bloc/operation_related_data_cubit.dart';
 import 'package:local_tammoz_chat/presentation/operation/pages/base_add_operation_page.dart';
 
 class AddGraftingPage extends BaseAddOperationPage {
-  final Storage firstStorage;
-  final Storage secondStorage;
+
   const AddGraftingPage({
     super.key,
-    super.preselectedOperationName,
-    required this.firstStorage,
-    required this.secondStorage,
   });
 
   @override
@@ -22,27 +17,43 @@ class AddGraftingPage extends BaseAddOperationPage {
 
 class _AddGraftingPageState extends BaseAddOperationPageState<AddGraftingPage> {
 
+  late Storage firstStorage;
+  late Storage secondStorage;
   late int maxQuantity;
+
   @override
-  void initState() {
-    maxQuantity = min(widget.firstStorage.quantity, widget.secondStorage.quantity);
-    super.initState();
-    quantityController.text = maxQuantity.toString();
-    final cubit = context.read<OperationRelatedDataCubit>();
-    cubit.loadFormData();
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
 
+    if (currentArgs == null) {
+      final args = ModalRoute
+          .of(context)
+          ?.settings
+          .arguments as Map<String, dynamic>?;
+      if (args != null) {
+        currentArgs = args;
+        // استخدم setState إذا تريد تحديث الواجهة بناءً على البيانات
+        setState(() {
+          operationTypeName = args['preselectedOperationName'];
+          firstStorage = args['firstStorage'];
+          secondStorage = args['secondStorage'];
+          maxQuantity = min(firstStorage.quantity, secondStorage.quantity);
+          quantityController.text = maxQuantity.toString();
+        });
+      }
+    }
   }
-
 
 
   @override
   Widget buildAddOperationSpecificFields(OperationRelatedDataState state) {
-    selectedFirstPlantType = state.plantTypes.firstWhere((item) => item.name == widget.firstStorage.plantType);
-    selectedFirstPlantShape = state.plantShapes.firstWhere((item)=> item.name == widget.firstStorage.plantShape);
-    selectedSecondPlantType = state.plantTypes.firstWhere((item) => item.name == widget.secondStorage.plantType);
-    selectedSecondPlantShape = state.plantShapes.firstWhere((item) => item.name == widget.secondStorage.plantShape);
-    firstStorageId = widget.firstStorage.id;
-    secondStorageId = widget.secondStorage.id;
+    selectedFirstPlantType = state.plantTypes.firstWhere((item) => item.name == firstStorage.plantType);
+    selectedFirstPlantShape = state.plantShapes.firstWhere((item)=> item.name == firstStorage.plantShape);
+    selectedSecondPlantType = state.plantTypes.firstWhere((item) => item.name == secondStorage.plantType);
+    selectedSecondPlantShape = state.plantShapes.firstWhere((item) => item.name == secondStorage.plantShape);
+    firstStorageId = firstStorage.id;
+    secondStorageId = secondStorage.id;
     return Column(
       children: [
         // نوع النبات الأول

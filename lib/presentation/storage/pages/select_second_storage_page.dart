@@ -9,16 +9,44 @@ import 'package:local_tammoz_chat/presentation/storage/widgets/storage_item_for_
 import '../bloc/storage_bloc.dart';
 import '../widgets/storage_search_bar.dart';
 
-class SelectSecondStoragePage extends StatelessWidget {
-  final String preselectedOperationName;
-  final Storage firstStorage;
-  const SelectSecondStoragePage(
-  {
-      super.key,
-      required this.preselectedOperationName,
-      required this.firstStorage,
+class SelectSecondStoragePage extends StatefulWidget {
+  const SelectSecondStoragePage({
+    super.key,
 
-});
+  });
+
+
+  @override
+  MyState createState() => MyState();
+}
+class MyState extends State<SelectSecondStoragePage>{
+  String preselectedOperationName ='';
+  late Storage firstStorage ;
+
+  Map<String, dynamic>? currentArgs;
+
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+    if (currentArgs == null) {
+      final args= ModalRoute
+          .of(context)
+          ?.settings
+          .arguments as Map<String, dynamic>?;
+      if (args != null) {
+        currentArgs = args;
+        // استخدم setState إذا تريد تحديث الواجهة بناءً على البيانات
+        setState(() {
+          preselectedOperationName = args['preselectedOperationName'];
+          firstStorage = args['firstStorage'];
+        });
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +94,7 @@ class SelectSecondStoragePage extends StatelessWidget {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.refresh),
-        onPressed: () => context.read<StorageBloc>().add(const LoadAllStorages()),
-      ),
+
     );
   }
   void _handleStateChanges(BuildContext context, StorageState state) {
@@ -85,10 +110,9 @@ class SelectSecondStoragePage extends StatelessWidget {
   }
 
   void moveToGraftingPage(BuildContext context, Storage secondStorage){
-    Navigator.pushNamedAndRemoveUntil(
+    Navigator.pushNamed(
         context,
         PagesRoutesConstants.addGrafting,
-        ModalRoute.withName(PagesRoutesConstants.selectSecondStorage),
         arguments: {
           'preselectedOperationName': preselectedOperationName,
           'firstStorage': firstStorage,
@@ -96,4 +120,6 @@ class SelectSecondStoragePage extends StatelessWidget {
         }
     );
   }
+
+
 }

@@ -1,9 +1,11 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_tammoz_chat/constants.dart';
+import 'package:local_tammoz_chat/core/injection/service_locator.dart';
 import 'package:local_tammoz_chat/domain/entities/operation.dart';
-import 'package:local_tammoz_chat/domain/entities/storage.dart';
 import 'package:local_tammoz_chat/domain/repositories/operation_repository.dart';
 import 'package:local_tammoz_chat/domain/usecases/operation/add_operation.dart';
+import 'package:local_tammoz_chat/presentation/storage/bloc/storage_bloc.dart';
 
 part 'operation_events.dart';
 part 'operation_states.dart';
@@ -42,9 +44,14 @@ class OperationBloc extends Bloc<OperationEvent, OperationState> {
     );
     result.fold(
           (failure) => emit(OperationAddFailure(failure.message)),
-          (_) => emit(OperationAddSuccess()),
+          (_) {
+            return event.operation.operationType.name == OperationTypesConstants.grafting
+                ? emit(GraftingAddSuccess())
+                :emit(OperationAddSuccess());
+          },
     );
 
+    getIt<StorageBloc>().add(LoadAllStorages());
     add(LoadOperations());
   }
 }

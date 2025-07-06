@@ -43,26 +43,21 @@ class StorageItem extends StatelessWidget {
   void _showAddPruningPage(BuildContext context) {
     //.pop(context); // لإغلاق الـ Drawer أو Dialog إذا كنت تستخدمه
 
-    Navigator.pushNamedAndRemoveUntil(
+    Navigator.pushNamed(
       context,
       PagesRoutesConstants.addPruning,
-      ModalRoute.withName(PagesRoutesConstants.storage),
       arguments: {
           'preselectedOperationName': OperationTypesConstants.pruning,
-          'firstStorageId': storage.id,
-          'plantTypeName': storage.plantType,
-          'plantShapeName': storage.plantShape,
-          'maxQuantity': storage.quantity,
+          'selectedStorage': storage
         },
 
     );
   }
 
   void _showNextStoragePage( BuildContext context ) {
-    Navigator.pushNamedAndRemoveUntil(
+    Navigator.pushNamed(
         context,
         PagesRoutesConstants.selectSecondStorage,
-        ModalRoute.withName(PagesRoutesConstants.storage),
         arguments: {
           'preselectedOperationName': OperationTypesConstants.grafting,
           'firstStorage': storage,

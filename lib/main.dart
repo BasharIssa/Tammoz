@@ -13,7 +13,6 @@ import 'firebase_options.dart';
 import 'presentation/main_page.dart';
 import 'presentation/operation/bloc/operation_bloc.dart';
 import 'presentation/operation/bloc/operation_related_data_cubit.dart';
-import 'presentation/operation/pages/add_operation_page.dart';
 import 'presentation/operation/pages/add_planting_page.dart';
 import 'presentation/operation/pages/operations_page.dart';
 import 'presentation/plant_types/bloc/plant_type_bloc.dart';
@@ -50,7 +49,7 @@ class MyApp extends StatelessWidget {
           create: (_) => getIt<StorageBloc>()..add(LoadAllStorages()),
         ),
         BlocProvider<OperationBloc>(
-          create: (_) => getIt<OperationBloc>(),
+          create: (_) => getIt<OperationBloc>()..add(LoadOperations()),
         ),
         BlocProvider<OperationRelatedDataCubit>(
           create: (_) => getIt<OperationRelatedDataCubit>(),
@@ -66,91 +65,49 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => const MainPage());
 
             case PagesRoutesConstants.addGrafting:
-            // استخرج الوسيطات المرسلة مع التنقل
-              final args = settings.arguments as Map<String, dynamic>?;
-
-              if (args == null) {
-                // يمكنك إرجاع صفحة خطأ أو صفحة افتراضية
-                return MaterialPageRoute(
-                  builder: (_) => const Scaffold(
-                    body: Center(child: Text('خطأ: لم يتم تمرير المعاملات')),
-                  ),
-                );
-              }
               return MaterialPageRoute(
-                builder: (_) => AddGraftingPage(
-                  preselectedOperationName: args['preselectedOperationName'] as String,
-                  firstStorage: args['firstStorage'] as Storage,
-                  secondStorage: args['secondStorage'] as Storage,
-                ),
+                builder: (_) => AddGraftingPage(),
+                settings: settings, // مهم لتمرير settings مع arguments
               );
 
 
             case PagesRoutesConstants.selectSecondStorage:
-            // استخرج الوسيطات المرسلة مع التنقل
-              final args = settings.arguments as Map<String, dynamic>?;
-
-              if (args == null) {
-                // يمكنك إرجاع صفحة خطأ أو صفحة افتراضية
-                return MaterialPageRoute(
-                  builder: (_) => const Scaffold(
-                    body: Center(child: Text('خطأ: لم يتم تمرير المعاملات')),
-                  ),
-                );
-              }
               return MaterialPageRoute(
-                builder: (_) => SelectSecondStoragePage(
-                  preselectedOperationName: args['preselectedOperationName'] as String,
-                  firstStorage: args['firstStorage'] as Storage,
-                ),
+                builder: (_) => SelectSecondStoragePage(),
+                settings: settings, // مهم لتمرير settings مع arguments
               );
 
             case PagesRoutesConstants.addPruning:
-            // استخرج الوسيطات المرسلة مع التنقل
-              final args = settings.arguments as Map<String, dynamic>?;
-
-              if (args == null) {
-                // يمكنك إرجاع صفحة خطأ أو صفحة افتراضية
-                return MaterialPageRoute(
-                  builder: (_) => const Scaffold(
-                    body: Center(child: Text('خطأ: لم يتم تمرير المعاملات')),
-                  ),
-                );
-              }
               return MaterialPageRoute(
-                builder: (_) => AddPruningPage(
-                  preselectedOperationName: args['preselectedOperationName'] as String?,
-                  firstStorageId: args['firstStorageId'] as int,
-                  plantTypeName: args['plantTypeName'] as String,
-                  plantShapeName: args['plantShapeName'] as String,
-                  maxQuantity: args['maxQuantity'] as int,
-                ),
+                builder: (context) =>  AddPruningPage(),
+                settings: settings, // مهم لتمرير settings مع arguments
               );
 
             case PagesRoutesConstants.addPlanting:
-              final args = settings.arguments as String?;
               return MaterialPageRoute(
-                builder: (_) => AddPlantingPage(preselectedOperationName: args),
+                builder: (_) =>  AddPlantingPage(),
+                settings: settings, // مهم لتمرير settings مع arguments
               );
 
             case '/addOperation':
-              final args = settings.arguments as Map<String, dynamic>?;
               return MaterialPageRoute(
-                builder: (_) => AddOperationPage(
-                  preselectedOperationName:
-                      args?['preselectedOperationName'] as String?,
-                  plantType: args?['plantType'] as String?,
-                  plantShape: args?['plantShape'] as String?,
-                  quantity: args?['quantity'] as int?,
-                ),
+                builder: (_) => AddOperationPage(),
+                settings: settings, // مهم لتمرير settings مع arguments
               );
 
             case PagesRoutesConstants.storage:
-              return MaterialPageRoute(builder: (_) => const StoragePage());
+              return MaterialPageRoute(builder: (_)  {
+                getIt<StorageBloc>().add(LoadAllStorages());
+                return const StoragePage();
+    });
 
-            case PagesRoutesConstants.operations:
-              return MaterialPageRoute(builder: (_) => const OperationsPage());
-
+            case PagesRoutesConstants.operations
+            :
+              return MaterialPageRoute(builder: (_)
+              {
+                getIt<OperationBloc>().add(LoadOperations());
+                return const OperationsPage();
+              });
             default:
               return MaterialPageRoute(
                 builder: (_) => const Scaffold(

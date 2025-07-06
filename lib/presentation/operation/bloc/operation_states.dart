@@ -28,6 +28,7 @@ class OperationError extends OperationState {
 }
 
 class OperationAddSuccess extends OperationState {}
+class GraftingAddSuccess extends OperationAddSuccess{}
 
 class OperationAddFailure extends OperationState {
   final String message;

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_tammoz_chat/constants.dart';
 import 'package:local_tammoz_chat/domain/entities/operation.dart';
 import 'package:local_tammoz_chat/domain/entities/operation_type.dart';
 import 'package:local_tammoz_chat/domain/entities/plant_shape.dart';
@@ -13,16 +14,8 @@ import 'package:local_tammoz_chat/presentation/plant_types/bloc/plant_type_bloc.
 import 'package:local_tammoz_chat/presentation/plant_types/bloc/plant_type_states.dart';
 
 abstract class BaseAddOperationPage extends StatefulWidget{
-
-  final String? preselectedOperationName;
-  final int? firstStorageId;
-  final int? secondStorageId;
-
   const BaseAddOperationPage({
     super.key,
-    this.preselectedOperationName,
-    this.firstStorageId,
-    this.secondStorageId
   });
 }
 
@@ -30,17 +23,22 @@ abstract class BaseAddOperationPageState<T extends BaseAddOperationPage> extends
   final formKey = GlobalKey<FormState>();
   final quantityController = TextEditingController();
   final costController = TextEditingController(text: '0');
+  String? operationTypeName ;
   OperationType? selectedOperationType;
-  late int? firstStorageId ;
+  int? firstStorageId;
   PlantType? selectedFirstPlantType;
   PlantShape? selectedFirstPlantShape;
-  late int? secondStorageId;
+  int? secondStorageId;
   PlantType? selectedSecondPlantType;
   PlantShape? selectedSecondPlantShape;
   DateTime selectedDate = DateTime.now();
   late Operation operationToAdd;
+
+  Map<String, dynamic>? currentArgs;
+
   @override
   void initState() {
+
     super.initState();
     final cubit = context.read<OperationRelatedDataCubit>();
     cubit.loadFormData();
@@ -81,8 +79,8 @@ abstract class BaseAddOperationPageState<T extends BaseAddOperationPage> extends
     return Scaffold(
       appBar: AppBar(title:
       Text(
-        widget.preselectedOperationName != null
-            ? 'إضافة عملية جديدة (${widget.preselectedOperationName})'
+        operationTypeName != null
+            ? 'إضافة عملية جديدة ($operationTypeName)'
             : 'إضافة عملية جديدة',
       ),
       ),
@@ -94,10 +92,10 @@ abstract class BaseAddOperationPageState<T extends BaseAddOperationPage> extends
           listener: (context, state) {
             if (!state.isLoading &&
                 selectedOperationType == null &&
-                widget.preselectedOperationName != null) {
+                operationTypeName != null) {
               final found = context
                   .read<OperationRelatedDataCubit>()
-                  .findOperationTypeByName(widget.preselectedOperationName!);
+                  .findOperationTypeByName(operationTypeName!);
               if (found != null) {
                 setState(() {
                   selectedOperationType = found;
@@ -184,7 +182,14 @@ abstract class BaseAddOperationPageState<T extends BaseAddOperationPage> extends
                         // زر الإضافة مع BlocConsumer
                         BlocConsumer<OperationBloc, OperationState>(
                           listener: (context, state) {
-                            if (state is OperationAddSuccess) {
+                            if (state is GraftingAddSuccess) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('تمت إضافة عملية التطعيم بنجاح')),
+                              );
+                            }else if (state is OperationAddSuccess) {
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

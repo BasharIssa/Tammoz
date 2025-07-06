@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_tammoz_chat/constants.dart';
+import 'package:local_tammoz_chat/core/injection/service_locator.dart';
 import 'package:local_tammoz_chat/presentation/operation/bloc/operation_bloc.dart';
 import 'package:local_tammoz_chat/presentation/operation/widgets/OperationsList.dart';
 
@@ -8,17 +9,15 @@ class MainPage extends StatelessWidget {
   const MainPage({super.key});
 
   void _openAddOperationPage(
-      BuildContext context, String operationName,{String? plantTypeName,
-      String? plantShapeName, String? quantity}
+      BuildContext context,
+      String operationName
       ) {
+
     Navigator.pushNamed(
       context,
-      '/addOperation',
+      PagesRoutesConstants.addPlanting,
       arguments: {
         'preselectedOperationName': operationName, // أو اسم عملية القص حسب الثابت لديك
-        'plantType': plantTypeName,        // نص اسم النبات
-        'plantShape': plantShapeName,      // نص اسم الشكل
-        'quantity': quantity,          // العدد الحالي
       },
     );
   }
@@ -44,24 +43,24 @@ class MainPage extends StatelessWidget {
                   onPressed: () =>
                       _openAddOperationPage(context, OperationTypesConstants.planting),
                 ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.content_cut),
-                  label: const Text('قص'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  onPressed: () =>
-                      _openAddOperationPage(context, OperationTypesConstants.pruning),
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.merge_type),
-                  label: const Text('تطعيم'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  onPressed: () =>
-                      Navigator.pushNamed(
-                        context,
-                        PagesRoutesConstants.addPlanting,
-                        arguments: 'زراعة', // أو أي اسم تريد تمريره
-                      )
-                ),
+                // ElevatedButton.icon(
+                //   icon: const Icon(Icons.content_cut),
+                //   label: const Text('قص'),
+                //   style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                //   onPressed: () =>
+                //       _openAddOperationPage(context, OperationTypesConstants.pruning),
+                // ),
+                // ElevatedButton.icon(
+                //   icon: const Icon(Icons.merge_type),
+                //   label: const Text('تطعيم'),
+                //   style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                //   onPressed: () =>
+                //       Navigator.pushNamed(
+                //         context,
+                //         PagesRoutesConstants.addPlanting,
+                //         arguments: 'زراعة', // أو أي اسم تريد تمريره
+                //       )
+                // ),
               ],
             ),
             const SizedBox(height: 20),

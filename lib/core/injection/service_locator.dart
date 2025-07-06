@@ -3,10 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:local_tammoz_chat/data/data_sources/firebase_expense_datasource.dart';
 import 'package:local_tammoz_chat/data/local/local_database.dart';
 import 'package:local_tammoz_chat/data/repositories/operation_repository_impl.dart';
-import 'package:local_tammoz_chat/data/repositories/planting_repository_impl.dart';
 import 'package:local_tammoz_chat/data/repositories/setup_expense_repository_impl.dart';
 import 'package:local_tammoz_chat/domain/repositories/operation_repository.dart';
-import 'package:local_tammoz_chat/domain/repositories/planting_repository.dart';
 import 'package:local_tammoz_chat/domain/repositories/setup_expense_repository.dart';
 import 'package:local_tammoz_chat/domain/usecases/add_setup_expense.dart';
 import 'package:local_tammoz_chat/domain/usecases/delete_setup_expense.dart';
@@ -46,9 +44,7 @@ void setupLocator() {
   getIt.registerLazySingleton<SetupExpenseRepository>(
         () => SetupExpenseRepositoryImpl(),
   );
-  getIt.registerLazySingleton<PlantingRepository>(
-        () => PlantingRepositoryImpl(),
-  );
+
 getIt.registerLazySingleton<StorageRepository>(
     () => StorageRepositoryImpl(getIt<LocalDatabase>())
 );
