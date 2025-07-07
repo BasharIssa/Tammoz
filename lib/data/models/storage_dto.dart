@@ -13,6 +13,9 @@ class StorageDto {
   final int? parentOperationId;
   final DateTime? parentOperationDate;
   final String? parentOperationName;
+  final int? reservationId;
+  final String? reserverFullName;
+  final bool isScheduled;
   final String? notes;
 
   StorageDto({
@@ -25,6 +28,9 @@ class StorageDto {
     this.parentOperationId,
     this.parentOperationDate,
     this.parentOperationName,
+    this.reservationId,
+    this.reserverFullName,
+    required this.isScheduled,
     this.notes,
   });
 

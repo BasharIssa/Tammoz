@@ -18,6 +18,9 @@ StorageDto _$StorageDtoFromJson(Map<String, dynamic> json) => StorageDto(
           ? null
           : DateTime.parse(json['parentOperationDate'] as String),
       parentOperationName: json['parentOperationName'] as String?,
+      reservationId: (json['reservationId'] as num?)?.toInt(),
+      reserverFullName: json['reserverFullName'] as String?,
+      isScheduled: json['isScheduled'] as bool,
       notes: json['notes'] as String?,
     );
 
@@ -32,5 +35,8 @@ Map<String, dynamic> _$StorageDtoToJson(StorageDto instance) =>
       'parentOperationId': instance.parentOperationId,
       'parentOperationDate': instance.parentOperationDate?.toIso8601String(),
       'parentOperationName': instance.parentOperationName,
+      'reservationId': instance.reservationId,
+      'reserverFullName': instance.reserverFullName,
+      'isScheduled': instance.isScheduled,
       'notes': instance.notes,
     };

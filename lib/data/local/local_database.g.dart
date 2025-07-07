@@ -698,311 +698,6 @@ class PlantTypesTableCompanion extends UpdateCompanion<PlantTypesTableData> {
   }
 }
 
-class $PlantingTableTable extends PlantingTable
-    with TableInfo<$PlantingTableTable, PlantingTableData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $PlantingTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _typeIdMeta = const VerificationMeta('typeId');
-  @override
-  late final GeneratedColumn<int> typeId = GeneratedColumn<int>(
-      'type_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES plant_types_table (id)'));
-  static const VerificationMeta _quantityMeta =
-      const VerificationMeta('quantity');
-  @override
-  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
-      'quantity', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _dateMeta = const VerificationMeta('date');
-  @override
-  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
-      'date', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _initialCostMeta =
-      const VerificationMeta('initialCost');
-  @override
-  late final GeneratedColumn<double> initialCost = GeneratedColumn<double>(
-      'initial_cost', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, typeId, quantity, date, initialCost];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'planting_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<PlantingTableData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('type_id')) {
-      context.handle(_typeIdMeta,
-          typeId.isAcceptableOrUnknown(data['type_id']!, _typeIdMeta));
-    } else if (isInserting) {
-      context.missing(_typeIdMeta);
-    }
-    if (data.containsKey('quantity')) {
-      context.handle(_quantityMeta,
-          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
-    } else if (isInserting) {
-      context.missing(_quantityMeta);
-    }
-    if (data.containsKey('date')) {
-      context.handle(
-          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
-    } else if (isInserting) {
-      context.missing(_dateMeta);
-    }
-    if (data.containsKey('initial_cost')) {
-      context.handle(
-          _initialCostMeta,
-          initialCost.isAcceptableOrUnknown(
-              data['initial_cost']!, _initialCostMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  PlantingTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return PlantingTableData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      typeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}type_id'])!,
-      quantity: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
-      date: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
-      initialCost: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}initial_cost']),
-    );
-  }
-
-  @override
-  $PlantingTableTable createAlias(String alias) {
-    return $PlantingTableTable(attachedDatabase, alias);
-  }
-}
-
-class PlantingTableData extends DataClass
-    implements Insertable<PlantingTableData> {
-  final int id;
-  final int typeId;
-  final int quantity;
-  final DateTime date;
-  final double? initialCost;
-  const PlantingTableData(
-      {required this.id,
-      required this.typeId,
-      required this.quantity,
-      required this.date,
-      this.initialCost});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['type_id'] = Variable<int>(typeId);
-    map['quantity'] = Variable<int>(quantity);
-    map['date'] = Variable<DateTime>(date);
-    if (!nullToAbsent || initialCost != null) {
-      map['initial_cost'] = Variable<double>(initialCost);
-    }
-    return map;
-  }
-
-  PlantingTableCompanion toCompanion(bool nullToAbsent) {
-    return PlantingTableCompanion(
-      id: Value(id),
-      typeId: Value(typeId),
-      quantity: Value(quantity),
-      date: Value(date),
-      initialCost: initialCost == null && nullToAbsent
-          ? const Value.absent()
-          : Value(initialCost),
-    );
-  }
-
-  factory PlantingTableData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return PlantingTableData(
-      id: serializer.fromJson<int>(json['id']),
-      typeId: serializer.fromJson<int>(json['typeId']),
-      quantity: serializer.fromJson<int>(json['quantity']),
-      date: serializer.fromJson<DateTime>(json['date']),
-      initialCost: serializer.fromJson<double?>(json['initialCost']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'typeId': serializer.toJson<int>(typeId),
-      'quantity': serializer.toJson<int>(quantity),
-      'date': serializer.toJson<DateTime>(date),
-      'initialCost': serializer.toJson<double?>(initialCost),
-    };
-  }
-
-  PlantingTableData copyWith(
-          {int? id,
-          int? typeId,
-          int? quantity,
-          DateTime? date,
-          Value<double?> initialCost = const Value.absent()}) =>
-      PlantingTableData(
-        id: id ?? this.id,
-        typeId: typeId ?? this.typeId,
-        quantity: quantity ?? this.quantity,
-        date: date ?? this.date,
-        initialCost: initialCost.present ? initialCost.value : this.initialCost,
-      );
-  PlantingTableData copyWithCompanion(PlantingTableCompanion data) {
-    return PlantingTableData(
-      id: data.id.present ? data.id.value : this.id,
-      typeId: data.typeId.present ? data.typeId.value : this.typeId,
-      quantity: data.quantity.present ? data.quantity.value : this.quantity,
-      date: data.date.present ? data.date.value : this.date,
-      initialCost:
-          data.initialCost.present ? data.initialCost.value : this.initialCost,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('PlantingTableData(')
-          ..write('id: $id, ')
-          ..write('typeId: $typeId, ')
-          ..write('quantity: $quantity, ')
-          ..write('date: $date, ')
-          ..write('initialCost: $initialCost')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, typeId, quantity, date, initialCost);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is PlantingTableData &&
-          other.id == this.id &&
-          other.typeId == this.typeId &&
-          other.quantity == this.quantity &&
-          other.date == this.date &&
-          other.initialCost == this.initialCost);
-}
-
-class PlantingTableCompanion extends UpdateCompanion<PlantingTableData> {
-  final Value<int> id;
-  final Value<int> typeId;
-  final Value<int> quantity;
-  final Value<DateTime> date;
-  final Value<double?> initialCost;
-  const PlantingTableCompanion({
-    this.id = const Value.absent(),
-    this.typeId = const Value.absent(),
-    this.quantity = const Value.absent(),
-    this.date = const Value.absent(),
-    this.initialCost = const Value.absent(),
-  });
-  PlantingTableCompanion.insert({
-    this.id = const Value.absent(),
-    required int typeId,
-    required int quantity,
-    required DateTime date,
-    this.initialCost = const Value.absent(),
-  })  : typeId = Value(typeId),
-        quantity = Value(quantity),
-        date = Value(date);
-  static Insertable<PlantingTableData> custom({
-    Expression<int>? id,
-    Expression<int>? typeId,
-    Expression<int>? quantity,
-    Expression<DateTime>? date,
-    Expression<double>? initialCost,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (typeId != null) 'type_id': typeId,
-      if (quantity != null) 'quantity': quantity,
-      if (date != null) 'date': date,
-      if (initialCost != null) 'initial_cost': initialCost,
-    });
-  }
-
-  PlantingTableCompanion copyWith(
-      {Value<int>? id,
-      Value<int>? typeId,
-      Value<int>? quantity,
-      Value<DateTime>? date,
-      Value<double?>? initialCost}) {
-    return PlantingTableCompanion(
-      id: id ?? this.id,
-      typeId: typeId ?? this.typeId,
-      quantity: quantity ?? this.quantity,
-      date: date ?? this.date,
-      initialCost: initialCost ?? this.initialCost,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (typeId.present) {
-      map['type_id'] = Variable<int>(typeId.value);
-    }
-    if (quantity.present) {
-      map['quantity'] = Variable<int>(quantity.value);
-    }
-    if (date.present) {
-      map['date'] = Variable<DateTime>(date.value);
-    }
-    if (initialCost.present) {
-      map['initial_cost'] = Variable<double>(initialCost.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('PlantingTableCompanion(')
-          ..write('id: $id, ')
-          ..write('typeId: $typeId, ')
-          ..write('quantity: $quantity, ')
-          ..write('date: $date, ')
-          ..write('initialCost: $initialCost')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $PlantShapesTableTable extends PlantShapesTable
     with TableInfo<$PlantShapesTableTable, PlantShapesTableData> {
   @override
@@ -2078,6 +1773,625 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
   }
 }
 
+class $ReservationsTableTable extends ReservationsTable
+    with TableInfo<$ReservationsTableTable, ReservationsTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReservationsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _fullNameMeta =
+      const VerificationMeta('fullName');
+  @override
+  late final GeneratedColumn<String> fullName = GeneratedColumn<String>(
+      'full_name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
+  @override
+  late final GeneratedColumn<String> phone = GeneratedColumn<String>(
+      'phone', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _reservationDateMeta =
+      const VerificationMeta('reservationDate');
+  @override
+  late final GeneratedColumn<DateTime> reservationDate =
+      GeneratedColumn<DateTime>('reservation_date', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _deliveryDateMeta =
+      const VerificationMeta('deliveryDate');
+  @override
+  late final GeneratedColumn<DateTime> deliveryDate = GeneratedColumn<DateTime>(
+      'delivery_date', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _plantTypeIdMeta =
+      const VerificationMeta('plantTypeId');
+  @override
+  late final GeneratedColumn<int> plantTypeId = GeneratedColumn<int>(
+      'plant_type_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES plant_types_table (id)'));
+  static const VerificationMeta _plantShapeIdMeta =
+      const VerificationMeta('plantShapeId');
+  @override
+  late final GeneratedColumn<int> plantShapeId = GeneratedColumn<int>(
+      'plant_shape_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES plant_shapes_table (id)'));
+  static const VerificationMeta _quantityMeta =
+      const VerificationMeta('quantity');
+  @override
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _depositMeta =
+      const VerificationMeta('deposit');
+  @override
+  late final GeneratedColumn<double> deposit = GeneratedColumn<double>(
+      'deposit', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: (Constant(0)));
+  static const VerificationMeta _isFullyPaidMeta =
+      const VerificationMeta('isFullyPaid');
+  @override
+  late final GeneratedColumn<bool> isFullyPaid = GeneratedColumn<bool>(
+      'is_fully_paid', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_fully_paid" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _isDeliveredMeta =
+      const VerificationMeta('isDelivered');
+  @override
+  late final GeneratedColumn<bool> isDelivered = GeneratedColumn<bool>(
+      'is_delivered', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_delivered" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        fullName,
+        phone,
+        reservationDate,
+        deliveryDate,
+        plantTypeId,
+        plantShapeId,
+        quantity,
+        deposit,
+        isFullyPaid,
+        isDelivered,
+        notes
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'reservations_table';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ReservationsTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('full_name')) {
+      context.handle(_fullNameMeta,
+          fullName.isAcceptableOrUnknown(data['full_name']!, _fullNameMeta));
+    } else if (isInserting) {
+      context.missing(_fullNameMeta);
+    }
+    if (data.containsKey('phone')) {
+      context.handle(
+          _phoneMeta, phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta));
+    } else if (isInserting) {
+      context.missing(_phoneMeta);
+    }
+    if (data.containsKey('reservation_date')) {
+      context.handle(
+          _reservationDateMeta,
+          reservationDate.isAcceptableOrUnknown(
+              data['reservation_date']!, _reservationDateMeta));
+    } else if (isInserting) {
+      context.missing(_reservationDateMeta);
+    }
+    if (data.containsKey('delivery_date')) {
+      context.handle(
+          _deliveryDateMeta,
+          deliveryDate.isAcceptableOrUnknown(
+              data['delivery_date']!, _deliveryDateMeta));
+    }
+    if (data.containsKey('plant_type_id')) {
+      context.handle(
+          _plantTypeIdMeta,
+          plantTypeId.isAcceptableOrUnknown(
+              data['plant_type_id']!, _plantTypeIdMeta));
+    } else if (isInserting) {
+      context.missing(_plantTypeIdMeta);
+    }
+    if (data.containsKey('plant_shape_id')) {
+      context.handle(
+          _plantShapeIdMeta,
+          plantShapeId.isAcceptableOrUnknown(
+              data['plant_shape_id']!, _plantShapeIdMeta));
+    } else if (isInserting) {
+      context.missing(_plantShapeIdMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    if (data.containsKey('deposit')) {
+      context.handle(_depositMeta,
+          deposit.isAcceptableOrUnknown(data['deposit']!, _depositMeta));
+    }
+    if (data.containsKey('is_fully_paid')) {
+      context.handle(
+          _isFullyPaidMeta,
+          isFullyPaid.isAcceptableOrUnknown(
+              data['is_fully_paid']!, _isFullyPaidMeta));
+    }
+    if (data.containsKey('is_delivered')) {
+      context.handle(
+          _isDeliveredMeta,
+          isDelivered.isAcceptableOrUnknown(
+              data['is_delivered']!, _isDeliveredMeta));
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ReservationsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReservationsTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      fullName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}full_name'])!,
+      phone: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}phone'])!,
+      reservationDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}reservation_date'])!,
+      deliveryDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}delivery_date']),
+      plantTypeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plant_type_id'])!,
+      plantShapeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plant_shape_id'])!,
+      quantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
+      deposit: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}deposit'])!,
+      isFullyPaid: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_fully_paid'])!,
+      isDelivered: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_delivered'])!,
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+    );
+  }
+
+  @override
+  $ReservationsTableTable createAlias(String alias) {
+    return $ReservationsTableTable(attachedDatabase, alias);
+  }
+}
+
+class ReservationsTableData extends DataClass
+    implements Insertable<ReservationsTableData> {
+  final int id;
+  final String fullName;
+  final String phone;
+  final DateTime reservationDate;
+  final DateTime? deliveryDate;
+  final int plantTypeId;
+  final int plantShapeId;
+  final int quantity;
+  final double deposit;
+  final bool isFullyPaid;
+  final bool isDelivered;
+  final String? notes;
+  const ReservationsTableData(
+      {required this.id,
+      required this.fullName,
+      required this.phone,
+      required this.reservationDate,
+      this.deliveryDate,
+      required this.plantTypeId,
+      required this.plantShapeId,
+      required this.quantity,
+      required this.deposit,
+      required this.isFullyPaid,
+      required this.isDelivered,
+      this.notes});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['full_name'] = Variable<String>(fullName);
+    map['phone'] = Variable<String>(phone);
+    map['reservation_date'] = Variable<DateTime>(reservationDate);
+    if (!nullToAbsent || deliveryDate != null) {
+      map['delivery_date'] = Variable<DateTime>(deliveryDate);
+    }
+    map['plant_type_id'] = Variable<int>(plantTypeId);
+    map['plant_shape_id'] = Variable<int>(plantShapeId);
+    map['quantity'] = Variable<int>(quantity);
+    map['deposit'] = Variable<double>(deposit);
+    map['is_fully_paid'] = Variable<bool>(isFullyPaid);
+    map['is_delivered'] = Variable<bool>(isDelivered);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    return map;
+  }
+
+  ReservationsTableCompanion toCompanion(bool nullToAbsent) {
+    return ReservationsTableCompanion(
+      id: Value(id),
+      fullName: Value(fullName),
+      phone: Value(phone),
+      reservationDate: Value(reservationDate),
+      deliveryDate: deliveryDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deliveryDate),
+      plantTypeId: Value(plantTypeId),
+      plantShapeId: Value(plantShapeId),
+      quantity: Value(quantity),
+      deposit: Value(deposit),
+      isFullyPaid: Value(isFullyPaid),
+      isDelivered: Value(isDelivered),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+    );
+  }
+
+  factory ReservationsTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReservationsTableData(
+      id: serializer.fromJson<int>(json['id']),
+      fullName: serializer.fromJson<String>(json['fullName']),
+      phone: serializer.fromJson<String>(json['phone']),
+      reservationDate: serializer.fromJson<DateTime>(json['reservationDate']),
+      deliveryDate: serializer.fromJson<DateTime?>(json['deliveryDate']),
+      plantTypeId: serializer.fromJson<int>(json['plantTypeId']),
+      plantShapeId: serializer.fromJson<int>(json['plantShapeId']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+      deposit: serializer.fromJson<double>(json['deposit']),
+      isFullyPaid: serializer.fromJson<bool>(json['isFullyPaid']),
+      isDelivered: serializer.fromJson<bool>(json['isDelivered']),
+      notes: serializer.fromJson<String?>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'fullName': serializer.toJson<String>(fullName),
+      'phone': serializer.toJson<String>(phone),
+      'reservationDate': serializer.toJson<DateTime>(reservationDate),
+      'deliveryDate': serializer.toJson<DateTime?>(deliveryDate),
+      'plantTypeId': serializer.toJson<int>(plantTypeId),
+      'plantShapeId': serializer.toJson<int>(plantShapeId),
+      'quantity': serializer.toJson<int>(quantity),
+      'deposit': serializer.toJson<double>(deposit),
+      'isFullyPaid': serializer.toJson<bool>(isFullyPaid),
+      'isDelivered': serializer.toJson<bool>(isDelivered),
+      'notes': serializer.toJson<String?>(notes),
+    };
+  }
+
+  ReservationsTableData copyWith(
+          {int? id,
+          String? fullName,
+          String? phone,
+          DateTime? reservationDate,
+          Value<DateTime?> deliveryDate = const Value.absent(),
+          int? plantTypeId,
+          int? plantShapeId,
+          int? quantity,
+          double? deposit,
+          bool? isFullyPaid,
+          bool? isDelivered,
+          Value<String?> notes = const Value.absent()}) =>
+      ReservationsTableData(
+        id: id ?? this.id,
+        fullName: fullName ?? this.fullName,
+        phone: phone ?? this.phone,
+        reservationDate: reservationDate ?? this.reservationDate,
+        deliveryDate:
+            deliveryDate.present ? deliveryDate.value : this.deliveryDate,
+        plantTypeId: plantTypeId ?? this.plantTypeId,
+        plantShapeId: plantShapeId ?? this.plantShapeId,
+        quantity: quantity ?? this.quantity,
+        deposit: deposit ?? this.deposit,
+        isFullyPaid: isFullyPaid ?? this.isFullyPaid,
+        isDelivered: isDelivered ?? this.isDelivered,
+        notes: notes.present ? notes.value : this.notes,
+      );
+  ReservationsTableData copyWithCompanion(ReservationsTableCompanion data) {
+    return ReservationsTableData(
+      id: data.id.present ? data.id.value : this.id,
+      fullName: data.fullName.present ? data.fullName.value : this.fullName,
+      phone: data.phone.present ? data.phone.value : this.phone,
+      reservationDate: data.reservationDate.present
+          ? data.reservationDate.value
+          : this.reservationDate,
+      deliveryDate: data.deliveryDate.present
+          ? data.deliveryDate.value
+          : this.deliveryDate,
+      plantTypeId:
+          data.plantTypeId.present ? data.plantTypeId.value : this.plantTypeId,
+      plantShapeId: data.plantShapeId.present
+          ? data.plantShapeId.value
+          : this.plantShapeId,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      deposit: data.deposit.present ? data.deposit.value : this.deposit,
+      isFullyPaid:
+          data.isFullyPaid.present ? data.isFullyPaid.value : this.isFullyPaid,
+      isDelivered:
+          data.isDelivered.present ? data.isDelivered.value : this.isDelivered,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReservationsTableData(')
+          ..write('id: $id, ')
+          ..write('fullName: $fullName, ')
+          ..write('phone: $phone, ')
+          ..write('reservationDate: $reservationDate, ')
+          ..write('deliveryDate: $deliveryDate, ')
+          ..write('plantTypeId: $plantTypeId, ')
+          ..write('plantShapeId: $plantShapeId, ')
+          ..write('quantity: $quantity, ')
+          ..write('deposit: $deposit, ')
+          ..write('isFullyPaid: $isFullyPaid, ')
+          ..write('isDelivered: $isDelivered, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      fullName,
+      phone,
+      reservationDate,
+      deliveryDate,
+      plantTypeId,
+      plantShapeId,
+      quantity,
+      deposit,
+      isFullyPaid,
+      isDelivered,
+      notes);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReservationsTableData &&
+          other.id == this.id &&
+          other.fullName == this.fullName &&
+          other.phone == this.phone &&
+          other.reservationDate == this.reservationDate &&
+          other.deliveryDate == this.deliveryDate &&
+          other.plantTypeId == this.plantTypeId &&
+          other.plantShapeId == this.plantShapeId &&
+          other.quantity == this.quantity &&
+          other.deposit == this.deposit &&
+          other.isFullyPaid == this.isFullyPaid &&
+          other.isDelivered == this.isDelivered &&
+          other.notes == this.notes);
+}
+
+class ReservationsTableCompanion
+    extends UpdateCompanion<ReservationsTableData> {
+  final Value<int> id;
+  final Value<String> fullName;
+  final Value<String> phone;
+  final Value<DateTime> reservationDate;
+  final Value<DateTime?> deliveryDate;
+  final Value<int> plantTypeId;
+  final Value<int> plantShapeId;
+  final Value<int> quantity;
+  final Value<double> deposit;
+  final Value<bool> isFullyPaid;
+  final Value<bool> isDelivered;
+  final Value<String?> notes;
+  const ReservationsTableCompanion({
+    this.id = const Value.absent(),
+    this.fullName = const Value.absent(),
+    this.phone = const Value.absent(),
+    this.reservationDate = const Value.absent(),
+    this.deliveryDate = const Value.absent(),
+    this.plantTypeId = const Value.absent(),
+    this.plantShapeId = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.deposit = const Value.absent(),
+    this.isFullyPaid = const Value.absent(),
+    this.isDelivered = const Value.absent(),
+    this.notes = const Value.absent(),
+  });
+  ReservationsTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String fullName,
+    required String phone,
+    required DateTime reservationDate,
+    this.deliveryDate = const Value.absent(),
+    required int plantTypeId,
+    required int plantShapeId,
+    required int quantity,
+    this.deposit = const Value.absent(),
+    this.isFullyPaid = const Value.absent(),
+    this.isDelivered = const Value.absent(),
+    this.notes = const Value.absent(),
+  })  : fullName = Value(fullName),
+        phone = Value(phone),
+        reservationDate = Value(reservationDate),
+        plantTypeId = Value(plantTypeId),
+        plantShapeId = Value(plantShapeId),
+        quantity = Value(quantity);
+  static Insertable<ReservationsTableData> custom({
+    Expression<int>? id,
+    Expression<String>? fullName,
+    Expression<String>? phone,
+    Expression<DateTime>? reservationDate,
+    Expression<DateTime>? deliveryDate,
+    Expression<int>? plantTypeId,
+    Expression<int>? plantShapeId,
+    Expression<int>? quantity,
+    Expression<double>? deposit,
+    Expression<bool>? isFullyPaid,
+    Expression<bool>? isDelivered,
+    Expression<String>? notes,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (fullName != null) 'full_name': fullName,
+      if (phone != null) 'phone': phone,
+      if (reservationDate != null) 'reservation_date': reservationDate,
+      if (deliveryDate != null) 'delivery_date': deliveryDate,
+      if (plantTypeId != null) 'plant_type_id': plantTypeId,
+      if (plantShapeId != null) 'plant_shape_id': plantShapeId,
+      if (quantity != null) 'quantity': quantity,
+      if (deposit != null) 'deposit': deposit,
+      if (isFullyPaid != null) 'is_fully_paid': isFullyPaid,
+      if (isDelivered != null) 'is_delivered': isDelivered,
+      if (notes != null) 'notes': notes,
+    });
+  }
+
+  ReservationsTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? fullName,
+      Value<String>? phone,
+      Value<DateTime>? reservationDate,
+      Value<DateTime?>? deliveryDate,
+      Value<int>? plantTypeId,
+      Value<int>? plantShapeId,
+      Value<int>? quantity,
+      Value<double>? deposit,
+      Value<bool>? isFullyPaid,
+      Value<bool>? isDelivered,
+      Value<String?>? notes}) {
+    return ReservationsTableCompanion(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      phone: phone ?? this.phone,
+      reservationDate: reservationDate ?? this.reservationDate,
+      deliveryDate: deliveryDate ?? this.deliveryDate,
+      plantTypeId: plantTypeId ?? this.plantTypeId,
+      plantShapeId: plantShapeId ?? this.plantShapeId,
+      quantity: quantity ?? this.quantity,
+      deposit: deposit ?? this.deposit,
+      isFullyPaid: isFullyPaid ?? this.isFullyPaid,
+      isDelivered: isDelivered ?? this.isDelivered,
+      notes: notes ?? this.notes,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (fullName.present) {
+      map['full_name'] = Variable<String>(fullName.value);
+    }
+    if (phone.present) {
+      map['phone'] = Variable<String>(phone.value);
+    }
+    if (reservationDate.present) {
+      map['reservation_date'] = Variable<DateTime>(reservationDate.value);
+    }
+    if (deliveryDate.present) {
+      map['delivery_date'] = Variable<DateTime>(deliveryDate.value);
+    }
+    if (plantTypeId.present) {
+      map['plant_type_id'] = Variable<int>(plantTypeId.value);
+    }
+    if (plantShapeId.present) {
+      map['plant_shape_id'] = Variable<int>(plantShapeId.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (deposit.present) {
+      map['deposit'] = Variable<double>(deposit.value);
+    }
+    if (isFullyPaid.present) {
+      map['is_fully_paid'] = Variable<bool>(isFullyPaid.value);
+    }
+    if (isDelivered.present) {
+      map['is_delivered'] = Variable<bool>(isDelivered.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReservationsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('fullName: $fullName, ')
+          ..write('phone: $phone, ')
+          ..write('reservationDate: $reservationDate, ')
+          ..write('deliveryDate: $deliveryDate, ')
+          ..write('plantTypeId: $plantTypeId, ')
+          ..write('plantShapeId: $plantShapeId, ')
+          ..write('quantity: $quantity, ')
+          ..write('deposit: $deposit, ')
+          ..write('isFullyPaid: $isFullyPaid, ')
+          ..write('isDelivered: $isDelivered, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $StorageTableTable extends StorageTable
     with TableInfo<$StorageTableTable, StorageTableData> {
   @override
@@ -2126,14 +2440,41 @@ class $StorageTableTable extends StorageTable
       requiredDuringInsert: false,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES operations_table (id)'));
+  static const VerificationMeta _isScheduledMeta =
+      const VerificationMeta('isScheduled');
+  @override
+  late final GeneratedColumn<bool> isScheduled = GeneratedColumn<bool>(
+      'is_scheduled', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_scheduled" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _reservationIdMeta =
+      const VerificationMeta('reservationId');
+  @override
+  late final GeneratedColumn<int> reservationId = GeneratedColumn<int>(
+      'reservation_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES reservations_table (id)'));
   static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
   late final GeneratedColumn<String> notes = GeneratedColumn<String>(
       'notes', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, plantTypeId, plantShapeId, quantity, parentOperationId, notes];
+  List<GeneratedColumn> get $columns => [
+        id,
+        plantTypeId,
+        plantShapeId,
+        quantity,
+        parentOperationId,
+        isScheduled,
+        reservationId,
+        notes
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2175,6 +2516,18 @@ class $StorageTableTable extends StorageTable
           parentOperationId.isAcceptableOrUnknown(
               data['parent_operation_id']!, _parentOperationIdMeta));
     }
+    if (data.containsKey('is_scheduled')) {
+      context.handle(
+          _isScheduledMeta,
+          isScheduled.isAcceptableOrUnknown(
+              data['is_scheduled']!, _isScheduledMeta));
+    }
+    if (data.containsKey('reservation_id')) {
+      context.handle(
+          _reservationIdMeta,
+          reservationId.isAcceptableOrUnknown(
+              data['reservation_id']!, _reservationIdMeta));
+    }
     if (data.containsKey('notes')) {
       context.handle(
           _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
@@ -2198,6 +2551,10 @@ class $StorageTableTable extends StorageTable
           .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
       parentOperationId: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}parent_operation_id']),
+      isScheduled: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_scheduled'])!,
+      reservationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}reservation_id']),
       notes: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
     );
@@ -2216,6 +2573,8 @@ class StorageTableData extends DataClass
   final int plantShapeId;
   final int quantity;
   final int? parentOperationId;
+  final bool isScheduled;
+  final int? reservationId;
   final String? notes;
   const StorageTableData(
       {required this.id,
@@ -2223,6 +2582,8 @@ class StorageTableData extends DataClass
       required this.plantShapeId,
       required this.quantity,
       this.parentOperationId,
+      required this.isScheduled,
+      this.reservationId,
       this.notes});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2233,6 +2594,10 @@ class StorageTableData extends DataClass
     map['quantity'] = Variable<int>(quantity);
     if (!nullToAbsent || parentOperationId != null) {
       map['parent_operation_id'] = Variable<int>(parentOperationId);
+    }
+    map['is_scheduled'] = Variable<bool>(isScheduled);
+    if (!nullToAbsent || reservationId != null) {
+      map['reservation_id'] = Variable<int>(reservationId);
     }
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
@@ -2249,6 +2614,10 @@ class StorageTableData extends DataClass
       parentOperationId: parentOperationId == null && nullToAbsent
           ? const Value.absent()
           : Value(parentOperationId),
+      isScheduled: Value(isScheduled),
+      reservationId: reservationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reservationId),
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
     );
@@ -2263,6 +2632,8 @@ class StorageTableData extends DataClass
       plantShapeId: serializer.fromJson<int>(json['plantShapeId']),
       quantity: serializer.fromJson<int>(json['quantity']),
       parentOperationId: serializer.fromJson<int?>(json['parentOperationId']),
+      isScheduled: serializer.fromJson<bool>(json['isScheduled']),
+      reservationId: serializer.fromJson<int?>(json['reservationId']),
       notes: serializer.fromJson<String?>(json['notes']),
     );
   }
@@ -2275,6 +2646,8 @@ class StorageTableData extends DataClass
       'plantShapeId': serializer.toJson<int>(plantShapeId),
       'quantity': serializer.toJson<int>(quantity),
       'parentOperationId': serializer.toJson<int?>(parentOperationId),
+      'isScheduled': serializer.toJson<bool>(isScheduled),
+      'reservationId': serializer.toJson<int?>(reservationId),
       'notes': serializer.toJson<String?>(notes),
     };
   }
@@ -2285,6 +2658,8 @@ class StorageTableData extends DataClass
           int? plantShapeId,
           int? quantity,
           Value<int?> parentOperationId = const Value.absent(),
+          bool? isScheduled,
+          Value<int?> reservationId = const Value.absent(),
           Value<String?> notes = const Value.absent()}) =>
       StorageTableData(
         id: id ?? this.id,
@@ -2294,6 +2669,9 @@ class StorageTableData extends DataClass
         parentOperationId: parentOperationId.present
             ? parentOperationId.value
             : this.parentOperationId,
+        isScheduled: isScheduled ?? this.isScheduled,
+        reservationId:
+            reservationId.present ? reservationId.value : this.reservationId,
         notes: notes.present ? notes.value : this.notes,
       );
   StorageTableData copyWithCompanion(StorageTableCompanion data) {
@@ -2308,6 +2686,11 @@ class StorageTableData extends DataClass
       parentOperationId: data.parentOperationId.present
           ? data.parentOperationId.value
           : this.parentOperationId,
+      isScheduled:
+          data.isScheduled.present ? data.isScheduled.value : this.isScheduled,
+      reservationId: data.reservationId.present
+          ? data.reservationId.value
+          : this.reservationId,
       notes: data.notes.present ? data.notes.value : this.notes,
     );
   }
@@ -2320,14 +2703,16 @@ class StorageTableData extends DataClass
           ..write('plantShapeId: $plantShapeId, ')
           ..write('quantity: $quantity, ')
           ..write('parentOperationId: $parentOperationId, ')
+          ..write('isScheduled: $isScheduled, ')
+          ..write('reservationId: $reservationId, ')
           ..write('notes: $notes')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, plantTypeId, plantShapeId, quantity, parentOperationId, notes);
+  int get hashCode => Object.hash(id, plantTypeId, plantShapeId, quantity,
+      parentOperationId, isScheduled, reservationId, notes);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2337,6 +2722,8 @@ class StorageTableData extends DataClass
           other.plantShapeId == this.plantShapeId &&
           other.quantity == this.quantity &&
           other.parentOperationId == this.parentOperationId &&
+          other.isScheduled == this.isScheduled &&
+          other.reservationId == this.reservationId &&
           other.notes == this.notes);
 }
 
@@ -2346,6 +2733,8 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
   final Value<int> plantShapeId;
   final Value<int> quantity;
   final Value<int?> parentOperationId;
+  final Value<bool> isScheduled;
+  final Value<int?> reservationId;
   final Value<String?> notes;
   const StorageTableCompanion({
     this.id = const Value.absent(),
@@ -2353,6 +2742,8 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
     this.plantShapeId = const Value.absent(),
     this.quantity = const Value.absent(),
     this.parentOperationId = const Value.absent(),
+    this.isScheduled = const Value.absent(),
+    this.reservationId = const Value.absent(),
     this.notes = const Value.absent(),
   });
   StorageTableCompanion.insert({
@@ -2361,6 +2752,8 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
     required int plantShapeId,
     required int quantity,
     this.parentOperationId = const Value.absent(),
+    this.isScheduled = const Value.absent(),
+    this.reservationId = const Value.absent(),
     this.notes = const Value.absent(),
   })  : plantTypeId = Value(plantTypeId),
         plantShapeId = Value(plantShapeId),
@@ -2371,6 +2764,8 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
     Expression<int>? plantShapeId,
     Expression<int>? quantity,
     Expression<int>? parentOperationId,
+    Expression<bool>? isScheduled,
+    Expression<int>? reservationId,
     Expression<String>? notes,
   }) {
     return RawValuesInsertable({
@@ -2379,6 +2774,8 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
       if (plantShapeId != null) 'plant_shape_id': plantShapeId,
       if (quantity != null) 'quantity': quantity,
       if (parentOperationId != null) 'parent_operation_id': parentOperationId,
+      if (isScheduled != null) 'is_scheduled': isScheduled,
+      if (reservationId != null) 'reservation_id': reservationId,
       if (notes != null) 'notes': notes,
     });
   }
@@ -2389,6 +2786,8 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
       Value<int>? plantShapeId,
       Value<int>? quantity,
       Value<int?>? parentOperationId,
+      Value<bool>? isScheduled,
+      Value<int?>? reservationId,
       Value<String?>? notes}) {
     return StorageTableCompanion(
       id: id ?? this.id,
@@ -2396,6 +2795,8 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
       plantShapeId: plantShapeId ?? this.plantShapeId,
       quantity: quantity ?? this.quantity,
       parentOperationId: parentOperationId ?? this.parentOperationId,
+      isScheduled: isScheduled ?? this.isScheduled,
+      reservationId: reservationId ?? this.reservationId,
       notes: notes ?? this.notes,
     );
   }
@@ -2418,6 +2819,12 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
     if (parentOperationId.present) {
       map['parent_operation_id'] = Variable<int>(parentOperationId.value);
     }
+    if (isScheduled.present) {
+      map['is_scheduled'] = Variable<bool>(isScheduled.value);
+    }
+    if (reservationId.present) {
+      map['reservation_id'] = Variable<int>(reservationId.value);
+    }
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
     }
@@ -2432,18 +2839,20 @@ class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
           ..write('plantShapeId: $plantShapeId, ')
           ..write('quantity: $quantity, ')
           ..write('parentOperationId: $parentOperationId, ')
+          ..write('isScheduled: $isScheduled, ')
+          ..write('reservationId: $reservationId, ')
           ..write('notes: $notes')
           ..write(')'))
         .toString();
   }
 }
 
-class $ScheduledStorageTableTable extends ScheduledStorageTable
-    with TableInfo<$ScheduledStorageTableTable, ScheduledStorageTableData> {
+class $PricesTableTable extends PricesTable
+    with TableInfo<$PricesTableTable, PricesTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ScheduledStorageTableTable(this.attachedDatabase, [this._alias]);
+  $PricesTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -2453,86 +2862,65 @@ class $ScheduledStorageTableTable extends ScheduledStorageTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _typeIdMeta = const VerificationMeta('typeId');
+  static const VerificationMeta _plantTypeIdMeta =
+      const VerificationMeta('plantTypeId');
   @override
-  late final GeneratedColumn<int> typeId = GeneratedColumn<int>(
-      'type_id', aliasedName, false,
+  late final GeneratedColumn<int> plantTypeId = GeneratedColumn<int>(
+      'plant_type_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES plant_types_table (id)'));
-  static const VerificationMeta _shapeIdMeta =
-      const VerificationMeta('shapeId');
+  static const VerificationMeta _plantShapeIdMeta =
+      const VerificationMeta('plantShapeId');
   @override
-  late final GeneratedColumn<int> shapeId = GeneratedColumn<int>(
-      'shape_id', aliasedName, false,
+  late final GeneratedColumn<int> plantShapeId = GeneratedColumn<int>(
+      'plant_shape_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'REFERENCES plant_shapes_table (id)'));
-  static const VerificationMeta _quantityMeta =
-      const VerificationMeta('quantity');
+  static const VerificationMeta _priceMeta = const VerificationMeta('price');
   @override
-  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
-      'quantity', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _parentOperationIdMeta =
-      const VerificationMeta('parentOperationId');
+  late final GeneratedColumn<double> price = GeneratedColumn<double>(
+      'price', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
   @override
-  late final GeneratedColumn<int> parentOperationId = GeneratedColumn<int>(
-      'parent_operation_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
-  @override
-  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, typeId, shapeId, quantity, parentOperationId, notes];
+  List<GeneratedColumn> get $columns => [id, plantTypeId, plantShapeId, price];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'scheduled_storage_table';
+  static const String $name = 'prices_table';
   @override
-  VerificationContext validateIntegrity(
-      Insertable<ScheduledStorageTableData> instance,
+  VerificationContext validateIntegrity(Insertable<PricesTableData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('type_id')) {
-      context.handle(_typeIdMeta,
-          typeId.isAcceptableOrUnknown(data['type_id']!, _typeIdMeta));
-    } else if (isInserting) {
-      context.missing(_typeIdMeta);
-    }
-    if (data.containsKey('shape_id')) {
-      context.handle(_shapeIdMeta,
-          shapeId.isAcceptableOrUnknown(data['shape_id']!, _shapeIdMeta));
-    } else if (isInserting) {
-      context.missing(_shapeIdMeta);
-    }
-    if (data.containsKey('quantity')) {
-      context.handle(_quantityMeta,
-          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
-    } else if (isInserting) {
-      context.missing(_quantityMeta);
-    }
-    if (data.containsKey('parent_operation_id')) {
+    if (data.containsKey('plant_type_id')) {
       context.handle(
-          _parentOperationIdMeta,
-          parentOperationId.isAcceptableOrUnknown(
-              data['parent_operation_id']!, _parentOperationIdMeta));
+          _plantTypeIdMeta,
+          plantTypeId.isAcceptableOrUnknown(
+              data['plant_type_id']!, _plantTypeIdMeta));
     } else if (isInserting) {
-      context.missing(_parentOperationIdMeta);
+      context.missing(_plantTypeIdMeta);
     }
-    if (data.containsKey('notes')) {
+    if (data.containsKey('plant_shape_id')) {
       context.handle(
-          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+          _plantShapeIdMeta,
+          plantShapeId.isAcceptableOrUnknown(
+              data['plant_shape_id']!, _plantShapeIdMeta));
+    } else if (isInserting) {
+      context.missing(_plantShapeIdMeta);
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+          _priceMeta, price.isAcceptableOrUnknown(data['price']!, _priceMeta));
+    } else if (isInserting) {
+      context.missing(_priceMeta);
     }
     return context;
   }
@@ -2540,82 +2928,63 @@ class $ScheduledStorageTableTable extends ScheduledStorageTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ScheduledStorageTableData map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
+  PricesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ScheduledStorageTableData(
+    return PricesTableData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      typeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}type_id'])!,
-      shapeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}shape_id'])!,
-      quantity: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
-      parentOperationId: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}parent_operation_id'])!,
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+      plantTypeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plant_type_id'])!,
+      plantShapeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plant_shape_id'])!,
+      price: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}price'])!,
     );
   }
 
   @override
-  $ScheduledStorageTableTable createAlias(String alias) {
-    return $ScheduledStorageTableTable(attachedDatabase, alias);
+  $PricesTableTable createAlias(String alias) {
+    return $PricesTableTable(attachedDatabase, alias);
   }
 }
 
-class ScheduledStorageTableData extends DataClass
-    implements Insertable<ScheduledStorageTableData> {
+class PricesTableData extends DataClass implements Insertable<PricesTableData> {
   final int id;
-  final int typeId;
-  final int shapeId;
-  final int quantity;
-  final int parentOperationId;
-  final String? notes;
-  const ScheduledStorageTableData(
+  final int plantTypeId;
+  final int plantShapeId;
+  final double price;
+  const PricesTableData(
       {required this.id,
-      required this.typeId,
-      required this.shapeId,
-      required this.quantity,
-      required this.parentOperationId,
-      this.notes});
+      required this.plantTypeId,
+      required this.plantShapeId,
+      required this.price});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['type_id'] = Variable<int>(typeId);
-    map['shape_id'] = Variable<int>(shapeId);
-    map['quantity'] = Variable<int>(quantity);
-    map['parent_operation_id'] = Variable<int>(parentOperationId);
-    if (!nullToAbsent || notes != null) {
-      map['notes'] = Variable<String>(notes);
-    }
+    map['plant_type_id'] = Variable<int>(plantTypeId);
+    map['plant_shape_id'] = Variable<int>(plantShapeId);
+    map['price'] = Variable<double>(price);
     return map;
   }
 
-  ScheduledStorageTableCompanion toCompanion(bool nullToAbsent) {
-    return ScheduledStorageTableCompanion(
+  PricesTableCompanion toCompanion(bool nullToAbsent) {
+    return PricesTableCompanion(
       id: Value(id),
-      typeId: Value(typeId),
-      shapeId: Value(shapeId),
-      quantity: Value(quantity),
-      parentOperationId: Value(parentOperationId),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      plantTypeId: Value(plantTypeId),
+      plantShapeId: Value(plantShapeId),
+      price: Value(price),
     );
   }
 
-  factory ScheduledStorageTableData.fromJson(Map<String, dynamic> json,
+  factory PricesTableData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ScheduledStorageTableData(
+    return PricesTableData(
       id: serializer.fromJson<int>(json['id']),
-      typeId: serializer.fromJson<int>(json['typeId']),
-      shapeId: serializer.fromJson<int>(json['shapeId']),
-      quantity: serializer.fromJson<int>(json['quantity']),
-      parentOperationId: serializer.fromJson<int>(json['parentOperationId']),
-      notes: serializer.fromJson<String?>(json['notes']),
+      plantTypeId: serializer.fromJson<int>(json['plantTypeId']),
+      plantShapeId: serializer.fromJson<int>(json['plantShapeId']),
+      price: serializer.fromJson<double>(json['price']),
     );
   }
   @override
@@ -2623,130 +2992,98 @@ class ScheduledStorageTableData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'typeId': serializer.toJson<int>(typeId),
-      'shapeId': serializer.toJson<int>(shapeId),
-      'quantity': serializer.toJson<int>(quantity),
-      'parentOperationId': serializer.toJson<int>(parentOperationId),
-      'notes': serializer.toJson<String?>(notes),
+      'plantTypeId': serializer.toJson<int>(plantTypeId),
+      'plantShapeId': serializer.toJson<int>(plantShapeId),
+      'price': serializer.toJson<double>(price),
     };
   }
 
-  ScheduledStorageTableData copyWith(
-          {int? id,
-          int? typeId,
-          int? shapeId,
-          int? quantity,
-          int? parentOperationId,
-          Value<String?> notes = const Value.absent()}) =>
-      ScheduledStorageTableData(
+  PricesTableData copyWith(
+          {int? id, int? plantTypeId, int? plantShapeId, double? price}) =>
+      PricesTableData(
         id: id ?? this.id,
-        typeId: typeId ?? this.typeId,
-        shapeId: shapeId ?? this.shapeId,
-        quantity: quantity ?? this.quantity,
-        parentOperationId: parentOperationId ?? this.parentOperationId,
-        notes: notes.present ? notes.value : this.notes,
+        plantTypeId: plantTypeId ?? this.plantTypeId,
+        plantShapeId: plantShapeId ?? this.plantShapeId,
+        price: price ?? this.price,
       );
-  ScheduledStorageTableData copyWithCompanion(
-      ScheduledStorageTableCompanion data) {
-    return ScheduledStorageTableData(
+  PricesTableData copyWithCompanion(PricesTableCompanion data) {
+    return PricesTableData(
       id: data.id.present ? data.id.value : this.id,
-      typeId: data.typeId.present ? data.typeId.value : this.typeId,
-      shapeId: data.shapeId.present ? data.shapeId.value : this.shapeId,
-      quantity: data.quantity.present ? data.quantity.value : this.quantity,
-      parentOperationId: data.parentOperationId.present
-          ? data.parentOperationId.value
-          : this.parentOperationId,
-      notes: data.notes.present ? data.notes.value : this.notes,
+      plantTypeId:
+          data.plantTypeId.present ? data.plantTypeId.value : this.plantTypeId,
+      plantShapeId: data.plantShapeId.present
+          ? data.plantShapeId.value
+          : this.plantShapeId,
+      price: data.price.present ? data.price.value : this.price,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('ScheduledStorageTableData(')
+    return (StringBuffer('PricesTableData(')
           ..write('id: $id, ')
-          ..write('typeId: $typeId, ')
-          ..write('shapeId: $shapeId, ')
-          ..write('quantity: $quantity, ')
-          ..write('parentOperationId: $parentOperationId, ')
-          ..write('notes: $notes')
+          ..write('plantTypeId: $plantTypeId, ')
+          ..write('plantShapeId: $plantShapeId, ')
+          ..write('price: $price')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, typeId, shapeId, quantity, parentOperationId, notes);
+  int get hashCode => Object.hash(id, plantTypeId, plantShapeId, price);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ScheduledStorageTableData &&
+      (other is PricesTableData &&
           other.id == this.id &&
-          other.typeId == this.typeId &&
-          other.shapeId == this.shapeId &&
-          other.quantity == this.quantity &&
-          other.parentOperationId == this.parentOperationId &&
-          other.notes == this.notes);
+          other.plantTypeId == this.plantTypeId &&
+          other.plantShapeId == this.plantShapeId &&
+          other.price == this.price);
 }
 
-class ScheduledStorageTableCompanion
-    extends UpdateCompanion<ScheduledStorageTableData> {
+class PricesTableCompanion extends UpdateCompanion<PricesTableData> {
   final Value<int> id;
-  final Value<int> typeId;
-  final Value<int> shapeId;
-  final Value<int> quantity;
-  final Value<int> parentOperationId;
-  final Value<String?> notes;
-  const ScheduledStorageTableCompanion({
+  final Value<int> plantTypeId;
+  final Value<int> plantShapeId;
+  final Value<double> price;
+  const PricesTableCompanion({
     this.id = const Value.absent(),
-    this.typeId = const Value.absent(),
-    this.shapeId = const Value.absent(),
-    this.quantity = const Value.absent(),
-    this.parentOperationId = const Value.absent(),
-    this.notes = const Value.absent(),
+    this.plantTypeId = const Value.absent(),
+    this.plantShapeId = const Value.absent(),
+    this.price = const Value.absent(),
   });
-  ScheduledStorageTableCompanion.insert({
+  PricesTableCompanion.insert({
     this.id = const Value.absent(),
-    required int typeId,
-    required int shapeId,
-    required int quantity,
-    required int parentOperationId,
-    this.notes = const Value.absent(),
-  })  : typeId = Value(typeId),
-        shapeId = Value(shapeId),
-        quantity = Value(quantity),
-        parentOperationId = Value(parentOperationId);
-  static Insertable<ScheduledStorageTableData> custom({
+    required int plantTypeId,
+    required int plantShapeId,
+    required double price,
+  })  : plantTypeId = Value(plantTypeId),
+        plantShapeId = Value(plantShapeId),
+        price = Value(price);
+  static Insertable<PricesTableData> custom({
     Expression<int>? id,
-    Expression<int>? typeId,
-    Expression<int>? shapeId,
-    Expression<int>? quantity,
-    Expression<int>? parentOperationId,
-    Expression<String>? notes,
+    Expression<int>? plantTypeId,
+    Expression<int>? plantShapeId,
+    Expression<double>? price,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (typeId != null) 'type_id': typeId,
-      if (shapeId != null) 'shape_id': shapeId,
-      if (quantity != null) 'quantity': quantity,
-      if (parentOperationId != null) 'parent_operation_id': parentOperationId,
-      if (notes != null) 'notes': notes,
+      if (plantTypeId != null) 'plant_type_id': plantTypeId,
+      if (plantShapeId != null) 'plant_shape_id': plantShapeId,
+      if (price != null) 'price': price,
     });
   }
 
-  ScheduledStorageTableCompanion copyWith(
+  PricesTableCompanion copyWith(
       {Value<int>? id,
-      Value<int>? typeId,
-      Value<int>? shapeId,
-      Value<int>? quantity,
-      Value<int>? parentOperationId,
-      Value<String?>? notes}) {
-    return ScheduledStorageTableCompanion(
+      Value<int>? plantTypeId,
+      Value<int>? plantShapeId,
+      Value<double>? price}) {
+    return PricesTableCompanion(
       id: id ?? this.id,
-      typeId: typeId ?? this.typeId,
-      shapeId: shapeId ?? this.shapeId,
-      quantity: quantity ?? this.quantity,
-      parentOperationId: parentOperationId ?? this.parentOperationId,
-      notes: notes ?? this.notes,
+      plantTypeId: plantTypeId ?? this.plantTypeId,
+      plantShapeId: plantShapeId ?? this.plantShapeId,
+      price: price ?? this.price,
     );
   }
 
@@ -2756,33 +3093,25 @@ class ScheduledStorageTableCompanion
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (typeId.present) {
-      map['type_id'] = Variable<int>(typeId.value);
+    if (plantTypeId.present) {
+      map['plant_type_id'] = Variable<int>(plantTypeId.value);
     }
-    if (shapeId.present) {
-      map['shape_id'] = Variable<int>(shapeId.value);
+    if (plantShapeId.present) {
+      map['plant_shape_id'] = Variable<int>(plantShapeId.value);
     }
-    if (quantity.present) {
-      map['quantity'] = Variable<int>(quantity.value);
-    }
-    if (parentOperationId.present) {
-      map['parent_operation_id'] = Variable<int>(parentOperationId.value);
-    }
-    if (notes.present) {
-      map['notes'] = Variable<String>(notes.value);
+    if (price.present) {
+      map['price'] = Variable<double>(price.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('ScheduledStorageTableCompanion(')
+    return (StringBuffer('PricesTableCompanion(')
           ..write('id: $id, ')
-          ..write('typeId: $typeId, ')
-          ..write('shapeId: $shapeId, ')
-          ..write('quantity: $quantity, ')
-          ..write('parentOperationId: $parentOperationId, ')
-          ..write('notes: $notes')
+          ..write('plantTypeId: $plantTypeId, ')
+          ..write('plantShapeId: $plantShapeId, ')
+          ..write('price: $price')
           ..write(')'))
         .toString();
   }
@@ -2795,16 +3124,16 @@ abstract class _$LocalDatabase extends GeneratedDatabase {
       $SetupExpenseTableTable(this);
   late final $PlantTypesTableTable plantTypesTable =
       $PlantTypesTableTable(this);
-  late final $PlantingTableTable plantingTable = $PlantingTableTable(this);
   late final $PlantShapesTableTable plantShapesTable =
       $PlantShapesTableTable(this);
   late final $OperationTypesTableTable operationTypesTable =
       $OperationTypesTableTable(this);
   late final $OperationsTableTable operationsTable =
       $OperationsTableTable(this);
+  late final $ReservationsTableTable reservationsTable =
+      $ReservationsTableTable(this);
   late final $StorageTableTable storageTable = $StorageTableTable(this);
-  late final $ScheduledStorageTableTable scheduledStorageTable =
-      $ScheduledStorageTableTable(this);
+  late final $PricesTableTable pricesTable = $PricesTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2812,12 +3141,12 @@ abstract class _$LocalDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         setupExpenseTable,
         plantTypesTable,
-        plantingTable,
         plantShapesTable,
         operationTypesTable,
         operationsTable,
+        reservationsTable,
         storageTable,
-        scheduledStorageTable
+        pricesTable
       ];
 }
 
@@ -3085,21 +3414,6 @@ final class $$PlantTypesTableTableReferences extends BaseReferences<
   $$PlantTypesTableTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$PlantingTableTable, List<PlantingTableData>>
-      _plantingTableRefsTable(_$LocalDatabase db) =>
-          MultiTypedResultKey.fromTable(db.plantingTable,
-              aliasName: $_aliasNameGenerator(
-                  db.plantTypesTable.id, db.plantingTable.typeId));
-
-  $$PlantingTableTableProcessedTableManager get plantingTableRefs {
-    final manager = $$PlantingTableTableTableManager($_db, $_db.plantingTable)
-        .filter((f) => f.typeId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_plantingTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
   static MultiTypedResultKey<$OperationsTableTable, List<OperationsTableData>>
       _firstTypeRelationTable(_$LocalDatabase db) =>
           MultiTypedResultKey.fromTable(db.operationsTable,
@@ -3132,6 +3446,24 @@ final class $$PlantTypesTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
+  static MultiTypedResultKey<$ReservationsTableTable,
+      List<ReservationsTableData>> _reservationsTableRefsTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.reservationsTable,
+          aliasName: $_aliasNameGenerator(
+              db.plantTypesTable.id, db.reservationsTable.plantTypeId));
+
+  $$ReservationsTableTableProcessedTableManager get reservationsTableRefs {
+    final manager = $$ReservationsTableTableTableManager(
+            $_db, $_db.reservationsTable)
+        .filter((f) => f.plantTypeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_reservationsTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
   static MultiTypedResultKey<$StorageTableTable, List<StorageTableData>>
       _storageTableRefsTable(_$LocalDatabase db) =>
           MultiTypedResultKey.fromTable(db.storageTable,
@@ -3147,21 +3479,17 @@ final class $$PlantTypesTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$ScheduledStorageTableTable,
-      List<ScheduledStorageTableData>> _scheduledStorageTableRefsTable(
-          _$LocalDatabase db) =>
-      MultiTypedResultKey.fromTable(db.scheduledStorageTable,
-          aliasName: $_aliasNameGenerator(
-              db.plantTypesTable.id, db.scheduledStorageTable.typeId));
+  static MultiTypedResultKey<$PricesTableTable, List<PricesTableData>>
+      _pricesTableRefsTable(_$LocalDatabase db) =>
+          MultiTypedResultKey.fromTable(db.pricesTable,
+              aliasName: $_aliasNameGenerator(
+                  db.plantTypesTable.id, db.pricesTable.plantTypeId));
 
-  $$ScheduledStorageTableTableProcessedTableManager
-      get scheduledStorageTableRefs {
-    final manager = $$ScheduledStorageTableTableTableManager(
-            $_db, $_db.scheduledStorageTable)
-        .filter((f) => f.typeId.id.sqlEquals($_itemColumn<int>('id')!));
+  $$PricesTableTableProcessedTableManager get pricesTableRefs {
+    final manager = $$PricesTableTableTableManager($_db, $_db.pricesTable)
+        .filter((f) => f.plantTypeId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache =
-        $_typedResult.readTableOrNull(_scheduledStorageTableRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_pricesTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -3181,27 +3509,6 @@ class $$PlantTypesTableTableFilterComposer
 
   ColumnFilters<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnFilters(column));
-
-  Expression<bool> plantingTableRefs(
-      Expression<bool> Function($$PlantingTableTableFilterComposer f) f) {
-    final $$PlantingTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.plantingTable,
-        getReferencedColumn: (t) => t.typeId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantingTableTableFilterComposer(
-              $db: $db,
-              $table: $db.plantingTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
 
   Expression<bool> firstTypeRelation(
       Expression<bool> Function($$OperationsTableTableFilterComposer f) f) {
@@ -3245,6 +3552,27 @@ class $$PlantTypesTableTableFilterComposer
     return f(composer);
   }
 
+  Expression<bool> reservationsTableRefs(
+      Expression<bool> Function($$ReservationsTableTableFilterComposer f) f) {
+    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.plantTypeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
   Expression<bool> storageTableRefs(
       Expression<bool> Function($$StorageTableTableFilterComposer f) f) {
     final $$StorageTableTableFilterComposer composer = $composerBuilder(
@@ -3266,26 +3594,24 @@ class $$PlantTypesTableTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> scheduledStorageTableRefs(
-      Expression<bool> Function($$ScheduledStorageTableTableFilterComposer f)
-          f) {
-    final $$ScheduledStorageTableTableFilterComposer composer =
-        $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $db.scheduledStorageTable,
-            getReferencedColumn: (t) => t.typeId,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$ScheduledStorageTableTableFilterComposer(
-                  $db: $db,
-                  $table: $db.scheduledStorageTable,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
+  Expression<bool> pricesTableRefs(
+      Expression<bool> Function($$PricesTableTableFilterComposer f) f) {
+    final $$PricesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.pricesTable,
+        getReferencedColumn: (t) => t.plantTypeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PricesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.pricesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return f(composer);
   }
 }
@@ -3320,27 +3646,6 @@ class $$PlantTypesTableTableAnnotationComposer
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
-
-  Expression<T> plantingTableRefs<T extends Object>(
-      Expression<T> Function($$PlantingTableTableAnnotationComposer a) f) {
-    final $$PlantingTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.plantingTable,
-        getReferencedColumn: (t) => t.typeId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantingTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.plantingTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
 
   Expression<T> firstTypeRelation<T extends Object>(
       Expression<T> Function($$OperationsTableTableAnnotationComposer a) f) {
@@ -3384,6 +3689,28 @@ class $$PlantTypesTableTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> reservationsTableRefs<T extends Object>(
+      Expression<T> Function($$ReservationsTableTableAnnotationComposer a) f) {
+    final $$ReservationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.reservationsTable,
+            getReferencedColumn: (t) => t.plantTypeId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.reservationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
   Expression<T> storageTableRefs<T extends Object>(
       Expression<T> Function($$StorageTableTableAnnotationComposer a) f) {
     final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
@@ -3405,26 +3732,24 @@ class $$PlantTypesTableTableAnnotationComposer
     return f(composer);
   }
 
-  Expression<T> scheduledStorageTableRefs<T extends Object>(
-      Expression<T> Function($$ScheduledStorageTableTableAnnotationComposer a)
-          f) {
-    final $$ScheduledStorageTableTableAnnotationComposer composer =
-        $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $db.scheduledStorageTable,
-            getReferencedColumn: (t) => t.typeId,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$ScheduledStorageTableTableAnnotationComposer(
-                  $db: $db,
-                  $table: $db.scheduledStorageTable,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
+  Expression<T> pricesTableRefs<T extends Object>(
+      Expression<T> Function($$PricesTableTableAnnotationComposer a) f) {
+    final $$PricesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.pricesTable,
+        getReferencedColumn: (t) => t.plantTypeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PricesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.pricesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return f(composer);
   }
 }
@@ -3441,11 +3766,11 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
     (PlantTypesTableData, $$PlantTypesTableTableReferences),
     PlantTypesTableData,
     PrefetchHooks Function(
-        {bool plantingTableRefs,
-        bool firstTypeRelation,
+        {bool firstTypeRelation,
         bool secondTypeRelation,
+        bool reservationsTableRefs,
         bool storageTableRefs,
-        bool scheduledStorageTableRefs})> {
+        bool pricesTableRefs})> {
   $$PlantTypesTableTableTableManager(
       _$LocalDatabase db, $PlantTypesTableTable table)
       : super(TableManagerState(
@@ -3480,36 +3805,23 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
                   ))
               .toList(),
           prefetchHooksCallback: (
-              {plantingTableRefs = false,
-              firstTypeRelation = false,
+              {firstTypeRelation = false,
               secondTypeRelation = false,
+              reservationsTableRefs = false,
               storageTableRefs = false,
-              scheduledStorageTableRefs = false}) {
+              pricesTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
-                if (plantingTableRefs) db.plantingTable,
                 if (firstTypeRelation) db.operationsTable,
                 if (secondTypeRelation) db.operationsTable,
+                if (reservationsTableRefs) db.reservationsTable,
                 if (storageTableRefs) db.storageTable,
-                if (scheduledStorageTableRefs) db.scheduledStorageTable
+                if (pricesTableRefs) db.pricesTable
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (plantingTableRefs)
-                    await $_getPrefetchedData<PlantTypesTableData,
-                            $PlantTypesTableTable, PlantingTableData>(
-                        currentTable: table,
-                        referencedTable: $$PlantTypesTableTableReferences
-                            ._plantingTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$PlantTypesTableTableReferences(db, table, p0)
-                                .plantingTableRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.typeId == item.id),
-                        typedResults: items),
                   if (firstTypeRelation)
                     await $_getPrefetchedData<PlantTypesTableData,
                             $PlantTypesTableTable, OperationsTableData>(
@@ -3536,6 +3848,19 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.secondTypeId == item.id),
                         typedResults: items),
+                  if (reservationsTableRefs)
+                    await $_getPrefetchedData<PlantTypesTableData,
+                            $PlantTypesTableTable, ReservationsTableData>(
+                        currentTable: table,
+                        referencedTable: $$PlantTypesTableTableReferences
+                            ._reservationsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlantTypesTableTableReferences(db, table, p0)
+                                .reservationsTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.plantTypeId == item.id),
+                        typedResults: items),
                   if (storageTableRefs)
                     await $_getPrefetchedData<PlantTypesTableData,
                             $PlantTypesTableTable, StorageTableData>(
@@ -3549,18 +3874,18 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.plantTypeId == item.id),
                         typedResults: items),
-                  if (scheduledStorageTableRefs)
+                  if (pricesTableRefs)
                     await $_getPrefetchedData<PlantTypesTableData,
-                            $PlantTypesTableTable, ScheduledStorageTableData>(
+                            $PlantTypesTableTable, PricesTableData>(
                         currentTable: table,
                         referencedTable: $$PlantTypesTableTableReferences
-                            ._scheduledStorageTableRefsTable(db),
+                            ._pricesTableRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$PlantTypesTableTableReferences(db, table, p0)
-                                .scheduledStorageTableRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.typeId == item.id),
+                                .pricesTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.plantTypeId == item.id),
                         typedResults: items)
                 ];
               },
@@ -3581,283 +3906,11 @@ typedef $$PlantTypesTableTableProcessedTableManager = ProcessedTableManager<
     (PlantTypesTableData, $$PlantTypesTableTableReferences),
     PlantTypesTableData,
     PrefetchHooks Function(
-        {bool plantingTableRefs,
-        bool firstTypeRelation,
+        {bool firstTypeRelation,
         bool secondTypeRelation,
+        bool reservationsTableRefs,
         bool storageTableRefs,
-        bool scheduledStorageTableRefs})>;
-typedef $$PlantingTableTableCreateCompanionBuilder = PlantingTableCompanion
-    Function({
-  Value<int> id,
-  required int typeId,
-  required int quantity,
-  required DateTime date,
-  Value<double?> initialCost,
-});
-typedef $$PlantingTableTableUpdateCompanionBuilder = PlantingTableCompanion
-    Function({
-  Value<int> id,
-  Value<int> typeId,
-  Value<int> quantity,
-  Value<DateTime> date,
-  Value<double?> initialCost,
-});
-
-final class $$PlantingTableTableReferences extends BaseReferences<
-    _$LocalDatabase, $PlantingTableTable, PlantingTableData> {
-  $$PlantingTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
-
-  static $PlantTypesTableTable _typeIdTable(_$LocalDatabase db) =>
-      db.plantTypesTable.createAlias(
-          $_aliasNameGenerator(db.plantingTable.typeId, db.plantTypesTable.id));
-
-  $$PlantTypesTableTableProcessedTableManager get typeId {
-    final $_column = $_itemColumn<int>('type_id')!;
-
-    final manager =
-        $$PlantTypesTableTableTableManager($_db, $_db.plantTypesTable)
-            .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_typeIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-}
-
-class $$PlantingTableTableFilterComposer
-    extends Composer<_$LocalDatabase, $PlantingTableTable> {
-  $$PlantingTableTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get quantity => $composableBuilder(
-      column: $table.quantity, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get date => $composableBuilder(
-      column: $table.date, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<double> get initialCost => $composableBuilder(
-      column: $table.initialCost, builder: (column) => ColumnFilters(column));
-
-  $$PlantTypesTableTableFilterComposer get typeId {
-    final $$PlantTypesTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.typeId,
-        referencedTable: $db.plantTypesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantTypesTableTableFilterComposer(
-              $db: $db,
-              $table: $db.plantTypesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-}
-
-class $$PlantingTableTableOrderingComposer
-    extends Composer<_$LocalDatabase, $PlantingTableTable> {
-  $$PlantingTableTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get quantity => $composableBuilder(
-      column: $table.quantity, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get date => $composableBuilder(
-      column: $table.date, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<double> get initialCost => $composableBuilder(
-      column: $table.initialCost, builder: (column) => ColumnOrderings(column));
-
-  $$PlantTypesTableTableOrderingComposer get typeId {
-    final $$PlantTypesTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.typeId,
-        referencedTable: $db.plantTypesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantTypesTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.plantTypesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-}
-
-class $$PlantingTableTableAnnotationComposer
-    extends Composer<_$LocalDatabase, $PlantingTableTable> {
-  $$PlantingTableTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<int> get quantity =>
-      $composableBuilder(column: $table.quantity, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get date =>
-      $composableBuilder(column: $table.date, builder: (column) => column);
-
-  GeneratedColumn<double> get initialCost => $composableBuilder(
-      column: $table.initialCost, builder: (column) => column);
-
-  $$PlantTypesTableTableAnnotationComposer get typeId {
-    final $$PlantTypesTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.typeId,
-        referencedTable: $db.plantTypesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantTypesTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.plantTypesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-}
-
-class $$PlantingTableTableTableManager extends RootTableManager<
-    _$LocalDatabase,
-    $PlantingTableTable,
-    PlantingTableData,
-    $$PlantingTableTableFilterComposer,
-    $$PlantingTableTableOrderingComposer,
-    $$PlantingTableTableAnnotationComposer,
-    $$PlantingTableTableCreateCompanionBuilder,
-    $$PlantingTableTableUpdateCompanionBuilder,
-    (PlantingTableData, $$PlantingTableTableReferences),
-    PlantingTableData,
-    PrefetchHooks Function({bool typeId})> {
-  $$PlantingTableTableTableManager(
-      _$LocalDatabase db, $PlantingTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$PlantingTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$PlantingTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$PlantingTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> typeId = const Value.absent(),
-            Value<int> quantity = const Value.absent(),
-            Value<DateTime> date = const Value.absent(),
-            Value<double?> initialCost = const Value.absent(),
-          }) =>
-              PlantingTableCompanion(
-            id: id,
-            typeId: typeId,
-            quantity: quantity,
-            date: date,
-            initialCost: initialCost,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required int typeId,
-            required int quantity,
-            required DateTime date,
-            Value<double?> initialCost = const Value.absent(),
-          }) =>
-              PlantingTableCompanion.insert(
-            id: id,
-            typeId: typeId,
-            quantity: quantity,
-            date: date,
-            initialCost: initialCost,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$PlantingTableTableReferences(db, table, e)
-                  ))
-              .toList(),
-          prefetchHooksCallback: ({typeId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (typeId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.typeId,
-                    referencedTable:
-                        $$PlantingTableTableReferences._typeIdTable(db),
-                    referencedColumn:
-                        $$PlantingTableTableReferences._typeIdTable(db).id,
-                  ) as T;
-                }
-
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
-        ));
-}
-
-typedef $$PlantingTableTableProcessedTableManager = ProcessedTableManager<
-    _$LocalDatabase,
-    $PlantingTableTable,
-    PlantingTableData,
-    $$PlantingTableTableFilterComposer,
-    $$PlantingTableTableOrderingComposer,
-    $$PlantingTableTableAnnotationComposer,
-    $$PlantingTableTableCreateCompanionBuilder,
-    $$PlantingTableTableUpdateCompanionBuilder,
-    (PlantingTableData, $$PlantingTableTableReferences),
-    PlantingTableData,
-    PrefetchHooks Function({bool typeId})>;
+        bool pricesTableRefs})>;
 typedef $$PlantShapesTableTableCreateCompanionBuilder
     = PlantShapesTableCompanion Function({
   Value<int> id,
@@ -3909,6 +3962,24 @@ final class $$PlantShapesTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
+  static MultiTypedResultKey<$ReservationsTableTable,
+      List<ReservationsTableData>> _reservationsTableRefsTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.reservationsTable,
+          aliasName: $_aliasNameGenerator(
+              db.plantShapesTable.id, db.reservationsTable.plantShapeId));
+
+  $$ReservationsTableTableProcessedTableManager get reservationsTableRefs {
+    final manager = $$ReservationsTableTableTableManager(
+            $_db, $_db.reservationsTable)
+        .filter((f) => f.plantShapeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_reservationsTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
   static MultiTypedResultKey<$StorageTableTable, List<StorageTableData>>
       _storageTableRefsTable(_$LocalDatabase db) =>
           MultiTypedResultKey.fromTable(db.storageTable,
@@ -3924,21 +3995,17 @@ final class $$PlantShapesTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$ScheduledStorageTableTable,
-      List<ScheduledStorageTableData>> _scheduledStorageTableRefsTable(
-          _$LocalDatabase db) =>
-      MultiTypedResultKey.fromTable(db.scheduledStorageTable,
-          aliasName: $_aliasNameGenerator(
-              db.plantShapesTable.id, db.scheduledStorageTable.shapeId));
+  static MultiTypedResultKey<$PricesTableTable, List<PricesTableData>>
+      _pricesTableRefsTable(_$LocalDatabase db) =>
+          MultiTypedResultKey.fromTable(db.pricesTable,
+              aliasName: $_aliasNameGenerator(
+                  db.plantShapesTable.id, db.pricesTable.plantShapeId));
 
-  $$ScheduledStorageTableTableProcessedTableManager
-      get scheduledStorageTableRefs {
-    final manager = $$ScheduledStorageTableTableTableManager(
-            $_db, $_db.scheduledStorageTable)
-        .filter((f) => f.shapeId.id.sqlEquals($_itemColumn<int>('id')!));
+  $$PricesTableTableProcessedTableManager get pricesTableRefs {
+    final manager = $$PricesTableTableTableManager($_db, $_db.pricesTable)
+        .filter((f) => f.plantShapeId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache =
-        $_typedResult.readTableOrNull(_scheduledStorageTableRefsTable($_db));
+    final cache = $_typedResult.readTableOrNull(_pricesTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -4004,6 +4071,27 @@ class $$PlantShapesTableTableFilterComposer
     return f(composer);
   }
 
+  Expression<bool> reservationsTableRefs(
+      Expression<bool> Function($$ReservationsTableTableFilterComposer f) f) {
+    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.plantShapeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
   Expression<bool> storageTableRefs(
       Expression<bool> Function($$StorageTableTableFilterComposer f) f) {
     final $$StorageTableTableFilterComposer composer = $composerBuilder(
@@ -4025,26 +4113,24 @@ class $$PlantShapesTableTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> scheduledStorageTableRefs(
-      Expression<bool> Function($$ScheduledStorageTableTableFilterComposer f)
-          f) {
-    final $$ScheduledStorageTableTableFilterComposer composer =
-        $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $db.scheduledStorageTable,
-            getReferencedColumn: (t) => t.shapeId,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$ScheduledStorageTableTableFilterComposer(
-                  $db: $db,
-                  $table: $db.scheduledStorageTable,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
+  Expression<bool> pricesTableRefs(
+      Expression<bool> Function($$PricesTableTableFilterComposer f) f) {
+    final $$PricesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.pricesTable,
+        getReferencedColumn: (t) => t.plantShapeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PricesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.pricesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return f(composer);
   }
 }
@@ -4129,6 +4215,28 @@ class $$PlantShapesTableTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> reservationsTableRefs<T extends Object>(
+      Expression<T> Function($$ReservationsTableTableAnnotationComposer a) f) {
+    final $$ReservationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.reservationsTable,
+            getReferencedColumn: (t) => t.plantShapeId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.reservationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
   Expression<T> storageTableRefs<T extends Object>(
       Expression<T> Function($$StorageTableTableAnnotationComposer a) f) {
     final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
@@ -4150,26 +4258,24 @@ class $$PlantShapesTableTableAnnotationComposer
     return f(composer);
   }
 
-  Expression<T> scheduledStorageTableRefs<T extends Object>(
-      Expression<T> Function($$ScheduledStorageTableTableAnnotationComposer a)
-          f) {
-    final $$ScheduledStorageTableTableAnnotationComposer composer =
-        $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $db.scheduledStorageTable,
-            getReferencedColumn: (t) => t.shapeId,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$ScheduledStorageTableTableAnnotationComposer(
-                  $db: $db,
-                  $table: $db.scheduledStorageTable,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
+  Expression<T> pricesTableRefs<T extends Object>(
+      Expression<T> Function($$PricesTableTableAnnotationComposer a) f) {
+    final $$PricesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.pricesTable,
+        getReferencedColumn: (t) => t.plantShapeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PricesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.pricesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return f(composer);
   }
 }
@@ -4188,8 +4294,9 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
     PrefetchHooks Function(
         {bool firstShapeRelation,
         bool secondShapeRelation,
+        bool reservationsTableRefs,
         bool storageTableRefs,
-        bool scheduledStorageTableRefs})> {
+        bool pricesTableRefs})> {
   $$PlantShapesTableTableTableManager(
       _$LocalDatabase db, $PlantShapesTableTable table)
       : super(TableManagerState(
@@ -4230,15 +4337,17 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
           prefetchHooksCallback: (
               {firstShapeRelation = false,
               secondShapeRelation = false,
+              reservationsTableRefs = false,
               storageTableRefs = false,
-              scheduledStorageTableRefs = false}) {
+              pricesTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (firstShapeRelation) db.operationsTable,
                 if (secondShapeRelation) db.operationsTable,
+                if (reservationsTableRefs) db.reservationsTable,
                 if (storageTableRefs) db.storageTable,
-                if (scheduledStorageTableRefs) db.scheduledStorageTable
+                if (pricesTableRefs) db.pricesTable
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -4269,6 +4378,19 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.secondShapeId == item.id),
                         typedResults: items),
+                  if (reservationsTableRefs)
+                    await $_getPrefetchedData<PlantShapesTableData,
+                            $PlantShapesTableTable, ReservationsTableData>(
+                        currentTable: table,
+                        referencedTable: $$PlantShapesTableTableReferences
+                            ._reservationsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlantShapesTableTableReferences(db, table, p0)
+                                .reservationsTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.plantShapeId == item.id),
+                        typedResults: items),
                   if (storageTableRefs)
                     await $_getPrefetchedData<PlantShapesTableData,
                             $PlantShapesTableTable, StorageTableData>(
@@ -4282,18 +4404,18 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.plantShapeId == item.id),
                         typedResults: items),
-                  if (scheduledStorageTableRefs)
+                  if (pricesTableRefs)
                     await $_getPrefetchedData<PlantShapesTableData,
-                            $PlantShapesTableTable, ScheduledStorageTableData>(
+                            $PlantShapesTableTable, PricesTableData>(
                         currentTable: table,
                         referencedTable: $$PlantShapesTableTableReferences
-                            ._scheduledStorageTableRefsTable(db),
+                            ._pricesTableRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$PlantShapesTableTableReferences(db, table, p0)
-                                .scheduledStorageTableRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.shapeId == item.id),
+                                .pricesTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.plantShapeId == item.id),
                         typedResults: items)
                 ];
               },
@@ -4316,8 +4438,9 @@ typedef $$PlantShapesTableTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function(
         {bool firstShapeRelation,
         bool secondShapeRelation,
+        bool reservationsTableRefs,
         bool storageTableRefs,
-        bool scheduledStorageTableRefs})>;
+        bool pricesTableRefs})>;
 typedef $$OperationTypesTableTableCreateCompanionBuilder
     = OperationTypesTableCompanion Function({
   Value<int> id,
@@ -5329,6 +5452,542 @@ typedef $$OperationsTableTableProcessedTableManager = ProcessedTableManager<
         bool secondTypeId,
         bool secondShapeId,
         bool storageTableRefs})>;
+typedef $$ReservationsTableTableCreateCompanionBuilder
+    = ReservationsTableCompanion Function({
+  Value<int> id,
+  required String fullName,
+  required String phone,
+  required DateTime reservationDate,
+  Value<DateTime?> deliveryDate,
+  required int plantTypeId,
+  required int plantShapeId,
+  required int quantity,
+  Value<double> deposit,
+  Value<bool> isFullyPaid,
+  Value<bool> isDelivered,
+  Value<String?> notes,
+});
+typedef $$ReservationsTableTableUpdateCompanionBuilder
+    = ReservationsTableCompanion Function({
+  Value<int> id,
+  Value<String> fullName,
+  Value<String> phone,
+  Value<DateTime> reservationDate,
+  Value<DateTime?> deliveryDate,
+  Value<int> plantTypeId,
+  Value<int> plantShapeId,
+  Value<int> quantity,
+  Value<double> deposit,
+  Value<bool> isFullyPaid,
+  Value<bool> isDelivered,
+  Value<String?> notes,
+});
+
+final class $$ReservationsTableTableReferences extends BaseReferences<
+    _$LocalDatabase, $ReservationsTableTable, ReservationsTableData> {
+  $$ReservationsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $PlantTypesTableTable _plantTypeIdTable(_$LocalDatabase db) =>
+      db.plantTypesTable.createAlias($_aliasNameGenerator(
+          db.reservationsTable.plantTypeId, db.plantTypesTable.id));
+
+  $$PlantTypesTableTableProcessedTableManager get plantTypeId {
+    final $_column = $_itemColumn<int>('plant_type_id')!;
+
+    final manager =
+        $$PlantTypesTableTableTableManager($_db, $_db.plantTypesTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_plantTypeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $PlantShapesTableTable _plantShapeIdTable(_$LocalDatabase db) =>
+      db.plantShapesTable.createAlias($_aliasNameGenerator(
+          db.reservationsTable.plantShapeId, db.plantShapesTable.id));
+
+  $$PlantShapesTableTableProcessedTableManager get plantShapeId {
+    final $_column = $_itemColumn<int>('plant_shape_id')!;
+
+    final manager =
+        $$PlantShapesTableTableTableManager($_db, $_db.plantShapesTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_plantShapeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$StorageTableTable, List<StorageTableData>>
+      _storageTableRefsTable(_$LocalDatabase db) =>
+          MultiTypedResultKey.fromTable(db.storageTable,
+              aliasName: $_aliasNameGenerator(
+                  db.reservationsTable.id, db.storageTable.reservationId));
+
+  $$StorageTableTableProcessedTableManager get storageTableRefs {
+    final manager = $$StorageTableTableTableManager($_db, $_db.storageTable)
+        .filter((f) => f.reservationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_storageTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$ReservationsTableTableFilterComposer
+    extends Composer<_$LocalDatabase, $ReservationsTableTable> {
+  $$ReservationsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get fullName => $composableBuilder(
+      column: $table.fullName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get phone => $composableBuilder(
+      column: $table.phone, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get reservationDate => $composableBuilder(
+      column: $table.reservationDate,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get deliveryDate => $composableBuilder(
+      column: $table.deliveryDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get deposit => $composableBuilder(
+      column: $table.deposit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isFullyPaid => $composableBuilder(
+      column: $table.isFullyPaid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDelivered => $composableBuilder(
+      column: $table.isDelivered, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnFilters(column));
+
+  $$PlantTypesTableTableFilterComposer get plantTypeId {
+    final $$PlantTypesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantTypeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableFilterComposer get plantShapeId {
+    final $$PlantShapesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantShapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> storageTableRefs(
+      Expression<bool> Function($$StorageTableTableFilterComposer f) f) {
+    final $$StorageTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.storageTable,
+        getReferencedColumn: (t) => t.reservationId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StorageTableTableFilterComposer(
+              $db: $db,
+              $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$ReservationsTableTableOrderingComposer
+    extends Composer<_$LocalDatabase, $ReservationsTableTable> {
+  $$ReservationsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get fullName => $composableBuilder(
+      column: $table.fullName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get phone => $composableBuilder(
+      column: $table.phone, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get reservationDate => $composableBuilder(
+      column: $table.reservationDate,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get deliveryDate => $composableBuilder(
+      column: $table.deliveryDate,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get deposit => $composableBuilder(
+      column: $table.deposit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isFullyPaid => $composableBuilder(
+      column: $table.isFullyPaid, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDelivered => $composableBuilder(
+      column: $table.isDelivered, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnOrderings(column));
+
+  $$PlantTypesTableTableOrderingComposer get plantTypeId {
+    final $$PlantTypesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantTypeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableOrderingComposer get plantShapeId {
+    final $$PlantShapesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantShapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ReservationsTableTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $ReservationsTableTable> {
+  $$ReservationsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get fullName =>
+      $composableBuilder(column: $table.fullName, builder: (column) => column);
+
+  GeneratedColumn<String> get phone =>
+      $composableBuilder(column: $table.phone, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get reservationDate => $composableBuilder(
+      column: $table.reservationDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deliveryDate => $composableBuilder(
+      column: $table.deliveryDate, builder: (column) => column);
+
+  GeneratedColumn<int> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<double> get deposit =>
+      $composableBuilder(column: $table.deposit, builder: (column) => column);
+
+  GeneratedColumn<bool> get isFullyPaid => $composableBuilder(
+      column: $table.isFullyPaid, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDelivered => $composableBuilder(
+      column: $table.isDelivered, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  $$PlantTypesTableTableAnnotationComposer get plantTypeId {
+    final $$PlantTypesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantTypeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableAnnotationComposer get plantShapeId {
+    final $$PlantShapesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantShapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> storageTableRefs<T extends Object>(
+      Expression<T> Function($$StorageTableTableAnnotationComposer a) f) {
+    final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.storageTable,
+        getReferencedColumn: (t) => t.reservationId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StorageTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$ReservationsTableTableTableManager extends RootTableManager<
+    _$LocalDatabase,
+    $ReservationsTableTable,
+    ReservationsTableData,
+    $$ReservationsTableTableFilterComposer,
+    $$ReservationsTableTableOrderingComposer,
+    $$ReservationsTableTableAnnotationComposer,
+    $$ReservationsTableTableCreateCompanionBuilder,
+    $$ReservationsTableTableUpdateCompanionBuilder,
+    (ReservationsTableData, $$ReservationsTableTableReferences),
+    ReservationsTableData,
+    PrefetchHooks Function(
+        {bool plantTypeId, bool plantShapeId, bool storageTableRefs})> {
+  $$ReservationsTableTableTableManager(
+      _$LocalDatabase db, $ReservationsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ReservationsTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ReservationsTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ReservationsTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> fullName = const Value.absent(),
+            Value<String> phone = const Value.absent(),
+            Value<DateTime> reservationDate = const Value.absent(),
+            Value<DateTime?> deliveryDate = const Value.absent(),
+            Value<int> plantTypeId = const Value.absent(),
+            Value<int> plantShapeId = const Value.absent(),
+            Value<int> quantity = const Value.absent(),
+            Value<double> deposit = const Value.absent(),
+            Value<bool> isFullyPaid = const Value.absent(),
+            Value<bool> isDelivered = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+          }) =>
+              ReservationsTableCompanion(
+            id: id,
+            fullName: fullName,
+            phone: phone,
+            reservationDate: reservationDate,
+            deliveryDate: deliveryDate,
+            plantTypeId: plantTypeId,
+            plantShapeId: plantShapeId,
+            quantity: quantity,
+            deposit: deposit,
+            isFullyPaid: isFullyPaid,
+            isDelivered: isDelivered,
+            notes: notes,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String fullName,
+            required String phone,
+            required DateTime reservationDate,
+            Value<DateTime?> deliveryDate = const Value.absent(),
+            required int plantTypeId,
+            required int plantShapeId,
+            required int quantity,
+            Value<double> deposit = const Value.absent(),
+            Value<bool> isFullyPaid = const Value.absent(),
+            Value<bool> isDelivered = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+          }) =>
+              ReservationsTableCompanion.insert(
+            id: id,
+            fullName: fullName,
+            phone: phone,
+            reservationDate: reservationDate,
+            deliveryDate: deliveryDate,
+            plantTypeId: plantTypeId,
+            plantShapeId: plantShapeId,
+            quantity: quantity,
+            deposit: deposit,
+            isFullyPaid: isFullyPaid,
+            isDelivered: isDelivered,
+            notes: notes,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ReservationsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {plantTypeId = false,
+              plantShapeId = false,
+              storageTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (storageTableRefs) db.storageTable],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (plantTypeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.plantTypeId,
+                    referencedTable: $$ReservationsTableTableReferences
+                        ._plantTypeIdTable(db),
+                    referencedColumn: $$ReservationsTableTableReferences
+                        ._plantTypeIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (plantShapeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.plantShapeId,
+                    referencedTable: $$ReservationsTableTableReferences
+                        ._plantShapeIdTable(db),
+                    referencedColumn: $$ReservationsTableTableReferences
+                        ._plantShapeIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (storageTableRefs)
+                    await $_getPrefetchedData<ReservationsTableData,
+                            $ReservationsTableTable, StorageTableData>(
+                        currentTable: table,
+                        referencedTable: $$ReservationsTableTableReferences
+                            ._storageTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ReservationsTableTableReferences(db, table, p0)
+                                .storageTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.reservationId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ReservationsTableTableProcessedTableManager = ProcessedTableManager<
+    _$LocalDatabase,
+    $ReservationsTableTable,
+    ReservationsTableData,
+    $$ReservationsTableTableFilterComposer,
+    $$ReservationsTableTableOrderingComposer,
+    $$ReservationsTableTableAnnotationComposer,
+    $$ReservationsTableTableCreateCompanionBuilder,
+    $$ReservationsTableTableUpdateCompanionBuilder,
+    (ReservationsTableData, $$ReservationsTableTableReferences),
+    ReservationsTableData,
+    PrefetchHooks Function(
+        {bool plantTypeId, bool plantShapeId, bool storageTableRefs})>;
 typedef $$StorageTableTableCreateCompanionBuilder = StorageTableCompanion
     Function({
   Value<int> id,
@@ -5336,6 +5995,8 @@ typedef $$StorageTableTableCreateCompanionBuilder = StorageTableCompanion
   required int plantShapeId,
   required int quantity,
   Value<int?> parentOperationId,
+  Value<bool> isScheduled,
+  Value<int?> reservationId,
   Value<String?> notes,
 });
 typedef $$StorageTableTableUpdateCompanionBuilder = StorageTableCompanion
@@ -5345,6 +6006,8 @@ typedef $$StorageTableTableUpdateCompanionBuilder = StorageTableCompanion
   Value<int> plantShapeId,
   Value<int> quantity,
   Value<int?> parentOperationId,
+  Value<bool> isScheduled,
+  Value<int?> reservationId,
   Value<String?> notes,
 });
 
@@ -5399,6 +6062,22 @@ final class $$StorageTableTableReferences extends BaseReferences<
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
+
+  static $ReservationsTableTable _reservationIdTable(_$LocalDatabase db) =>
+      db.reservationsTable.createAlias($_aliasNameGenerator(
+          db.storageTable.reservationId, db.reservationsTable.id));
+
+  $$ReservationsTableTableProcessedTableManager? get reservationId {
+    final $_column = $_itemColumn<int>('reservation_id');
+    if ($_column == null) return null;
+    final manager =
+        $$ReservationsTableTableTableManager($_db, $_db.reservationsTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_reservationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 }
 
 class $$StorageTableTableFilterComposer
@@ -5415,6 +6094,9 @@ class $$StorageTableTableFilterComposer
 
   ColumnFilters<int> get quantity => $composableBuilder(
       column: $table.quantity, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isScheduled => $composableBuilder(
+      column: $table.isScheduled, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get notes => $composableBuilder(
       column: $table.notes, builder: (column) => ColumnFilters(column));
@@ -5478,6 +6160,26 @@ class $$StorageTableTableFilterComposer
             ));
     return composer;
   }
+
+  $$ReservationsTableTableFilterComposer get reservationId {
+    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.reservationId,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$StorageTableTableOrderingComposer
@@ -5494,6 +6196,9 @@ class $$StorageTableTableOrderingComposer
 
   ColumnOrderings<int> get quantity => $composableBuilder(
       column: $table.quantity, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isScheduled => $composableBuilder(
+      column: $table.isScheduled, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get notes => $composableBuilder(
       column: $table.notes, builder: (column) => ColumnOrderings(column));
@@ -5557,6 +6262,26 @@ class $$StorageTableTableOrderingComposer
             ));
     return composer;
   }
+
+  $$ReservationsTableTableOrderingComposer get reservationId {
+    final $$ReservationsTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.reservationId,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$StorageTableTableAnnotationComposer
@@ -5573,6 +6298,9 @@ class $$StorageTableTableAnnotationComposer
 
   GeneratedColumn<int> get quantity =>
       $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<bool> get isScheduled => $composableBuilder(
+      column: $table.isScheduled, builder: (column) => column);
 
   GeneratedColumn<String> get notes =>
       $composableBuilder(column: $table.notes, builder: (column) => column);
@@ -5636,6 +6364,27 @@ class $$StorageTableTableAnnotationComposer
             ));
     return composer;
   }
+
+  $$ReservationsTableTableAnnotationComposer get reservationId {
+    final $$ReservationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.reservationId,
+            referencedTable: $db.reservationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.reservationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
 }
 
 class $$StorageTableTableTableManager extends RootTableManager<
@@ -5650,7 +6399,10 @@ class $$StorageTableTableTableManager extends RootTableManager<
     (StorageTableData, $$StorageTableTableReferences),
     StorageTableData,
     PrefetchHooks Function(
-        {bool plantTypeId, bool plantShapeId, bool parentOperationId})> {
+        {bool plantTypeId,
+        bool plantShapeId,
+        bool parentOperationId,
+        bool reservationId})> {
   $$StorageTableTableTableManager(_$LocalDatabase db, $StorageTableTable table)
       : super(TableManagerState(
           db: db,
@@ -5667,6 +6419,8 @@ class $$StorageTableTableTableManager extends RootTableManager<
             Value<int> plantShapeId = const Value.absent(),
             Value<int> quantity = const Value.absent(),
             Value<int?> parentOperationId = const Value.absent(),
+            Value<bool> isScheduled = const Value.absent(),
+            Value<int?> reservationId = const Value.absent(),
             Value<String?> notes = const Value.absent(),
           }) =>
               StorageTableCompanion(
@@ -5675,6 +6429,8 @@ class $$StorageTableTableTableManager extends RootTableManager<
             plantShapeId: plantShapeId,
             quantity: quantity,
             parentOperationId: parentOperationId,
+            isScheduled: isScheduled,
+            reservationId: reservationId,
             notes: notes,
           ),
           createCompanionCallback: ({
@@ -5683,6 +6439,8 @@ class $$StorageTableTableTableManager extends RootTableManager<
             required int plantShapeId,
             required int quantity,
             Value<int?> parentOperationId = const Value.absent(),
+            Value<bool> isScheduled = const Value.absent(),
+            Value<int?> reservationId = const Value.absent(),
             Value<String?> notes = const Value.absent(),
           }) =>
               StorageTableCompanion.insert(
@@ -5691,6 +6449,8 @@ class $$StorageTableTableTableManager extends RootTableManager<
             plantShapeId: plantShapeId,
             quantity: quantity,
             parentOperationId: parentOperationId,
+            isScheduled: isScheduled,
+            reservationId: reservationId,
             notes: notes,
           ),
           withReferenceMapper: (p0) => p0
@@ -5702,7 +6462,8 @@ class $$StorageTableTableTableManager extends RootTableManager<
           prefetchHooksCallback: (
               {plantTypeId = false,
               plantShapeId = false,
-              parentOperationId = false}) {
+              parentOperationId = false,
+              reservationId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -5750,6 +6511,17 @@ class $$StorageTableTableTableManager extends RootTableManager<
                         .id,
                   ) as T;
                 }
+                if (reservationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.reservationId,
+                    referencedTable:
+                        $$StorageTableTableReferences._reservationIdTable(db),
+                    referencedColumn: $$StorageTableTableReferences
+                        ._reservationIdTable(db)
+                        .id,
+                  ) as T;
+                }
 
                 return state;
               },
@@ -5773,67 +6545,65 @@ typedef $$StorageTableTableProcessedTableManager = ProcessedTableManager<
     (StorageTableData, $$StorageTableTableReferences),
     StorageTableData,
     PrefetchHooks Function(
-        {bool plantTypeId, bool plantShapeId, bool parentOperationId})>;
-typedef $$ScheduledStorageTableTableCreateCompanionBuilder
-    = ScheduledStorageTableCompanion Function({
+        {bool plantTypeId,
+        bool plantShapeId,
+        bool parentOperationId,
+        bool reservationId})>;
+typedef $$PricesTableTableCreateCompanionBuilder = PricesTableCompanion
+    Function({
   Value<int> id,
-  required int typeId,
-  required int shapeId,
-  required int quantity,
-  required int parentOperationId,
-  Value<String?> notes,
+  required int plantTypeId,
+  required int plantShapeId,
+  required double price,
 });
-typedef $$ScheduledStorageTableTableUpdateCompanionBuilder
-    = ScheduledStorageTableCompanion Function({
+typedef $$PricesTableTableUpdateCompanionBuilder = PricesTableCompanion
+    Function({
   Value<int> id,
-  Value<int> typeId,
-  Value<int> shapeId,
-  Value<int> quantity,
-  Value<int> parentOperationId,
-  Value<String?> notes,
+  Value<int> plantTypeId,
+  Value<int> plantShapeId,
+  Value<double> price,
 });
 
-final class $$ScheduledStorageTableTableReferences extends BaseReferences<
-    _$LocalDatabase, $ScheduledStorageTableTable, ScheduledStorageTableData> {
-  $$ScheduledStorageTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
+final class $$PricesTableTableReferences extends BaseReferences<_$LocalDatabase,
+    $PricesTableTable, PricesTableData> {
+  $$PricesTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $PlantTypesTableTable _typeIdTable(_$LocalDatabase db) =>
+  static $PlantTypesTableTable _plantTypeIdTable(_$LocalDatabase db) =>
       db.plantTypesTable.createAlias($_aliasNameGenerator(
-          db.scheduledStorageTable.typeId, db.plantTypesTable.id));
+          db.pricesTable.plantTypeId, db.plantTypesTable.id));
 
-  $$PlantTypesTableTableProcessedTableManager get typeId {
-    final $_column = $_itemColumn<int>('type_id')!;
+  $$PlantTypesTableTableProcessedTableManager get plantTypeId {
+    final $_column = $_itemColumn<int>('plant_type_id')!;
 
     final manager =
         $$PlantTypesTableTableTableManager($_db, $_db.plantTypesTable)
             .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_typeIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_plantTypeIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static $PlantShapesTableTable _shapeIdTable(_$LocalDatabase db) =>
+  static $PlantShapesTableTable _plantShapeIdTable(_$LocalDatabase db) =>
       db.plantShapesTable.createAlias($_aliasNameGenerator(
-          db.scheduledStorageTable.shapeId, db.plantShapesTable.id));
+          db.pricesTable.plantShapeId, db.plantShapesTable.id));
 
-  $$PlantShapesTableTableProcessedTableManager get shapeId {
-    final $_column = $_itemColumn<int>('shape_id')!;
+  $$PlantShapesTableTableProcessedTableManager get plantShapeId {
+    final $_column = $_itemColumn<int>('plant_shape_id')!;
 
     final manager =
         $$PlantShapesTableTableTableManager($_db, $_db.plantShapesTable)
             .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_shapeIdTable($_db));
+    final item = $_typedResult.readTableOrNull(_plantShapeIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: [item]));
   }
 }
 
-class $$ScheduledStorageTableTableFilterComposer
-    extends Composer<_$LocalDatabase, $ScheduledStorageTableTable> {
-  $$ScheduledStorageTableTableFilterComposer({
+class $$PricesTableTableFilterComposer
+    extends Composer<_$LocalDatabase, $PricesTableTable> {
+  $$PricesTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -5843,20 +6613,13 @@ class $$ScheduledStorageTableTableFilterComposer
   ColumnFilters<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get quantity => $composableBuilder(
-      column: $table.quantity, builder: (column) => ColumnFilters(column));
+  ColumnFilters<double> get price => $composableBuilder(
+      column: $table.price, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get parentOperationId => $composableBuilder(
-      column: $table.parentOperationId,
-      builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnFilters(column));
-
-  $$PlantTypesTableTableFilterComposer get typeId {
+  $$PlantTypesTableTableFilterComposer get plantTypeId {
     final $$PlantTypesTableTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.typeId,
+        getCurrentColumn: (t) => t.plantTypeId,
         referencedTable: $db.plantTypesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -5873,10 +6636,10 @@ class $$ScheduledStorageTableTableFilterComposer
     return composer;
   }
 
-  $$PlantShapesTableTableFilterComposer get shapeId {
+  $$PlantShapesTableTableFilterComposer get plantShapeId {
     final $$PlantShapesTableTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.shapeId,
+        getCurrentColumn: (t) => t.plantShapeId,
         referencedTable: $db.plantShapesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -5894,9 +6657,9 @@ class $$ScheduledStorageTableTableFilterComposer
   }
 }
 
-class $$ScheduledStorageTableTableOrderingComposer
-    extends Composer<_$LocalDatabase, $ScheduledStorageTableTable> {
-  $$ScheduledStorageTableTableOrderingComposer({
+class $$PricesTableTableOrderingComposer
+    extends Composer<_$LocalDatabase, $PricesTableTable> {
+  $$PricesTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -5906,20 +6669,13 @@ class $$ScheduledStorageTableTableOrderingComposer
   ColumnOrderings<int> get id => $composableBuilder(
       column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get quantity => $composableBuilder(
-      column: $table.quantity, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<double> get price => $composableBuilder(
+      column: $table.price, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get parentOperationId => $composableBuilder(
-      column: $table.parentOperationId,
-      builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnOrderings(column));
-
-  $$PlantTypesTableTableOrderingComposer get typeId {
+  $$PlantTypesTableTableOrderingComposer get plantTypeId {
     final $$PlantTypesTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.typeId,
+        getCurrentColumn: (t) => t.plantTypeId,
         referencedTable: $db.plantTypesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -5936,10 +6692,10 @@ class $$ScheduledStorageTableTableOrderingComposer
     return composer;
   }
 
-  $$PlantShapesTableTableOrderingComposer get shapeId {
+  $$PlantShapesTableTableOrderingComposer get plantShapeId {
     final $$PlantShapesTableTableOrderingComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.shapeId,
+        getCurrentColumn: (t) => t.plantShapeId,
         referencedTable: $db.plantShapesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -5957,9 +6713,9 @@ class $$ScheduledStorageTableTableOrderingComposer
   }
 }
 
-class $$ScheduledStorageTableTableAnnotationComposer
-    extends Composer<_$LocalDatabase, $ScheduledStorageTableTable> {
-  $$ScheduledStorageTableTableAnnotationComposer({
+class $$PricesTableTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $PricesTableTable> {
+  $$PricesTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -5969,19 +6725,13 @@ class $$ScheduledStorageTableTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<int> get quantity =>
-      $composableBuilder(column: $table.quantity, builder: (column) => column);
+  GeneratedColumn<double> get price =>
+      $composableBuilder(column: $table.price, builder: (column) => column);
 
-  GeneratedColumn<int> get parentOperationId => $composableBuilder(
-      column: $table.parentOperationId, builder: (column) => column);
-
-  GeneratedColumn<String> get notes =>
-      $composableBuilder(column: $table.notes, builder: (column) => column);
-
-  $$PlantTypesTableTableAnnotationComposer get typeId {
+  $$PlantTypesTableTableAnnotationComposer get plantTypeId {
     final $$PlantTypesTableTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.typeId,
+        getCurrentColumn: (t) => t.plantTypeId,
         referencedTable: $db.plantTypesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -5998,10 +6748,10 @@ class $$ScheduledStorageTableTableAnnotationComposer
     return composer;
   }
 
-  $$PlantShapesTableTableAnnotationComposer get shapeId {
+  $$PlantShapesTableTableAnnotationComposer get plantShapeId {
     final $$PlantShapesTableTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.shapeId,
+        getCurrentColumn: (t) => t.plantShapeId,
         referencedTable: $db.plantShapesTable,
         getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
@@ -6019,71 +6769,59 @@ class $$ScheduledStorageTableTableAnnotationComposer
   }
 }
 
-class $$ScheduledStorageTableTableTableManager extends RootTableManager<
+class $$PricesTableTableTableManager extends RootTableManager<
     _$LocalDatabase,
-    $ScheduledStorageTableTable,
-    ScheduledStorageTableData,
-    $$ScheduledStorageTableTableFilterComposer,
-    $$ScheduledStorageTableTableOrderingComposer,
-    $$ScheduledStorageTableTableAnnotationComposer,
-    $$ScheduledStorageTableTableCreateCompanionBuilder,
-    $$ScheduledStorageTableTableUpdateCompanionBuilder,
-    (ScheduledStorageTableData, $$ScheduledStorageTableTableReferences),
-    ScheduledStorageTableData,
-    PrefetchHooks Function({bool typeId, bool shapeId})> {
-  $$ScheduledStorageTableTableTableManager(
-      _$LocalDatabase db, $ScheduledStorageTableTable table)
+    $PricesTableTable,
+    PricesTableData,
+    $$PricesTableTableFilterComposer,
+    $$PricesTableTableOrderingComposer,
+    $$PricesTableTableAnnotationComposer,
+    $$PricesTableTableCreateCompanionBuilder,
+    $$PricesTableTableUpdateCompanionBuilder,
+    (PricesTableData, $$PricesTableTableReferences),
+    PricesTableData,
+    PrefetchHooks Function({bool plantTypeId, bool plantShapeId})> {
+  $$PricesTableTableTableManager(_$LocalDatabase db, $PricesTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$ScheduledStorageTableTableFilterComposer(
-                  $db: db, $table: table),
+              $$PricesTableTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$ScheduledStorageTableTableOrderingComposer(
-                  $db: db, $table: table),
+              $$PricesTableTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$ScheduledStorageTableTableAnnotationComposer(
-                  $db: db, $table: table),
+              $$PricesTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<int> typeId = const Value.absent(),
-            Value<int> shapeId = const Value.absent(),
-            Value<int> quantity = const Value.absent(),
-            Value<int> parentOperationId = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
+            Value<int> plantTypeId = const Value.absent(),
+            Value<int> plantShapeId = const Value.absent(),
+            Value<double> price = const Value.absent(),
           }) =>
-              ScheduledStorageTableCompanion(
+              PricesTableCompanion(
             id: id,
-            typeId: typeId,
-            shapeId: shapeId,
-            quantity: quantity,
-            parentOperationId: parentOperationId,
-            notes: notes,
+            plantTypeId: plantTypeId,
+            plantShapeId: plantShapeId,
+            price: price,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required int typeId,
-            required int shapeId,
-            required int quantity,
-            required int parentOperationId,
-            Value<String?> notes = const Value.absent(),
+            required int plantTypeId,
+            required int plantShapeId,
+            required double price,
           }) =>
-              ScheduledStorageTableCompanion.insert(
+              PricesTableCompanion.insert(
             id: id,
-            typeId: typeId,
-            shapeId: shapeId,
-            quantity: quantity,
-            parentOperationId: parentOperationId,
-            notes: notes,
+            plantTypeId: plantTypeId,
+            plantShapeId: plantShapeId,
+            price: price,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
                     e.readTable(table),
-                    $$ScheduledStorageTableTableReferences(db, table, e)
+                    $$PricesTableTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({typeId = false, shapeId = false}) {
+          prefetchHooksCallback: ({plantTypeId = false, plantShapeId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -6100,26 +6838,24 @@ class $$ScheduledStorageTableTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic>>(state) {
-                if (typeId) {
+                if (plantTypeId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.typeId,
+                    currentColumn: table.plantTypeId,
                     referencedTable:
-                        $$ScheduledStorageTableTableReferences._typeIdTable(db),
-                    referencedColumn: $$ScheduledStorageTableTableReferences
-                        ._typeIdTable(db)
-                        .id,
+                        $$PricesTableTableReferences._plantTypeIdTable(db),
+                    referencedColumn:
+                        $$PricesTableTableReferences._plantTypeIdTable(db).id,
                   ) as T;
                 }
-                if (shapeId) {
+                if (plantShapeId) {
                   state = state.withJoin(
                     currentTable: table,
-                    currentColumn: table.shapeId,
-                    referencedTable: $$ScheduledStorageTableTableReferences
-                        ._shapeIdTable(db),
-                    referencedColumn: $$ScheduledStorageTableTableReferences
-                        ._shapeIdTable(db)
-                        .id,
+                    currentColumn: table.plantShapeId,
+                    referencedTable:
+                        $$PricesTableTableReferences._plantShapeIdTable(db),
+                    referencedColumn:
+                        $$PricesTableTableReferences._plantShapeIdTable(db).id,
                   ) as T;
                 }
 
@@ -6133,19 +6869,18 @@ class $$ScheduledStorageTableTableTableManager extends RootTableManager<
         ));
 }
 
-typedef $$ScheduledStorageTableTableProcessedTableManager
-    = ProcessedTableManager<
-        _$LocalDatabase,
-        $ScheduledStorageTableTable,
-        ScheduledStorageTableData,
-        $$ScheduledStorageTableTableFilterComposer,
-        $$ScheduledStorageTableTableOrderingComposer,
-        $$ScheduledStorageTableTableAnnotationComposer,
-        $$ScheduledStorageTableTableCreateCompanionBuilder,
-        $$ScheduledStorageTableTableUpdateCompanionBuilder,
-        (ScheduledStorageTableData, $$ScheduledStorageTableTableReferences),
-        ScheduledStorageTableData,
-        PrefetchHooks Function({bool typeId, bool shapeId})>;
+typedef $$PricesTableTableProcessedTableManager = ProcessedTableManager<
+    _$LocalDatabase,
+    $PricesTableTable,
+    PricesTableData,
+    $$PricesTableTableFilterComposer,
+    $$PricesTableTableOrderingComposer,
+    $$PricesTableTableAnnotationComposer,
+    $$PricesTableTableCreateCompanionBuilder,
+    $$PricesTableTableUpdateCompanionBuilder,
+    (PricesTableData, $$PricesTableTableReferences),
+    PricesTableData,
+    PrefetchHooks Function({bool plantTypeId, bool plantShapeId})>;
 
 class $LocalDatabaseManager {
   final _$LocalDatabase _db;
@@ -6154,16 +6889,16 @@ class $LocalDatabaseManager {
       $$SetupExpenseTableTableTableManager(_db, _db.setupExpenseTable);
   $$PlantTypesTableTableTableManager get plantTypesTable =>
       $$PlantTypesTableTableTableManager(_db, _db.plantTypesTable);
-  $$PlantingTableTableTableManager get plantingTable =>
-      $$PlantingTableTableTableManager(_db, _db.plantingTable);
   $$PlantShapesTableTableTableManager get plantShapesTable =>
       $$PlantShapesTableTableTableManager(_db, _db.plantShapesTable);
   $$OperationTypesTableTableTableManager get operationTypesTable =>
       $$OperationTypesTableTableTableManager(_db, _db.operationTypesTable);
   $$OperationsTableTableTableManager get operationsTable =>
       $$OperationsTableTableTableManager(_db, _db.operationsTable);
+  $$ReservationsTableTableTableManager get reservationsTable =>
+      $$ReservationsTableTableTableManager(_db, _db.reservationsTable);
   $$StorageTableTableTableManager get storageTable =>
       $$StorageTableTableTableManager(_db, _db.storageTable);
-  $$ScheduledStorageTableTableTableManager get scheduledStorageTable =>
-      $$ScheduledStorageTableTableTableManager(_db, _db.scheduledStorageTable);
+  $$PricesTableTableTableManager get pricesTable =>
+      $$PricesTableTableTableManager(_db, _db.pricesTable);
 }

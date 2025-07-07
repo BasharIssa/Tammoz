@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:local_tammoz_chat/domain/entities/storage.dart';
 import 'package:local_tammoz_chat/presentation/operation/pages/add_grafting_page.dart';
 import 'package:local_tammoz_chat/presentation/operation/pages/add_pruning_page.dart';
 import 'package:local_tammoz_chat/presentation/plant_types/bloc/plant_type_events.dart';
@@ -86,12 +85,6 @@ class MyApp extends StatelessWidget {
             case PagesRoutesConstants.addPlanting:
               return MaterialPageRoute(
                 builder: (_) =>  AddPlantingPage(),
-                settings: settings, // مهم لتمرير settings مع arguments
-              );
-
-            case '/addOperation':
-              return MaterialPageRoute(
-                builder: (_) => AddOperationPage(),
                 settings: settings, // مهم لتمرير settings مع arguments
               );
 

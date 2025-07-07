@@ -6,12 +6,12 @@ import 'package:drift/native.dart';
 import 'package:local_tammoz_chat/data/local/tables/Operations.dart';
 import 'package:local_tammoz_chat/data/local/tables/operation_types.dart';
 import 'package:local_tammoz_chat/data/local/tables/plant_shapes.dart';
-import 'package:local_tammoz_chat/data/local/tables/scheduled_storage.dart';
 import 'package:local_tammoz_chat/data/local/tables/storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../../constants.dart';
-import 'tables/planting.dart';
+import 'tables/prices.dart';
+import 'tables/reservations.dart';
 import 'tables/setup_expense.dart'; // يحتوي على تعريف SetupExpenseTable
 import 'tables/plant_types.dart';
 // ... (بقية الاستيرادات)
@@ -20,18 +20,19 @@ part 'local_database.g.dart';
 
 @DriftDatabase(tables: [
   SetupExpenseTable,
-  PlantingTable,
   PlantTypesTable,
   StorageTable,
-  ScheduledStorageTable,
   PlantShapesTable,
-  OperationTypesTable
+  OperationTypesTable,
+//  OperationsTable,
+  ReservationsTable,
+  PricesTable
 ])
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1; // تم تغيير إلى 1
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -50,13 +51,14 @@ class LocalDatabase extends _$LocalDatabase {
   // دالة مساعدة لحذف جميع الجداول
   Future<void> _deleteAllTables() async {
     await transaction(() async {
-      await delete(setupExpenseTable).go();
-      await delete(plantingTable).go();
-      await delete(plantTypesTable).go();
-      await delete(storageTable).go();
-      await delete(scheduledStorageTable).go();
-      await delete(plantShapesTable).go();
-      await delete(operationTypesTable).go();
+      // await delete(setupExpenseTable).go();
+      // await delete(plantTypesTable).go();
+      // await delete(storageTable).go();
+      // await delete(plantShapesTable).go();
+      // await delete(operationTypesTable).go();
+      // await delete(operationsTable).go();
+      // await delete(reservationsTable).go();
+      // await delete(pricesTable).go();
     });
   }
 
