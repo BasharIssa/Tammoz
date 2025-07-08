@@ -8,6 +8,7 @@ import 'package:local_tammoz_chat/presentation/storage/pages/select_second_stora
 
 import 'constants.dart';
 import 'core/injection/service_locator.dart';
+import 'data/local/local_database.dart';
 import 'firebase_options.dart';
 import 'presentation/main_page.dart';
 import 'presentation/operation/bloc/operation_bloc.dart';
@@ -25,7 +26,6 @@ Future<void> main() async {
   );
   setupLocator();
 
-  //
   //getIt<LocalDatabase>().deleteDatabaseFile();
 
   runApp(const MyApp());

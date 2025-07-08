@@ -123,8 +123,10 @@ class _StorageEditDialogState extends State<StorageEditDialog> {
         plantShape: _plantShapeController.text,
         quantity: int.parse(_quantityController.text),
         notes: _notesController.text,
+        parentOperationId: widget.storage!.parentOperationId,
         parentOperationDate: widget.storage!.parentOperationDate,
         parentOperationName: widget.storage!.parentOperationName,
+        isScheduled: widget.storage!.isScheduled,
       );
 
       if (widget.storage == null) {

@@ -7,6 +7,10 @@ import 'plant_shape_mapper.dart';
 import 'plant_type_mapper.dart'; // فرضًا هذا مسار قاعدة البيانات
 
 class ReservationMapper {
+  static SlimReservation toSlimEntity(ReservationDto dto){
+    return SlimReservation(id: dto.id, fullName: dto.fullName);
+  }
+  
   static Reservation toEntity(ReservationDto dto) {
     return Reservation(
       id: dto.id,
@@ -57,7 +61,6 @@ class ReservationMapper {
       plantShapeId: Value(dto.plantShape.id!),
       // نفس الافتراض لـ PlantShapeDto
       quantity: Value(dto.quantity),
-      calculatedTotalAmount: Value(dto.calculatedTotalAmount),
       deposit: dto.deposit != null ? Value(dto.deposit!) : const Value.absent(),
       isFullyPaid: Value(dto.isFullyPaid),
       isDelivered: Value(dto.isDelivered),
@@ -65,8 +68,12 @@ class ReservationMapper {
     );
   }
 
-  static ReservationDto fromTableData(ReservationsTableData data,
-      PlantTypesTableData plantTypeData, PlantShapesTableData plantShapeData) {
+  static ReservationDto fromTableData(
+      ReservationsTableData data,
+      double calculatedTotalAmount,
+      PlantTypesTableData plantTypeData,
+      PlantShapesTableData plantShapeData
+      ) {
     return ReservationDto(
       id: data.id,
       fullName: data.fullName,
@@ -76,7 +83,7 @@ class ReservationMapper {
       plantType: PlantTypeMapper.fromTableData(plantTypeData),
       plantShape: PlantShapeMapper.fromTableData(plantShapeData),
       quantity: data.quantity,
-      calculatedTotalAmount: data.calculatedTotalAmount,
+      calculatedTotalAmount: calculatedTotalAmount,
       deposit: data.deposit,
       isFullyPaid: data.isFullyPaid,
       isDelivered: data.isDelivered,

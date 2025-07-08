@@ -20,7 +20,8 @@ ReservationDto _$ReservationDtoFromJson(Map<String, dynamic> json) =>
       plantShape:
           PlantShapeDto.fromJson(json['plantShape'] as Map<String, dynamic>),
       quantity: (json['quantity'] as num).toInt(),
-      calculatedTotalAmount: (json['calculatedTotalAmount'] as num).toDouble(),
+      calculatedTotalAmount:
+          (json['calculatedTotalAmount'] as num?)?.toDouble(),
       deposit: (json['deposit'] as num?)?.toDouble(),
       isFullyPaid: json['isFullyPaid'] as bool? ?? false,
       isDelivered: json['isDelivered'] as bool? ?? false,

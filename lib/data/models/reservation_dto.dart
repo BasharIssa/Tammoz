@@ -14,7 +14,7 @@ class ReservationDto {
   final PlantTypeDto plantType;
   final PlantShapeDto plantShape;
   final int quantity;
-  final double calculatedTotalAmount; //هذا الحقل حسابي نجلبه من الريبو
+  final double? calculatedTotalAmount; //هذا الحقل حسابي نجلبه من الريبو
   final double? deposit;
   final bool isFullyPaid;
   final bool isDelivered;
@@ -29,7 +29,7 @@ class ReservationDto {
     required this.plantType,
     required this.plantShape,
     required this.quantity,
-    required this.calculatedTotalAmount,
+    this.calculatedTotalAmount,
     required this.deposit,
     this.isFullyPaid = false,
     this.isDelivered = false,

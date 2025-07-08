@@ -40,18 +40,29 @@ class AddOperationAndUpdateStorageUseCase {
       final firstQty = operation.quantity;
       final successRatio = operation.operationType.successRatio;
       final firstPlantTypeName = operation.firstType.name;
+      final opId = operation.id!;
       final opDate = operation.date;
+      final opIsScheduled = operation.isScheduled;
       switch (opType) {
         case OperationTypesConstants.planting:
           return _handlePlanting(
-              firstPlantTypeName, firstShapeName, firstQty, successRatio, opType, opDate);
+              firstPlantTypeName, firstShapeName, firstQty, successRatio,opId, opType, opDate,
+              opIsScheduled);
         case OperationTypesConstants.pruning:
           if (firstStorageId == null) {
             return Left(OperationValidationFailure(
                 message: 'لا يمكن تطبيق عملية القص وسجل المخزن غير محدد'));
           }
-          return _handlePruning(firstPlantTypeName, firstShapeName, firstQty, successRatio,
-              opType, opDate, firstStorageId);
+          return _handlePruning(
+              firstPlantTypeName,
+              firstShapeName,
+              firstQty,
+              successRatio,
+              opId,
+              opType,
+              opDate,
+              opIsScheduled,
+              firstStorageId);
         case OperationTypesConstants.grafting:
           return _handleGrafting(operation, firstStorageId, secondStorageId);
         default:
@@ -69,8 +80,10 @@ class AddOperationAndUpdateStorageUseCase {
     String shapeName,
     int qty,
     double successRatio,
-    String operationType,
+    int parentOperationId,
+      String operationType,
     DateTime operationDate,
+      bool isScheduled,
   ) async {
     final int adjustedQty = (qty * successRatio).floor();
 
@@ -83,6 +96,8 @@ class AddOperationAndUpdateStorageUseCase {
             plantShape: PlantShapesConstants.origin,
             plantType: plantTypeName,
             quantity: adjustedQty,
+            parentOperationId: parentOperationId,
+            isScheduled: isScheduled,
           ),
         ).then((either) => either.map((_) => unit));
 
@@ -94,6 +109,8 @@ class AddOperationAndUpdateStorageUseCase {
             plantShape: PlantShapesConstants.seedling,
             plantType: plantTypeName,
             quantity: adjustedQty,
+            parentOperationId: parentOperationId,
+            isScheduled: isScheduled
           ),
         ).then((either) => either.map((_) => unit));
 
@@ -108,9 +125,13 @@ class AddOperationAndUpdateStorageUseCase {
       String shapeName,
       int qty,
       double successRatio,
+      int operationId,
       String operationName,
+
       DateTime operationDate,
+      bool opIsScheduled,
       int prunedStorageId,
+
       ) async {
     final res1 = await storageRepository.decreaseQuantity(
       storageId: prunedStorageId,
@@ -126,6 +147,8 @@ class AddOperationAndUpdateStorageUseCase {
           quantity: qty,
           parentOperationName: operationName,
           parentOperationDate: operationDate,
+          parentOperationId: operationId,
+          isScheduled: opIsScheduled
         ),
       ).then((either) => either.map((_) => unit));
       if (res2.isLeft()) return res2;
@@ -138,6 +161,8 @@ class AddOperationAndUpdateStorageUseCase {
           quantity: rasiyaQty,
           parentOperationName: operationName,
           parentOperationDate: operationDate,
+            parentOperationId: operationId,
+            isScheduled: opIsScheduled
         ),
       ).then((either) => either.map((_) => unit));
     } else if (shapeName == PlantShapesConstants.rasiya) {
@@ -148,6 +173,8 @@ class AddOperationAndUpdateStorageUseCase {
           quantity: qty,
           parentOperationName: operationName,
           parentOperationDate: operationDate,
+            parentOperationId: operationId,
+            isScheduled: opIsScheduled
         ),
       ).then((either) => either.map((_) => unit));
       if (res2.isLeft()) return res2;
@@ -160,6 +187,8 @@ class AddOperationAndUpdateStorageUseCase {
           quantity: rasiyaRasiyaQty,
           parentOperationName: operationName,
           parentOperationDate: operationDate,
+            parentOperationId: operationId,
+            isScheduled: opIsScheduled
         ),
       ).then((either) => either.map((_) => unit));
     }
@@ -207,7 +236,9 @@ class AddOperationAndUpdateStorageUseCase {
           parentOperationDate: operation.date,
           plantShape: shapeOfRootOfHead,
           plantType: headTypeName,
-          quantity: operation.quantity)
+          quantity: operation.quantity,
+          parentOperationId: operation.id!,
+          isScheduled: operation.isScheduled)
           : null;
       if (rootOfHead != null) {
         final res31 = await storageRepository
@@ -229,6 +260,8 @@ class AddOperationAndUpdateStorageUseCase {
             .round(),
         parentOperationDate: operation.date,
         parentOperationName: operation.operationType.name,
+          parentOperationId: operation.id!,
+          isScheduled: operation.isScheduled
       )
           : null;
       if (headOfRoot != null) {
@@ -251,6 +284,8 @@ class AddOperationAndUpdateStorageUseCase {
       quantity: (operation.quantity * operation.operationType.successRatio).round(),
       plantType: headTypeName,
       plantShape: graftingShape,
+        parentOperationId: operation.id!,
+        isScheduled: operation.isScheduled
     );
     final res4 = await storageRepository.addStorage(graftingStorage)
       .then((either) => either.map((_) => unit));

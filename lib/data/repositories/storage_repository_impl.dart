@@ -125,24 +125,16 @@ class StorageRepositoryImpl extends StorageRepository {
       final typeIdResult = await _getPlantTypeIdByName(storage.plantType);
       final shapeIdResult = await _getPlantShapeIdByName(storage.plantShape);
 
-      final parentOperationId = await _getParentOperationId(
-        storage.parentOperationDate,
-      );
-
-
       return typeIdResult.fold(
             (failure) => Left(failure),
             (plantTypeId) =>
             shapeIdResult.fold(
                   (failure) => Left(failure),
                   (plantShapeId) async {
-                final dto = StorageMapper.toDto(
+                final dto = StorageMapper.fromEntity(
                   storage,
                   plantTypeId: plantTypeId,
                   plantShapeId: plantShapeId,
-                  parentOperationId: parentOperationId,
-                  parentOperationDate: storage.parentOperationDate,
-                  parentOperationName: storage.parentOperationName,
                 );
 
                 final companion = StorageMapper.toTableCompanion(dto);
@@ -172,9 +164,6 @@ class StorageRepositoryImpl extends StorageRepository {
 
       final typeIdResult = await _getPlantTypeIdByName(storage.plantType);
       final shapeIdResult = await _getPlantShapeIdByName(storage.plantShape);
-      final parentOperationId = await _getParentOperationId(
-        storage.parentOperationDate,
-      );
 
       return typeIdResult.fold(
             (failure) => Left(failure),
@@ -182,13 +171,10 @@ class StorageRepositoryImpl extends StorageRepository {
             shapeIdResult.fold(
                   (failure) => Left(failure),
                   (plantShapeId) async {
-                final dto = StorageMapper.toDto(
+                final dto = StorageMapper.fromEntity(
                   storage,
                   plantTypeId: plantTypeId,
                   plantShapeId: plantShapeId,
-                  parentOperationId: parentOperationId,
-                  parentOperationDate: storage.parentOperationDate,
-                  parentOperationName: storage.parentOperationName,
                 );
 
                 final companion = StorageMapper.toTableCompanion(dto);
@@ -442,42 +428,6 @@ class StorageRepositoryImpl extends StorageRepository {
           StorageFailure(message: 'فشل في جلب شكل النبات', stackTrace: st));
     }
   }
-
-  Future<Either<StorageFailure, int>> _getOperationTypeIdByName(
-      String operationTypeName) async {
-    try {
-      final operationType = await (db.select(db.operationTypesTable)
-        ..where((tbl) => tbl.name.equals(operationTypeName)))
-          .getSingleOrNull();
-
-      if (operationType != null) {
-        return Right(operationType.id);
-      } else {
-        return Left(StorageFailure(
-            message: 'نوع العملية غير موجود: $operationTypeName'));
-      }
-    } catch (e, st) {
-      return Left(
-          StorageFailure(message: 'فشل في جلب نوع العملية', stackTrace: st));
-    }
-  }
-
-
-  Future<int?> _getParentOperationId(DateTime date) async {
-    try {
-      final operation = await (db.select(db.operationsTable)
-        ..where((tbl) =>
-            tbl.date.equals(date)))
-          .getSingleOrNull();
-
-      return operation?.id;
-    } catch (e) {
-      print('  فشل في جلب العملية الأم   $e  ');
-      return null;
-    }
-  }
-
-
 
   @override
   Future<Either<Failure, int>> getTotalQuantityByType(String plantType) {

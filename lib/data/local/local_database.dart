@@ -32,7 +32,7 @@ class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -51,14 +51,14 @@ class LocalDatabase extends _$LocalDatabase {
   // دالة مساعدة لحذف جميع الجداول
   Future<void> _deleteAllTables() async {
     await transaction(() async {
-      // await delete(setupExpenseTable).go();
-      // await delete(plantTypesTable).go();
-      // await delete(storageTable).go();
-      // await delete(plantShapesTable).go();
-      // await delete(operationTypesTable).go();
-      // await delete(operationsTable).go();
-      // await delete(reservationsTable).go();
-      // await delete(pricesTable).go();
+      await delete(setupExpenseTable).go();
+      await delete(plantTypesTable).go();
+      await delete(storageTable).go();
+      await delete(plantShapesTable).go();
+      await delete(operationTypesTable).go();
+      await delete(operationsTable).go();
+      await delete(reservationsTable).go();
+      await delete(pricesTable).go();
     });
   }
 

@@ -15,6 +15,7 @@ class StorageMapper {
     required String plantShapeName,
     DateTime? parentOperationDate,
     String? parentOperationName,
+    String? reserverFullName,
   }) {
     return StorageDto(
       id: data.id,
@@ -27,6 +28,9 @@ class StorageMapper {
       parentOperationDate: parentOperationDate,
       parentOperationName: parentOperationName,
       notes: data.notes,
+      reservationId: data.reservationId,
+      reserverFullName: reserverFullName,
+      isScheduled: data.isScheduled,
     );
   }
 
@@ -37,19 +41,21 @@ class StorageMapper {
       plantType: dto.plantTypeName,
       plantShape: dto.plantShapeName,
       quantity: dto.quantity,
+      parentOperationId: dto.parentOperationId!,
       parentOperationDate: dto.parentOperationDate?? DateTime(1989),
       parentOperationName: dto.parentOperationName?? '',
       notes: dto.notes,
+      reservationId: dto.reservationId,
+      reserverFullName: dto.reserverFullName,
+      isScheduled: dto.isScheduled,
     );
   }
 
   // تحويل من Entity إلى DTO
-  static StorageDto toDto(Storage entity, {
+  static StorageDto fromEntity(
+      Storage entity, {
     required int plantTypeId,
     required int plantShapeId,
-    int? parentOperationId,
-    DateTime? parentOperationDate,
-    String? parentOperationName,
   }) {
     return StorageDto(
       id: entity.id,
@@ -58,9 +64,12 @@ class StorageMapper {
       plantShapeId: plantShapeId,
       plantShapeName: entity.plantShape,
       quantity: entity.quantity,
-      parentOperationId: parentOperationId,
-      parentOperationDate: parentOperationDate,
-      parentOperationName: parentOperationName,
+      parentOperationId: entity.parentOperationId,
+      parentOperationDate: entity.parentOperationDate,
+      parentOperationName: entity.parentOperationName,
+      reservationId: entity.reservationId,
+      reserverFullName: entity.reserverFullName,
+      isScheduled: entity.isScheduled,
       notes: entity.notes,
     );
   }
@@ -73,6 +82,8 @@ class StorageMapper {
       plantShapeId: Value(dto.plantShapeId),
       quantity: Value(dto.quantity),
       parentOperationId: dto.parentOperationId != 0 ? Value(dto.parentOperationId) : const Value.absent(),
+      reservationId: Value(dto.reservationId) ,
+      isScheduled: Value(dto.isScheduled),
       notes: dto.notes != null ? Value(dto.notes!) : const Value.absent(),
     );
   }
