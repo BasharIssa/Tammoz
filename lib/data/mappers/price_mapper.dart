@@ -9,8 +9,8 @@ import 'package:local_tammoz_chat/domain/entities/price.dart';
 
 extension PriceDtoMapper on PriceDto {
   // من DTO إلى Entity
-  PriceEntity toEntity() {
-    return PriceEntity(
+  Price toEntity() {
+    return Price(
       id: id,
       plantType: PlantTypeMapper.toEntity(plantTypeDto),
       plantShape: PlantShapeMapper.toEntity(plantShapeDto),
@@ -29,7 +29,7 @@ extension PriceDtoMapper on PriceDto {
   }
 }
 
-extension PriceMapper on PriceEntity {
+extension PriceMapper on Price {
   // من Entity إلى DTO
   PriceDto toDto() {
     return PriceDto(

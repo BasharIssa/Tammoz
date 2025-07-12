@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_tammoz_chat/constants.dart';
-import 'package:local_tammoz_chat/core/injection/service_locator.dart';
 import 'package:local_tammoz_chat/presentation/operation/bloc/operation_bloc.dart';
 import 'package:local_tammoz_chat/presentation/operation/widgets/OperationsList.dart';
 
@@ -143,7 +142,23 @@ class MainPage extends StatelessWidget {
                 //Navigator.pop(context);
                 Navigator.pushNamed(context, PagesRoutesConstants.operations);
               }
-            )
+            ),
+            ListTile(
+                leading: const Icon(Icons.book_online_sharp),
+                title: const Text('الحجوزات'),
+                onTap: (){
+                  //Navigator.pop(context);
+                  Navigator.pushNamed(context, PagesRoutesConstants.reservations);
+                }
+            ),
+            ListTile(
+                leading: const Icon(Icons.money_sharp),
+                title: const Text('الاسعار'),
+                onTap: (){
+                  //Navigator.pop(context);
+                  Navigator.pushNamed(context, PagesRoutesConstants.prices);
+                }
+            ),
             // أضف خيارات أخرى حسب الحاجة
           ],
         ),

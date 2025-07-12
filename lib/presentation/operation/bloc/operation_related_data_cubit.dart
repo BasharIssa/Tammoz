@@ -28,6 +28,7 @@ class OperationRelatedDataCubit extends Cubit<OperationRelatedDataState> {
             plantShapesResult.fold(
                   (failure) => emit(state.copyWith(isLoading: false, error: failure.message)),
                   (plantShapes) {
+                    final plantSeedsResult = plantShapes.where((shape) => shape.name.contains('بذرة')).toList();
                 emit(state.copyWith(
                   isLoading: false,
                   operationTypes: opTypes,

@@ -30,3 +30,7 @@ class UnauthorizedFailure extends Failure {
 class ValidationFailure extends Failure {
   const ValidationFailure({required super.message, super.stackTrace});
 }
+
+class InvalidInputFailure extends Failure {
+  const InvalidInputFailure({required super.message, super.stackTrace});
+}

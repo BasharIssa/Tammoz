@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:local_tammoz_chat/data/local/local_database.dart';
-import 'package:local_tammoz_chat/data/local/tables/operation_types.dart';
 import 'package:local_tammoz_chat/domain/entities/operation_type.dart';
 
 import '../models/operation_type_dto.dart';

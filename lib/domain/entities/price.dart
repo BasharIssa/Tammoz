@@ -2,13 +2,13 @@ import 'package:equatable/equatable.dart';
 import 'package:local_tammoz_chat/domain/entities/plant_shape.dart';
 import 'package:local_tammoz_chat/domain/entities/plant_type.dart';
 
-class PriceEntity extends Equatable {
+class Price extends Equatable {
   final int? id;
   final PlantType plantType;
   final PlantShape plantShape;
   final double price;
 
-  const PriceEntity({
+  const Price({
     this.id,
     required this.plantType,
     required this.plantShape,
@@ -16,13 +16,13 @@ class PriceEntity extends Equatable {
   });
 
 
-  PriceEntity copyWith({
+  Price copyWith({
     int? id,
     PlantType? plantType,
     PlantShape? plantShape,
     double? price,
   }) {
-    return PriceEntity(
+    return Price(
       id: id ?? this.id,
       plantType: plantType ?? this.plantType,
       plantShape: plantShape ?? this.plantShape,

@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:local_tammoz_chat/constants.dart';
 import 'package:local_tammoz_chat/domain/entities/storage.dart';
 
 class SecondStorageItem extends StatelessWidget {

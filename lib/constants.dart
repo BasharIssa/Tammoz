@@ -10,6 +10,8 @@ class PagesRoutesConstants {
   static const String selectSecondStorage = '/select-second-storage';
   static const String storage = '/storage';
   static const String operations = '/operations';
+  static const String prices = '/prices';
+  static const String reservations = '/reservations';
 }
 class OperationTypesConstants {
   static const String planting = 'زراعة';
@@ -62,8 +64,9 @@ class PlantShapesConstants {
     throw StateError('الشكل $cultivatedPlantShape غير مدعوم في الدالة rootOf');
   }
   static String? headOf(String wildPlantShape) {
-    if (wildPlantShape == origin) return zaghfa;
-    else if (wildPlantShape == zaghfa) return null;
+    if (wildPlantShape == origin) {
+      return zaghfa;
+    } else if (wildPlantShape == zaghfa) return null;
     // رمي استثناء في حالة عدم تطابق أي شرط
     throw StateError('الشكل $wildPlantShape غير مدعوم في الدالة headOf');
   }

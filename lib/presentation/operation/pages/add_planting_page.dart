@@ -6,6 +6,7 @@ import 'package:local_tammoz_chat/presentation/operation/bloc/operation_related_
 import 'package:local_tammoz_chat/presentation/operation/pages/base_add_operation_page.dart';
 import 'package:local_tammoz_chat/presentation/plant_types/bloc/plant_type_bloc.dart';
 import 'package:local_tammoz_chat/presentation/plant_types/bloc/plant_type_events.dart';
+import 'package:local_tammoz_chat/presentation/plant_types/widgets/add_new_plant_type_dialog.dart';
 
 class AddPlantingPage extends BaseAddOperationPage {
   const AddPlantingPage({
@@ -18,14 +19,6 @@ class AddPlantingPage extends BaseAddOperationPage {
 
 class _AddPlantingPageState extends BaseAddOperationPageState<AddPlantingPage> {
 
-  late TextEditingController _newPlantTypeController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _newPlantTypeController = TextEditingController();
-  }
 
   @override
   void didChangeDependencies() {
@@ -47,14 +40,6 @@ class _AddPlantingPageState extends BaseAddOperationPageState<AddPlantingPage> {
       }
     }
   }
-
-
-  @override
-  void dispose() {
-    _newPlantTypeController.dispose();
-    super.dispose();
-  }
-
 
   @override
   Widget buildAddOperationSpecificFields(OperationRelatedDataState state) {
@@ -140,48 +125,12 @@ class _AddPlantingPageState extends BaseAddOperationPageState<AddPlantingPage> {
       );
   }
   Future<void> _showAddPlantTypeDialog() async {
-    _newPlantTypeController.clear();
-    // نستخدم context مباشرة مع التحقق من mounted للـ State
-    if (!mounted) return;
+    final newTypeName = await AddNewPlantTypeDialog.show(context);
 
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('إضافة نوع نبات جديد'),
-        content: TextField(
-          controller: _newPlantTypeController,
-          decoration: const InputDecoration(labelText: 'اسم النوع'),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('إلغاء'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final newTypeName = _newPlantTypeController.text.trim();
-              if (newTypeName.isNotEmpty) {
-                Navigator.of(context).pop(true);
-              }
-            },
-            child: const Text('إضافة'),
-          ),
-        ],
-      ),
-    );
-
-    if (result == true) {
-      if (!mounted) return; // تحقق مجدداً قبل استخدام context
-      final newTypeName = _newPlantTypeController.text.trim();
-
-      // إرسال الحدث لإضافة النوع الجديد
+    if (newTypeName != null && newTypeName.isNotEmpty && mounted) {
       context.read<PlantTypeBloc>().add(
         AddPlantType(PlantType(name: newTypeName)),
       );
     }
   }
-
-
-
 }

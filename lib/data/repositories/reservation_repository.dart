@@ -119,8 +119,12 @@ class ReservationRepositoryImpl implements ReservationRepository {
         final reservationData = row.readTable(_db.reservationsTable);
         final plantTypeData = row.readTable(_db.plantTypesTable);
         final plantShapeData = row.readTable(_db.plantShapesTable);
-        final pricesData = row.readTable(_db.pricesTable);
-        final calculatedTotalAmount = reservationData.quantity * pricesData.price;
+        final pricesData = row.readTableOrNull(_db.pricesTable);
+
+        final calculatedTotalAmount =pricesData ==null
+                          ? 0.0
+        :reservationData.quantity * pricesData.price ;
+
 
         final reservationDto = ReservationMapper.fromTableData(
           reservationData,
@@ -131,8 +135,8 @@ class ReservationRepositoryImpl implements ReservationRepository {
         reservations.add(ReservationMapper.toEntity(reservationDto));
       }
       return Right(reservations);
-    } on DriftRemoteException catch (e) {
-      return Left(DatabaseFailure(message: 'Failed to create reservation ',stackTrace: e.remoteStackTrace));
+    } on DriftRemoteException catch (e, st) {
+      return Left(DatabaseFailure(message: 'Failed to create reservation ',stackTrace: st));
     } on Exception catch (e) {
       return Left(DatabaseFailure(message: 'An unexpected error occurred: ${e.toString()}'));
     }

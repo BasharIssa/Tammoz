@@ -3,16 +3,13 @@
 import 'package:local_tammoz_chat/domain/failures/failures.dart';
 
 class OperationDatabaseFailure extends Failure {
-  const OperationDatabaseFailure({required String message, StackTrace? stackTrace})
-      : super(message: message, stackTrace: stackTrace);
+  const OperationDatabaseFailure({required super.message, super.stackTrace});
 }
 
 class OperationNotFoundFailure extends Failure {
-  const OperationNotFoundFailure({required String message})
-      : super(message: message);
+  const OperationNotFoundFailure({required super.message});
 }
 
 class OperationValidationFailure extends Failure {
-  const OperationValidationFailure({required String message})
-      : super(message: message);
+  const OperationValidationFailure({required super.message});
 }

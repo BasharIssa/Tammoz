@@ -24,13 +24,11 @@ class StorageDetailsDialog extends StatelessWidget {
             _buildDetailRow('نوع النبات', storage.plantType),
             _buildDetailRow('شكل النبات', storage.plantShape),
             _buildDetailRow('الكمية', storage.quantity.toString()),
-            if (storage.parentOperationName != null)
-              _buildDetailRow('العملية الأم', storage.parentOperationName!),
-            if (storage.parentOperationDate != null)
-              _buildDetailRow(
-                'تاريخ العملية',
-                storage.parentOperationDate!.toLocal().toString(),
-              ),
+            _buildDetailRow('العملية الأم', storage.parentOperationName),
+            _buildDetailRow(
+              'تاريخ العملية',
+              storage.parentOperationDate.toLocal().toString(),
+            ),
             if (storage.notes?.isNotEmpty ?? false)
               _buildDetailRow('ملاحظات', storage.notes!),
             const SizedBox(height: 20),

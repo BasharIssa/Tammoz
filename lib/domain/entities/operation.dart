@@ -22,7 +22,7 @@ class Operation extends Equatable {
   final PlantShape? secondShape; // nullable
   final int quantity;
 
-  Operation({
+  const Operation({
     this.id,
     required this.operationType,
     required this.date,

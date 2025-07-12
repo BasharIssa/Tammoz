@@ -1,14 +1,14 @@
 // lib/presentation/plant_type/bloc/plant_type_bloc.dart
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:local_tammoz_chat/domain/repositories/operation_repository.dart';
+import 'package:local_tammoz_chat/domain/repositories/plant_type_repository.dart';
 import 'package:local_tammoz_chat/presentation/plant_types/bloc/plant_type_events.dart';
 import 'package:local_tammoz_chat/presentation/plant_types/bloc/plant_type_states.dart';
 
 import '../../../domain/entities/plant_type.dart';
 
 class PlantTypeBloc extends Bloc<PlantTypeEvent, PlantTypeState> {
-  final OperationRepository repository;
+  final PlantTypeRerpository repository;
 
   PlantTypeBloc(this.repository) : super(PlantTypeInitial()) {
     on<LoadPlantTypes>((event, emit) async {

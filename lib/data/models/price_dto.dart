@@ -1,6 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:local_tammoz_chat/domain/entities/plant_shape.dart';
-import 'package:local_tammoz_chat/domain/entities/plant_type.dart';
 
 import 'plant_shape_dto.dart';
 import 'plant_type_dto.dart';

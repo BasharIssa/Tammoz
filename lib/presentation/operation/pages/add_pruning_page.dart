@@ -18,13 +18,6 @@ class AddPruningPage extends BaseAddOperationPage {
 class _AddPruningPageState extends BaseAddOperationPageState<AddPruningPage> {
 
   late Storage storage ;
-  @override
-  void initState() {
-    super.initState();
-
-
-
-  }
 
   @override
   void didChangeDependencies() {
