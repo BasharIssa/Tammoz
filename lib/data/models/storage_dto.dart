@@ -1,45 +1,39 @@
+// package:local_tammoz_chat/data/models/storage_dto.dart
+
 import 'package:json_annotation/json_annotation.dart';
+
+import 'plant_shape_dto.dart';
+import 'plant_type_dto.dart';
+import 'operation_brief_dto.dart';
+import 'reservation_brief_dto.dart';
 
 part 'storage_dto.g.dart';
 
 @JsonSerializable()
 class StorageDto {
   final int? id;
-  final int plantTypeId;
-  final String plantTypeName;
-  final int plantShapeId;
-  final String plantShapeName;
+  final PlantTypeDto plantTypeDto;
+  final PlantShapeDto plantShapeDto;
   final int quantity;
-  final int? parentOperationId;
-  final DateTime? parentOperationDate;
-  final String? parentOperationName;
-  final int? reservationId;
-  final String? reserverFullName;
+  final OperationBriefDto parentOperation; // العملية المختصرة (تحتوي id و operationDate)
+  final ReservationBriefDto? reservation; // الحجز المختصر (اختياري)
   final bool isScheduled;
   final String? notes;
 
   StorageDto({
     this.id,
-    required this.plantTypeId,
-    required this.plantTypeName,
-    required this.plantShapeId,
-    required this.plantShapeName,
+    required this.plantTypeDto,
+    required this.plantShapeDto,
     required this.quantity,
-    this.parentOperationId,
-    this.parentOperationDate,
-    this.parentOperationName,
-    this.reservationId,
-    this.reserverFullName,
+    required this.parentOperation,
+    this.reservation,
     required this.isScheduled,
     this.notes,
   });
 
-  // Convert from JSON
-  factory StorageDto.fromJson(Map<String, dynamic> json) =>
-      _$StorageDtoFromJson(json);
+  // من JSON إلى StorageDto
+  factory StorageDto.fromJson(Map<String, dynamic> json) => _$StorageDtoFromJson(json);
 
-  // Convert to JSON
+  // من StorageDto إلى JSON
   Map<String, dynamic> toJson() => _$StorageDtoToJson(this);
-
-
 }

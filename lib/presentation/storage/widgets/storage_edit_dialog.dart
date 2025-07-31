@@ -25,9 +25,9 @@ class _StorageEditDialogState extends State<StorageEditDialog> {
   void initState() {
     super.initState();
     _plantTypeController = TextEditingController(
-        text: widget.storage?.plantType ?? '');
+        text: widget.storage?.plantType.name ?? '');
     _plantShapeController = TextEditingController(
-        text: widget.storage?.plantShape ?? '');
+        text: widget.storage?.plantShape.name ?? '');
     _quantityController = TextEditingController(
         text: widget.storage?.quantity.toString() ?? '1');
     _notesController = TextEditingController(
@@ -107,35 +107,36 @@ class _StorageEditDialogState extends State<StorageEditDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('إلغاء'),
         ),
-        ElevatedButton(
-          onPressed: _submitForm,
-          child: const Text('حفظ'),
-        ),
+        // ElevatedButton(
+        //   onPressed: _submitForm,
+        //   child: const Text('حفظ'),
+        // ),
       ],
     );
   }
 
   void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final storage = Storage(
-        id: widget.storage?.id,
-        plantType: _plantTypeController.text,
-        plantShape: _plantShapeController.text,
-        quantity: int.parse(_quantityController.text),
-        notes: _notesController.text,
-        parentOperationId: widget.storage!.parentOperationId,
-        parentOperationDate: widget.storage!.parentOperationDate,
-        parentOperationName: widget.storage!.parentOperationName,
-        isScheduled: widget.storage!.isScheduled,
-      );
-
-      if (widget.storage == null) {
-        context.read<StorageBloc>().add(AddStorage(storage));
-      } else {
-        context.read<StorageBloc>().add(UpdateStorage(storage));
-      }
-
-      Navigator.of(context).pop();
-    }
+    throw UnimplementedError;
+    // if (_formKey.currentState?.validate() ?? false) {
+    //   final storage = Storage(
+    //     id: widget.storage?.id,
+    //     plantType: _plantTypeController.text,
+    //     plantShape: _plantShapeController.text,
+    //     quantity: int.parse(_quantityController.text),
+    //     notes: _notesController.text,
+    //     parentOperationId: widget.storage!.parentOperationId,
+    //     parentOperationDate: widget.storage!.parentOperationDate,
+    //     parentOperationName: widget.storage!.parentOperationName,
+    //     isScheduled: widget.storage!.isScheduled,
+    //   );
+    //
+    //   if (widget.storage == null) {
+    //     context.read<StorageBloc>().add(AddStorage(storage));
+    //   } else {
+    //     context.read<StorageBloc>().add(UpdateStorage(storage));
+    //   }
+    //
+    //   Navigator.of(context).pop();
+    // }
   }
 }

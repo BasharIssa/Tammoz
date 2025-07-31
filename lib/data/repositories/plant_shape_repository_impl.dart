@@ -23,6 +23,24 @@ class PlantShapeRepositoryImpl implements PlantShapeRepository {
   }
 
   @override
+  Future<Either<Failure, PlantShape>> getPlantShapeByName(String shapeName) async {
+    try {
+      final plantShapeData = await (_db.select(_db.plantShapesTable)
+        ..where((tbl) => tbl.name.equals(shapeName)))
+          .getSingleOrNull();
+
+      if (plantShapeData != null) {
+        return Right(PlantShapeMapper.toEntity (PlantShapeMapper.fromTableData(plantShapeData)));
+      } else {
+        return Left(DatabaseFailure(message: 'شكل النبات غير موجود: $shapeName'));
+      }
+    } catch (e, st) {
+      return Left(DatabaseFailure(message: 'فشل في جلب شكل النبات', stackTrace: st));
+    }
+  }
+
+
+  @override
   Future<Either<Failure, PlantShape>> addPlantShape(PlantShape plantShape) async {
     try {
       final companion = PlantShapeMapper.toCompanion(PlantShapeMapper.fromEntity(plantShape));

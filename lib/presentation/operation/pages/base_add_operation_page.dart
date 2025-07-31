@@ -194,7 +194,7 @@ abstract class BaseAddOperationPageState<T extends BaseAddOperationPage> extends
                                 const SnackBar(
                                     content: Text('تمت إضافة العملية بنجاح')),
                               );
-                            } else if (state is OperationAddFailure) {
+                            } else if (state is OperationAddError) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                     content: Text('حدث خطأ: ${state.message}')),

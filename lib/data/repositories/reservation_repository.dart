@@ -173,4 +173,34 @@ class ReservationRepositoryImpl implements ReservationRepository {
     }
   }
 
+
+  // @override
+  // Future<Either<DatabaseFailure, int>>
+  // getQuantityByTypeIdAndShapeIdAndDeliveryDate(
+  //     int typeId,
+  //     shapeId,
+  //     DateTime deliveryDate) async {
+  //   try {
+  //     final query = _db.selectOnly(_db.reservationDetailsTable)
+  //       ..addColumns([_db.reservationDetailsTable.quantity])
+  //       ..where(_db.reservationDetailsTable.typeId.equals(typeId)
+  //       & _db.reservationDetailsTable.shapeId.equals(shapeId)
+  //       & _db.reservationDetailsTable.deliveryDate.equalsExp(deliveryDate));
+  //
+  //
+  //
+  //     final quantity = await query.map((row) => row.read(_db.reservationDetailsTable.quantity)).getSingleOrNull();
+  //
+  //     //final result = await query.map((row) => row.read(_db.reservationDetailsTable.quantity)).getSingle();
+  //
+  //     if (quantity == null) {
+  //       return const Left(DatabaseFailure(message: 'تفصيل الحجز غير موجود'));
+  //     }
+  //     return Right(quantity);
+  //   } catch (e) {
+  //     // التعامل مع أي استثناءات عامة بخطأ قواعد بيانات مع رسالة موحدة
+  //     return const Left(DatabaseFailure(message: 'فشل في جلب الكمية من تفصيل الحجز'));
+  //   }
+  // }
+
 }

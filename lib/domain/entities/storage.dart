@@ -1,16 +1,18 @@
-// lib/domain/entities/planting.dart
+// lib/domain/entities/storage.dart
+
 import 'package:equatable/equatable.dart';
+import 'package:local_tammoz_chat/domain/entities/plant_shape.dart';
+import 'package:local_tammoz_chat/domain/entities/plant_type.dart';
+import 'operation_brief.dart';
+import 'reservation_brief.dart';
 
 class Storage extends Equatable {
   final int? id;
-  final String plantType;
-  final String plantShape;
+  final PlantType plantType;
+  final PlantShape plantShape;
   final int quantity;
-  final int parentOperationId;
-  final DateTime parentOperationDate;
-  final String parentOperationName;
-  final int? reservationId;
-  final String? reserverFullName;
+  final OperationBrief parentOperation;
+  final ReservationBrief? reservation;
   final bool isScheduled;
   final String? notes;
 
@@ -19,25 +21,19 @@ class Storage extends Equatable {
     required this.plantType,
     required this.plantShape,
     required this.quantity,
-    required this.parentOperationId,
-    required this.parentOperationName,
-    required this.parentOperationDate,
-    this.reservationId,
-    this.reserverFullName,
+    required this.parentOperation,
+    this.reservation,
     required this.isScheduled,
     this.notes,
   });
 
   Storage copyWith({
     int? id,
-    String? plantType,
-    String? plantShape,
+    PlantType? plantType,
+    PlantShape? plantShape,
     int? quantity,
-    int? parentOperationId,
-    DateTime? parentOperationDate,
-    String? parentOperationName,
-    int? reservationId,
-    String? reserverFullName,
+    OperationBrief? parentOperation,
+    ReservationBrief? reservation,
     bool? isScheduled,
     String? notes,
   }) {
@@ -46,11 +42,8 @@ class Storage extends Equatable {
       plantType: plantType ?? this.plantType,
       plantShape: plantShape ?? this.plantShape,
       quantity: quantity ?? this.quantity,
-      parentOperationId: parentOperationId ?? this.parentOperationId,
-      parentOperationDate: parentOperationDate ?? this.parentOperationDate,
-      parentOperationName: parentOperationName ?? this.parentOperationName,
-      reservationId: reservationId ?? this.reservationId,
-      reserverFullName: reserverFullName ?? this.reserverFullName,
+      parentOperation: parentOperation ?? this.parentOperation,
+      reservation: reservation ?? this.reservation,
       isScheduled: isScheduled ?? this.isScheduled,
       notes: notes ?? this.notes,
     );
@@ -62,11 +55,8 @@ class Storage extends Equatable {
     plantType,
     plantShape,
     quantity,
-    parentOperationId,
-    parentOperationDate,
-    parentOperationName,
-    reservationId,
-    reserverFullName,
+    parentOperation,
+    reservation,
     isScheduled,
     notes,
   ];

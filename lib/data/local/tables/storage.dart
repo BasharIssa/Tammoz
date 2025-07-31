@@ -14,6 +14,5 @@ class StorageTable extends Table {
   IntColumn get quantity => integer()(); // العدد
   IntColumn get parentOperationId => integer().nullable().references(OperationsTable,  #id)(); // معرف العملية الام
   BoolColumn get isScheduled => boolean().withDefault(Constant(false))();
-  IntColumn get reservationId => integer().nullable().references(ReservationsTable, #id)();
   TextColumn get notes => text().nullable()(); // ملاحظات
 }

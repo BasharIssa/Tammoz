@@ -3,21 +3,27 @@ import 'package:local_tammoz_chat/domain/entities/operation_type.dart';
 import 'package:local_tammoz_chat/domain/entities/plant_type.dart';
 import 'package:local_tammoz_chat/domain/entities/plant_shape.dart';
 import 'package:local_tammoz_chat/domain/repositories/operation_repository.dart';
+import 'package:local_tammoz_chat/domain/repositories/plant_shape_repository.dart';
+import 'package:local_tammoz_chat/domain/repositories/plant_type_repository.dart';
 
 part 'operation_related_data_states.dart';
 
 
 class OperationRelatedDataCubit extends Cubit<OperationRelatedDataState> {
   final OperationRepository operationRepository;
+  final PlantShapeRepository plantShapeRepository;
+  final PlantTypeRerpository plantTypeRerpository;
 
-  OperationRelatedDataCubit(this.operationRepository) : super(OperationRelatedDataState());
+  OperationRelatedDataCubit(
+      this.operationRepository,this.plantTypeRerpository,this.plantShapeRepository
+      ) : super(OperationRelatedDataState());
 
   Future<void> loadFormData() async {
     emit(state.copyWith(isLoading: true, error: null));
 
     final opTypesResult = await operationRepository.getAllOperationsTypes();
-    final plantTypesResult = await operationRepository.getAllPlantTypes();
-    final plantShapesResult = await operationRepository.getAllPlantShapes();
+    final plantTypesResult = await plantTypeRerpository.getAllPlantTypes();
+    final plantShapesResult = await plantShapeRepository.getAllPlantShapes();
 
     opTypesResult.fold(
           (failure) => emit(state.copyWith(isLoading: false, error: failure.message)),

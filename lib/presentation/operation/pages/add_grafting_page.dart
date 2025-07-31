@@ -48,10 +48,10 @@ class _AddGraftingPageState extends BaseAddOperationPageState<AddGraftingPage> {
 
   @override
   Widget buildAddOperationSpecificFields(OperationRelatedDataState state) {
-    selectedFirstPlantType = state.plantTypes.firstWhere((item) => item.name == firstStorage.plantType);
-    selectedFirstPlantShape = state.plantShapes.firstWhere((item)=> item.name == firstStorage.plantShape);
-    selectedSecondPlantType = state.plantTypes.firstWhere((item) => item.name == secondStorage.plantType);
-    selectedSecondPlantShape = state.plantShapes.firstWhere((item) => item.name == secondStorage.plantShape);
+    selectedFirstPlantType = state.plantTypes.firstWhere((item) => item.name == firstStorage.plantType.name);
+    selectedFirstPlantShape = state.plantShapes.firstWhere((item)=> item.name == firstStorage.plantShape.name);
+    selectedSecondPlantType = state.plantTypes.firstWhere((item) => item.name == secondStorage.plantType.name);
+    selectedSecondPlantShape = state.plantShapes.firstWhere((item) => item.name == secondStorage.plantShape.name);
     firstStorageId = firstStorage.id;
     secondStorageId = secondStorage.id;
     return Column(

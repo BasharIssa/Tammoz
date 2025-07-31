@@ -4,10 +4,10 @@ import 'package:equatable/equatable.dart';
 import 'package:local_tammoz_chat/domain/entities/reservation.dart';
 import 'package:local_tammoz_chat/domain/failures/failures.dart';
 import 'package:local_tammoz_chat/domain/failures/general_failures.dart';
-import 'package:local_tammoz_chat/domain/usecases/reservation/create_reservation.dart';
-import 'package:local_tammoz_chat/domain/usecases/reservation/get_all_reservations.dart';
-import 'package:local_tammoz_chat/domain/usecases/reservation/get_all_slim_reservation.dart';
-import 'package:local_tammoz_chat/domain/usecases/reservation/get_reservation_by_id.dart';
+import 'package:local_tammoz_chat/domain/usecases/reservation/create_reservation_usecase.dart';
+import 'package:local_tammoz_chat/domain/usecases/reservation/get_all_reservations_usecase.dart';
+import 'package:local_tammoz_chat/domain/usecases/reservation/get_all_slim_reservation_usecase.dart';
+import 'package:local_tammoz_chat/domain/usecases/reservation/get_reservation_by_id_usecase.dart';
 
 part 'reservation_events.dart';
 part 'reservation_states.dart';
@@ -19,10 +19,10 @@ const String _notFoundFailureMessage = 'الحجز المطلوب غير موج�
 const String _unexpectedErrorMessage = 'حدث خطأ غير متوقع، يرجى المحاولة لاحقًا.';
 
 class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
-  final CreateReservation createReservation;
-  final GetReservationById getReservationById;
-  final GetAllReservations getAllReservations;
-  final GetAllSlimReservations getAllSlimReservations;
+  final CreateReservationUseCase createReservation;
+  final GetReservationByIdUseCase getReservationById;
+  final GetAllReservationsUseCase getAllReservations;
+  final GetAllSlimReservationsUseCase getAllSlimReservations;
 
   ReservationBloc({
     required this.createReservation,

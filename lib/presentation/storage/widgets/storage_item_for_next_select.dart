@@ -18,7 +18,8 @@ class SecondStorageItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ListTile(
         leading: const Icon(Icons.inventory_2),
-        title: Text('${storage.plantType} - ${storage.plantShape} -${storage.parentOperationDate.toIso8601String()}'),
+        title: Text('${storage.plantType.name} - ${storage.plantShape.name} -${
+            storage.parentOperation.operationDate.toIso8601String()}'),
         subtitle: Text('الكمية: ${storage.quantity}'),
         onLongPress: onLongPress,
 

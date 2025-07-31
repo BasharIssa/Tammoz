@@ -3,6 +3,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:local_tammoz_chat/domain/entities/plant_shape.dart';
 import 'package:local_tammoz_chat/domain/entities/plant_type.dart';
+import 'package:local_tammoz_chat/domain/entities/reservation_brief.dart';
 
 import 'operation_type.dart';
 // domain/entities/operation.dart
@@ -12,7 +13,7 @@ class Operation extends Equatable {
   final DateTime date;
   final double cost;
   final bool isScheduled;
-  final int? reservationId;
+  final ReservationBrief? reservationBrief;
   final String? notes;
 
   // كائنات كاملة بدل IDs
@@ -28,7 +29,7 @@ class Operation extends Equatable {
     required this.date,
     this.cost = 0.0,
     this.isScheduled = false,
-    this.reservationId,
+    this.reservationBrief,
     this.notes,
     required this.firstType,
     required this.firstShape,
@@ -44,7 +45,7 @@ class Operation extends Equatable {
     date,
     cost,
     isScheduled,
-    reservationId,
+    reservationBrief,
     notes,
     firstType,
     firstShape,
@@ -61,7 +62,7 @@ Operation copyWith({
   DateTime? date,
   double? cost,
   bool? isScheduled,
-  int? reservationId,
+  ReservationBrief? reservationBrief,
   String? notes,
   PlantType? firstType,
   PlantShape? firstShape,
@@ -75,7 +76,7 @@ Operation copyWith({
     date: date ?? this.date,
     cost: cost ?? this.cost,
     isScheduled: isScheduled ?? this.isScheduled,
-    reservationId: reservationId ?? this.reservationId,
+    reservationBrief: reservationBrief ?? this.reservationBrief,
     notes: notes ?? this.notes,
     firstType: firstType ?? this.firstType,
     firstShape: firstShape ?? this.firstShape,

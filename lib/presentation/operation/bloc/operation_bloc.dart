@@ -4,7 +4,7 @@ import 'package:local_tammoz_chat/constants.dart';
 import 'package:local_tammoz_chat/core/injection/service_locator.dart';
 import 'package:local_tammoz_chat/domain/entities/operation.dart';
 import 'package:local_tammoz_chat/domain/repositories/operation_repository.dart';
-import 'package:local_tammoz_chat/domain/usecases/operation/add_operation.dart';
+import 'package:local_tammoz_chat/domain/usecases/operation/add_operation_usecase.dart';
 import 'package:local_tammoz_chat/presentation/storage/bloc/storage_bloc.dart';
 
 part 'operation_events.dart';
@@ -43,7 +43,7 @@ class OperationBloc extends Bloc<OperationEvent, OperationState> {
       event.secondStorageId,
     );
     result.fold(
-          (failure) => emit(OperationAddFailure(failure.message)),
+          (failure) => emit(OperationAddError(failure.message)),
           (_) {
             return event.operation.operationType.name == OperationTypesConstants.grafting
                 ? emit(GraftingAddSuccess())

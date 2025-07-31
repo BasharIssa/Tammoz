@@ -3,13 +3,17 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:local_tammoz_chat/data/local/tables/Operations.dart';
+import 'package:local_tammoz_chat/data/local/tables/ReservationDetails.dart';
+import 'package:local_tammoz_chat/data/local/tables/chances.dart';
+import 'package:local_tammoz_chat/data/local/tables/operations.dart';
 import 'package:local_tammoz_chat/data/local/tables/operation_types.dart';
 import 'package:local_tammoz_chat/data/local/tables/plant_shapes.dart';
 import 'package:local_tammoz_chat/data/local/tables/storage.dart';
+import 'package:local_tammoz_chat/data/local/tables/storage_reservation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../../constants.dart';
+import 'tables/parent_child_chances.dart';
 import 'tables/prices.dart';
 import 'tables/reservations.dart';
 import 'tables/setup_expense.dart'; // يحتوي على تعريف SetupExpenseTable
@@ -24,9 +28,13 @@ part 'local_database.g.dart';
   StorageTable,
   PlantShapesTable,
   OperationTypesTable,
-//  OperationsTable,
+  OperationsTable,
   ReservationsTable,
-  PricesTable
+  PricesTable,
+  ChancesTable,
+  ParentChildChancesTable,
+  ReservationDetailsTable,
+  StorageReservationTable,
 ])
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
@@ -45,6 +53,7 @@ class LocalDatabase extends _$LocalDatabase {
       await _deleteAllTables();
       await m.createAll();
       await _insertInitialData();
+      // throw UnimplementedError();
     },
   );
 
@@ -86,15 +95,15 @@ class LocalDatabase extends _$LocalDatabase {
         batch.insertAll(operationTypesTable, [
           OperationTypesTableCompanion.insert(
             name: OperationTypesConstants.planting,
-            successRatio: Value(OperationTypesConstants.plantingSuccessRatio),
+            successRatio: Value(OperationTypesConstants.plantingDefaultSuccessRatio),
           ),
           OperationTypesTableCompanion.insert(
             name: OperationTypesConstants.pruning,
-            successRatio: Value(OperationTypesConstants.pruningSuccessRatio),
+            successRatio: Value(OperationTypesConstants.pruningDefaultSuccessRatio),
           ),
           OperationTypesTableCompanion.insert(
             name: OperationTypesConstants.grafting,
-            successRatio: Value(OperationTypesConstants.graftingSuccessRatio),
+            successRatio: Value(OperationTypesConstants.graftingDefaultSuccessRatio),
           ),
         ]);
       });

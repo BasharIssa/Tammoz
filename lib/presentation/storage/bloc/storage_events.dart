@@ -6,7 +6,7 @@ abstract class StorageEvent extends Equatable {
   const StorageEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadAllStorages extends StorageEvent {
@@ -21,24 +21,86 @@ class LoadStorageById extends StorageEvent {
   @override
   List<Object> get props => [id];
 }
+// storage_events.dart
 
-class AddStorage extends StorageEvent {
-  final Storage storage;
 
-  const AddStorage(this.storage);
-
-  @override
-  List<Object> get props => [storage];
-}
-
-class UpdateStorage extends StorageEvent {
-  final Storage storage;
-
-  const UpdateStorage(this.storage);
-
-  @override
-  List<Object> get props => [storage];
-}
+//
+// // استبدال AddStorage لتأخذ بيانات الإدخال فقط
+// //بحاجة اكمال Tider 7-25
+// class AddStorage extends StorageEvent {
+//   final String plantTypeName;
+//   final String plantShapeName;
+//   final int quantity;
+//   final String notes;
+//   final int parentOperationId;
+//   final DateTime parentOperationDate;
+//   final String parentOperationName;
+//   final bool isScheduled;
+//   // في حال أردت يمكن إضافة معرف `id` إذا ضروري للتحديث (عادة يكون null في الإضافة)
+//
+//   const AddStorage({
+//     required this.plantType,
+//     required this.plantShape,
+//     required this.quantity,
+//     required this.notes,
+//     required this.parentOperationId,
+//     required this.parentOperationDate,
+//     required this.parentOperationName,
+//     required this.isScheduled,
+//   });
+//
+//   @override
+//   List<Object?> get props => [
+//     plantType,
+//     plantShape,
+//     quantity,
+//     notes,
+//     parentOperationId,
+//     parentOperationDate,
+//     parentOperationName,
+//     isScheduled,
+//   ];
+// }
+//
+// // استبدال UpdateStorage بشكل مشابه، مع تضمين id
+// class UpdateStorage extends StorageEvent {
+//   final int id;
+//   final String plantType;
+//   final String plantShape;
+//   final int quantity;
+//   final String notes;
+//   final int parentOperationId;
+//   final DateTime parentOperationDate;
+//   final String parentOperationName;
+//   final bool isScheduled;
+//
+//   const UpdateStorage({
+//     required this.id,
+//     required this.plantType,
+//     required this.plantShape,
+//     required this.quantity,
+//     required this.notes,
+//     required this.parentOperationId,
+//     required this.parentOperationDate,
+//     required this.parentOperationName,
+//     required this.isScheduled,
+//   });
+//
+//   @override
+//   List<Object?> get props =>
+//       [
+//         id,
+//         plantType,
+//         plantShape,
+//         quantity,
+//         notes,
+//         parentOperationId,
+//         parentOperationDate,
+//         parentOperationName,
+//         isScheduled,
+//       ];
+// }
+//
 
 class DeleteStorage extends StorageEvent {
   final int id;
@@ -70,15 +132,15 @@ class DecreaseQuantity extends StorageEvent {
 }
 
 class SearchStorages extends StorageEvent {
-  final String? plantType;
-  final String? plantShape;
+  final String? plantTypeName;
+  final String? plantShapeName;
 
-  const SearchStorages({this.plantType, this.plantShape});
+  const SearchStorages({this.plantTypeName, this.plantShapeName});
 
   @override
   List<Object> get props => [
-    if (plantType != null) plantType!,
-    if (plantShape != null) plantShape!,
+    if (plantTypeName != null) plantTypeName!,
+    if (plantShapeName != null) plantShapeName!,
   ];
 }
 

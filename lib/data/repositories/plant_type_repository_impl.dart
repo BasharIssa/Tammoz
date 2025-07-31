@@ -23,6 +23,23 @@ class PlantTypeRepositoryImpl implements PlantTypeRerpository {
   }
 
   @override
+  Future<Either<Failure, PlantType>> getPlantTypeByName(String typeName) async {
+    try {
+      final plantTypeData = await (_db.select(_db.plantTypesTable)
+        ..where((tbl) => tbl.name.equals(typeName)))
+          .getSingleOrNull();
+
+      if (plantTypeData != null) {
+        return Right(PlantTypeMapper.toEntity (PlantTypeMapper.fromTableData(plantTypeData)));
+      } else {
+        return Left(DatabaseFailure(message: 'شكل النبات غير موجود: $typeName'));
+      }
+    } catch (e, st) {
+      return Left(DatabaseFailure(message: 'فشل في جلب شكل النبات', stackTrace: st));
+    }
+  }
+
+  @override
   Future<Either<Failure, int>> addPlantType(PlantType plantType) async {
     try {
       final dto = PlantTypeMapper.fromEntity(plantType);

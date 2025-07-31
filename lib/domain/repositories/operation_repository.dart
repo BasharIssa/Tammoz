@@ -16,10 +16,7 @@ abstract class OperationRepository{
   Future<Either<Failure, Unit>> deleteOperation(int id);
 
   Future<Either<Failure, List<OperationType>>> getAllOperationsTypes();
-  Future<Either<Failure, List<PlantShape>>> getAllPlantShapes();
 
-  Future<Either<Failure, List<PlantType>>> getAllPlantTypes();
-  Future<Either<Failure, int>> addPlantType(PlantType plantType);
   Future<Either<Failure,T>> runInTransaction<T> (Future<Either<Failure, T>> Function() action);
 
 }

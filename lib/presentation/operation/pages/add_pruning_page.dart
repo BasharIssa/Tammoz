@@ -44,8 +44,8 @@ class _AddPruningPageState extends BaseAddOperationPageState<AddPruningPage> {
 
   @override
   Widget buildAddOperationSpecificFields(OperationRelatedDataState state) {
-    selectedFirstPlantType = state.plantTypes.firstWhere((item) => item.name == storage.plantType);
-    selectedFirstPlantShape = state.plantShapes.firstWhere((item)=> item.name == storage.plantShape);
+    selectedFirstPlantType = state.plantTypes.firstWhere((item) => item.name == storage.plantType.name);
+    selectedFirstPlantShape = state.plantShapes.firstWhere((item)=> item.name == storage.plantShape.name);
     firstStorageId= storage.id;
     return Column(
       children: [
@@ -57,7 +57,7 @@ class _AddPruningPageState extends BaseAddOperationPageState<AddPruningPage> {
             // hintText: 'اختر نوع النبات', // غير ضروري هنا
           ),
           child: Text(
-            storage.plantType,
+            storage.plantType.name,
             style: TextStyle(
               fontSize: 16,
               color: Colors.black87,
@@ -74,7 +74,7 @@ class _AddPruningPageState extends BaseAddOperationPageState<AddPruningPage> {
             // hintText: 'اختر نوع النبات', // غير ضروري هنا
           ),
           child: Text(
-            storage.plantShape,
+            storage.plantShape.name,
             style: TextStyle(
               fontSize: 16,
               color: Colors.black87,

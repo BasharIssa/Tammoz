@@ -1,16 +1,16 @@
-// lib/domain/usecases/get_reservation_by_id.dart
+// lib/domain/usecases/get_all_slim_reservations.dart
 import 'package:dartz/dartz.dart';
 import 'package:local_tammoz_chat/domain/entities/reservation.dart';
 import 'package:local_tammoz_chat/domain/failures/failures.dart';
 import 'package:local_tammoz_chat/domain/repositories/reservation_repository.dart';
 
 
-class GetReservationById {
+class GetAllSlimReservationsUseCase {
   final ReservationRepository repository;
 
-  GetReservationById(this.repository);
+  GetAllSlimReservationsUseCase(this.repository);
 
-  Future<Either<Failure, Reservation>> call(int id) async {
-    return await repository.getReservationById(id);
+  Future<Either<Failure, List<SlimReservation>>> call() async {
+    return await repository.getAllSlimReservations();
   }
 }

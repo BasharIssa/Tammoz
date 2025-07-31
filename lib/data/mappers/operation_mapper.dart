@@ -3,6 +3,8 @@
 import 'package:drift/drift.dart';
 import 'package:local_tammoz_chat/data/mappers/plant_shape_mapper.dart';
 import 'package:local_tammoz_chat/data/mappers/plant_type_mapper.dart';
+import 'package:local_tammoz_chat/data/mappers/reservation_brief_mapper.dart';
+import 'package:local_tammoz_chat/domain/entities/operation_brief.dart';
 
 import '../../domain/entities/operation.dart';
 import '../local/local_database.dart';
@@ -14,11 +16,11 @@ class OperationMapper {
   static Operation toEntity(OperationDto dto) {
     return Operation(
       id: dto.id,
-      operationType: OperationTypeMapper.toEntity(dto.operationType),
+      operationType: OperationTypeMapper.toEntity(dto.operationTypeDto),
       date: dto.date,
       cost: dto.cost,
       isScheduled: dto.scheduled,
-      reservationId: dto.reservationId,
+      reservationBrief: dto.reservationBriefDto?.toEntity(),
       notes: dto.notes,
       firstType: PlantTypeMapper.toEntity(dto.firstType),
       firstShape: PlantShapeMapper.toEntity(dto.firstShape),
@@ -36,11 +38,11 @@ class OperationMapper {
   static OperationsTableCompanion toCompanion(OperationDto dto) {
     return OperationsTableCompanion(
       id: Value.absentIfNull(dto.id),
-      operationTypeId: Value(dto.operationType.id!),
+      operationTypeId: Value(dto.operationTypeDto.id!),
       date: Value(dto.date),
       cost: Value(dto.cost),
       scheduled: Value(dto.scheduled),
-      reservationId: Value.absentIfNull(dto.reservationId),
+      reservationId: Value.absentIfNull(dto.reservationBriefDto?.id),
       notes: Value.absentIfNull(dto.notes),
       firstTypeId: Value(dto.firstType.id!),
       firstShapeId: Value(dto.firstShape.id!),
@@ -57,15 +59,16 @@ class OperationMapper {
       PlantTypesTableData firstPlantTypeData,
       PlantShapesTableData firstPlantShapeData,
       PlantTypesTableData? secondPlantTypeData,
-      PlantShapesTableData? secondPlantShapeData
+      PlantShapesTableData? secondPlantShapeData,
+      ReservationsTableData? reservationData,
       ) {
     return OperationDto(
       id: tableData.id,
-      operationType: OperationTypeMapper.fromTableData(operationTypeData),
+      operationTypeDto: OperationTypeMapper.fromTableData(operationTypeData),
       date: tableData.date,
       cost: tableData.cost,
       scheduled: tableData.scheduled,
-      reservationId: tableData.reservationId,
+      reservationBriefDto: reservationData?.toDto(),
       notes: tableData.notes,
       firstType: PlantTypeMapper.fromTableData(firstPlantTypeData),
       firstShape: PlantShapeMapper.fromTableData(firstPlantShapeData),
@@ -83,11 +86,11 @@ class OperationMapper {
   static OperationDto fromEntity(Operation entity) {
     return OperationDto(
       id: entity.id,
-      operationType: OperationTypeMapper.fromEntity(entity.operationType),
+      operationTypeDto: OperationTypeMapper.fromEntity(entity.operationType),
       date: entity.date,
       cost: entity.cost,
       scheduled: entity.isScheduled,
-      reservationId: entity.reservationId,
+      reservationBriefDto: entity.reservationBrief?.toDto(),
       notes: entity.notes,
       firstType: PlantTypeMapper.fromEntity(entity.firstType),
       firstShape: PlantShapeMapper.fromEntity(entity.firstShape),
@@ -99,5 +102,13 @@ class OperationMapper {
           : null,
       quantity: entity.quantity,
     );
+  }
+
+  static OperationBrief entityToBriefEntity(Operation entity){
+    return OperationBrief(
+        id: entity.id == null
+            ? throw ArgumentError.notNull("operation.id")
+            : entity.id!,
+        operationDate: entity.date);
   }
 }

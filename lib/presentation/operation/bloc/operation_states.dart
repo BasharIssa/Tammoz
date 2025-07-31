@@ -30,10 +30,10 @@ class OperationError extends OperationState {
 class OperationAddSuccess extends OperationState {}
 class GraftingAddSuccess extends OperationAddSuccess{}
 
-class OperationAddFailure extends OperationState {
+class OperationAddError extends OperationState {
   final String message;
 
-  OperationAddFailure(this.message);
+  OperationAddError(this.message);
 
   @override
   List<Object?> get props => [message];

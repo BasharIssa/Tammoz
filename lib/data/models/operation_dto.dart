@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:local_tammoz_chat/data/models/plant_shape_dto.dart';
 import 'package:local_tammoz_chat/data/models/plant_type_dto.dart';
+import 'package:local_tammoz_chat/data/models/reservation_brief_dto.dart';
+import 'package:local_tammoz_chat/domain/entities/reservation_brief.dart';
 
 import 'operation_type_dto.dart';
 
@@ -9,11 +11,11 @@ part 'operation_dto.g.dart';
 @JsonSerializable()
 class OperationDto {
   final int? id;
-  final OperationTypeDto operationType;
+  final OperationTypeDto operationTypeDto;
   final DateTime date;
   final double cost; // ⭐ حقل الكلفة المطلوب
   final bool scheduled;
-  final int? reservationId;
+  final ReservationBriefDto? reservationBriefDto;
   final String? notes;
   final int quantity;
   // العلاقات مع الجداول الأخرى
@@ -24,11 +26,11 @@ class OperationDto {
 
   OperationDto({
     this.id,
-    required this.operationType,
+    required this.operationTypeDto,
     required this.date,
     this.cost = 0.0,
     this.scheduled = false,
-    this.reservationId,
+    this.reservationBriefDto,
     this.notes,
     required this.quantity,
     required this.firstType,

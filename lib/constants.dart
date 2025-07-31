@@ -18,9 +18,9 @@ class OperationTypesConstants {
   static const String pruning = 'قص';
   static const String grafting = 'تطعيم';
 
-  static const double plantingSuccessRatio = 0.85;
-  static const double pruningSuccessRatio = 0.9;
-  static const double graftingSuccessRatio = 0.85;
+  static const double plantingDefaultSuccessRatio = 0.85;
+  static const double pruningDefaultSuccessRatio = 0.9;
+  static const double graftingDefaultSuccessRatio = 0.85;
 }
 
 class NurseryPeriodConstants {
@@ -51,24 +51,31 @@ class PlantShapesConstants {
   static const String falqaOnZaghfa = 'فلقة ع زغفة';
 
   static String mergeForGrafting (String head, String root)=>"$head ع $root";
-  static String? rootOf(String cultivatedPlantShape){
+  static String? rootOf(String cultivatedPlantShape) {
     switch (cultivatedPlantShape) {
-      case seedling: return qarmah;
-      case rasiya: return falqa;
+      case seedling:
+        return qarmah;
+      case rasiya:
+        return falqa;
       case falqa:
       case rasiyaRasiya:
-      case qarmah:return null;
-
+      case qarmah:
+        return null;
+      default:
+      // رمي استثناء في حالة عدم تطابق أي شرط
+        throw StateError('الشكل $cultivatedPlantShape غير مدعوم في الدالة rootOf');
     }
-    // رمي استثناء في حالة عدم تطابق أي شرط
-    throw StateError('الشكل $cultivatedPlantShape غير مدعوم في الدالة rootOf');
   }
+
   static String? headOf(String wildPlantShape) {
-    if (wildPlantShape == origin) {
-      return zaghfa;
-    } else if (wildPlantShape == zaghfa) return null;
-    // رمي استثناء في حالة عدم تطابق أي شرط
-    throw StateError('الشكل $wildPlantShape غير مدعوم في الدالة headOf');
+    switch (wildPlantShape) {
+      case origin:
+        return zaghfa;
+      case zaghfa:
+        return null;
+      default:
+        throw StateError('الشكل $wildPlantShape غير مدعوم في الدالة headOf');
+    }
   }
 
 }

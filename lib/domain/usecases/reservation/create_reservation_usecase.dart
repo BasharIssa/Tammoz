@@ -1,4 +1,4 @@
-// lib/domain/usecases/create_reservation.dart
+// lib/domain/usecases/create_reservation_usecase.dart
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:local_tammoz_chat/domain/entities/reservation.dart';
@@ -6,10 +6,10 @@ import 'package:local_tammoz_chat/domain/failures/failures.dart';
 import 'package:local_tammoz_chat/domain/repositories/reservation_repository.dart';
 
 
-class CreateReservation {
+class CreateReservationUseCase {
   final ReservationRepository repository;
 
-  CreateReservation(this.repository);
+  CreateReservationUseCase(this.repository);
 
   Future<Either<Failure, int>> call(CreateReservationParams params) async {
     return await repository.createReservation(params.reservation);

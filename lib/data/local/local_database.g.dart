@@ -1773,6 +1773,414 @@ class OperationsTableCompanion extends UpdateCompanion<OperationsTableData> {
   }
 }
 
+class $StorageTableTable extends StorageTable
+    with TableInfo<$StorageTableTable, StorageTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StorageTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _plantTypeIdMeta =
+      const VerificationMeta('plantTypeId');
+  @override
+  late final GeneratedColumn<int> plantTypeId = GeneratedColumn<int>(
+      'plant_type_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES plant_types_table (id)'));
+  static const VerificationMeta _plantShapeIdMeta =
+      const VerificationMeta('plantShapeId');
+  @override
+  late final GeneratedColumn<int> plantShapeId = GeneratedColumn<int>(
+      'plant_shape_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES plant_shapes_table (id)'));
+  static const VerificationMeta _quantityMeta =
+      const VerificationMeta('quantity');
+  @override
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _parentOperationIdMeta =
+      const VerificationMeta('parentOperationId');
+  @override
+  late final GeneratedColumn<int> parentOperationId = GeneratedColumn<int>(
+      'parent_operation_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES operations_table (id)'));
+  static const VerificationMeta _isScheduledMeta =
+      const VerificationMeta('isScheduled');
+  @override
+  late final GeneratedColumn<bool> isScheduled = GeneratedColumn<bool>(
+      'is_scheduled', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_scheduled" IN (0, 1))'),
+      defaultValue: Constant(false));
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        plantTypeId,
+        plantShapeId,
+        quantity,
+        parentOperationId,
+        isScheduled,
+        notes
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'storage_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<StorageTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('plant_type_id')) {
+      context.handle(
+          _plantTypeIdMeta,
+          plantTypeId.isAcceptableOrUnknown(
+              data['plant_type_id']!, _plantTypeIdMeta));
+    } else if (isInserting) {
+      context.missing(_plantTypeIdMeta);
+    }
+    if (data.containsKey('plant_shape_id')) {
+      context.handle(
+          _plantShapeIdMeta,
+          plantShapeId.isAcceptableOrUnknown(
+              data['plant_shape_id']!, _plantShapeIdMeta));
+    } else if (isInserting) {
+      context.missing(_plantShapeIdMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    if (data.containsKey('parent_operation_id')) {
+      context.handle(
+          _parentOperationIdMeta,
+          parentOperationId.isAcceptableOrUnknown(
+              data['parent_operation_id']!, _parentOperationIdMeta));
+    }
+    if (data.containsKey('is_scheduled')) {
+      context.handle(
+          _isScheduledMeta,
+          isScheduled.isAcceptableOrUnknown(
+              data['is_scheduled']!, _isScheduledMeta));
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  StorageTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StorageTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      plantTypeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plant_type_id'])!,
+      plantShapeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}plant_shape_id'])!,
+      quantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
+      parentOperationId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}parent_operation_id']),
+      isScheduled: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_scheduled'])!,
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+    );
+  }
+
+  @override
+  $StorageTableTable createAlias(String alias) {
+    return $StorageTableTable(attachedDatabase, alias);
+  }
+}
+
+class StorageTableData extends DataClass
+    implements Insertable<StorageTableData> {
+  final int id;
+  final int plantTypeId;
+  final int plantShapeId;
+  final int quantity;
+  final int? parentOperationId;
+  final bool isScheduled;
+  final String? notes;
+  const StorageTableData(
+      {required this.id,
+      required this.plantTypeId,
+      required this.plantShapeId,
+      required this.quantity,
+      this.parentOperationId,
+      required this.isScheduled,
+      this.notes});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['plant_type_id'] = Variable<int>(plantTypeId);
+    map['plant_shape_id'] = Variable<int>(plantShapeId);
+    map['quantity'] = Variable<int>(quantity);
+    if (!nullToAbsent || parentOperationId != null) {
+      map['parent_operation_id'] = Variable<int>(parentOperationId);
+    }
+    map['is_scheduled'] = Variable<bool>(isScheduled);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    return map;
+  }
+
+  StorageTableCompanion toCompanion(bool nullToAbsent) {
+    return StorageTableCompanion(
+      id: Value(id),
+      plantTypeId: Value(plantTypeId),
+      plantShapeId: Value(plantShapeId),
+      quantity: Value(quantity),
+      parentOperationId: parentOperationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentOperationId),
+      isScheduled: Value(isScheduled),
+      notes:
+          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+    );
+  }
+
+  factory StorageTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return StorageTableData(
+      id: serializer.fromJson<int>(json['id']),
+      plantTypeId: serializer.fromJson<int>(json['plantTypeId']),
+      plantShapeId: serializer.fromJson<int>(json['plantShapeId']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+      parentOperationId: serializer.fromJson<int?>(json['parentOperationId']),
+      isScheduled: serializer.fromJson<bool>(json['isScheduled']),
+      notes: serializer.fromJson<String?>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'plantTypeId': serializer.toJson<int>(plantTypeId),
+      'plantShapeId': serializer.toJson<int>(plantShapeId),
+      'quantity': serializer.toJson<int>(quantity),
+      'parentOperationId': serializer.toJson<int?>(parentOperationId),
+      'isScheduled': serializer.toJson<bool>(isScheduled),
+      'notes': serializer.toJson<String?>(notes),
+    };
+  }
+
+  StorageTableData copyWith(
+          {int? id,
+          int? plantTypeId,
+          int? plantShapeId,
+          int? quantity,
+          Value<int?> parentOperationId = const Value.absent(),
+          bool? isScheduled,
+          Value<String?> notes = const Value.absent()}) =>
+      StorageTableData(
+        id: id ?? this.id,
+        plantTypeId: plantTypeId ?? this.plantTypeId,
+        plantShapeId: plantShapeId ?? this.plantShapeId,
+        quantity: quantity ?? this.quantity,
+        parentOperationId: parentOperationId.present
+            ? parentOperationId.value
+            : this.parentOperationId,
+        isScheduled: isScheduled ?? this.isScheduled,
+        notes: notes.present ? notes.value : this.notes,
+      );
+  StorageTableData copyWithCompanion(StorageTableCompanion data) {
+    return StorageTableData(
+      id: data.id.present ? data.id.value : this.id,
+      plantTypeId:
+          data.plantTypeId.present ? data.plantTypeId.value : this.plantTypeId,
+      plantShapeId: data.plantShapeId.present
+          ? data.plantShapeId.value
+          : this.plantShapeId,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      parentOperationId: data.parentOperationId.present
+          ? data.parentOperationId.value
+          : this.parentOperationId,
+      isScheduled:
+          data.isScheduled.present ? data.isScheduled.value : this.isScheduled,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StorageTableData(')
+          ..write('id: $id, ')
+          ..write('plantTypeId: $plantTypeId, ')
+          ..write('plantShapeId: $plantShapeId, ')
+          ..write('quantity: $quantity, ')
+          ..write('parentOperationId: $parentOperationId, ')
+          ..write('isScheduled: $isScheduled, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, plantTypeId, plantShapeId, quantity,
+      parentOperationId, isScheduled, notes);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is StorageTableData &&
+          other.id == this.id &&
+          other.plantTypeId == this.plantTypeId &&
+          other.plantShapeId == this.plantShapeId &&
+          other.quantity == this.quantity &&
+          other.parentOperationId == this.parentOperationId &&
+          other.isScheduled == this.isScheduled &&
+          other.notes == this.notes);
+}
+
+class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
+  final Value<int> id;
+  final Value<int> plantTypeId;
+  final Value<int> plantShapeId;
+  final Value<int> quantity;
+  final Value<int?> parentOperationId;
+  final Value<bool> isScheduled;
+  final Value<String?> notes;
+  const StorageTableCompanion({
+    this.id = const Value.absent(),
+    this.plantTypeId = const Value.absent(),
+    this.plantShapeId = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.parentOperationId = const Value.absent(),
+    this.isScheduled = const Value.absent(),
+    this.notes = const Value.absent(),
+  });
+  StorageTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int plantTypeId,
+    required int plantShapeId,
+    required int quantity,
+    this.parentOperationId = const Value.absent(),
+    this.isScheduled = const Value.absent(),
+    this.notes = const Value.absent(),
+  })  : plantTypeId = Value(plantTypeId),
+        plantShapeId = Value(plantShapeId),
+        quantity = Value(quantity);
+  static Insertable<StorageTableData> custom({
+    Expression<int>? id,
+    Expression<int>? plantTypeId,
+    Expression<int>? plantShapeId,
+    Expression<int>? quantity,
+    Expression<int>? parentOperationId,
+    Expression<bool>? isScheduled,
+    Expression<String>? notes,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (plantTypeId != null) 'plant_type_id': plantTypeId,
+      if (plantShapeId != null) 'plant_shape_id': plantShapeId,
+      if (quantity != null) 'quantity': quantity,
+      if (parentOperationId != null) 'parent_operation_id': parentOperationId,
+      if (isScheduled != null) 'is_scheduled': isScheduled,
+      if (notes != null) 'notes': notes,
+    });
+  }
+
+  StorageTableCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? plantTypeId,
+      Value<int>? plantShapeId,
+      Value<int>? quantity,
+      Value<int?>? parentOperationId,
+      Value<bool>? isScheduled,
+      Value<String?>? notes}) {
+    return StorageTableCompanion(
+      id: id ?? this.id,
+      plantTypeId: plantTypeId ?? this.plantTypeId,
+      plantShapeId: plantShapeId ?? this.plantShapeId,
+      quantity: quantity ?? this.quantity,
+      parentOperationId: parentOperationId ?? this.parentOperationId,
+      isScheduled: isScheduled ?? this.isScheduled,
+      notes: notes ?? this.notes,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (plantTypeId.present) {
+      map['plant_type_id'] = Variable<int>(plantTypeId.value);
+    }
+    if (plantShapeId.present) {
+      map['plant_shape_id'] = Variable<int>(plantShapeId.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (parentOperationId.present) {
+      map['parent_operation_id'] = Variable<int>(parentOperationId.value);
+    }
+    if (isScheduled.present) {
+      map['is_scheduled'] = Variable<bool>(isScheduled.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StorageTableCompanion(')
+          ..write('id: $id, ')
+          ..write('plantTypeId: $plantTypeId, ')
+          ..write('plantShapeId: $plantShapeId, ')
+          ..write('quantity: $quantity, ')
+          ..write('parentOperationId: $parentOperationId, ')
+          ..write('isScheduled: $isScheduled, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $ReservationsTableTable extends ReservationsTable
     with TableInfo<$ReservationsTableTable, ReservationsTableData> {
   @override
@@ -2392,461 +2800,6 @@ class ReservationsTableCompanion
   }
 }
 
-class $StorageTableTable extends StorageTable
-    with TableInfo<$StorageTableTable, StorageTableData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $StorageTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _plantTypeIdMeta =
-      const VerificationMeta('plantTypeId');
-  @override
-  late final GeneratedColumn<int> plantTypeId = GeneratedColumn<int>(
-      'plant_type_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES plant_types_table (id)'));
-  static const VerificationMeta _plantShapeIdMeta =
-      const VerificationMeta('plantShapeId');
-  @override
-  late final GeneratedColumn<int> plantShapeId = GeneratedColumn<int>(
-      'plant_shape_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES plant_shapes_table (id)'));
-  static const VerificationMeta _quantityMeta =
-      const VerificationMeta('quantity');
-  @override
-  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
-      'quantity', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _parentOperationIdMeta =
-      const VerificationMeta('parentOperationId');
-  @override
-  late final GeneratedColumn<int> parentOperationId = GeneratedColumn<int>(
-      'parent_operation_id', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES operations_table (id)'));
-  static const VerificationMeta _isScheduledMeta =
-      const VerificationMeta('isScheduled');
-  @override
-  late final GeneratedColumn<bool> isScheduled = GeneratedColumn<bool>(
-      'is_scheduled', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("is_scheduled" IN (0, 1))'),
-      defaultValue: Constant(false));
-  static const VerificationMeta _reservationIdMeta =
-      const VerificationMeta('reservationId');
-  @override
-  late final GeneratedColumn<int> reservationId = GeneratedColumn<int>(
-      'reservation_id', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES reservations_table (id)'));
-  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
-  @override
-  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
-      'notes', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        plantTypeId,
-        plantShapeId,
-        quantity,
-        parentOperationId,
-        isScheduled,
-        reservationId,
-        notes
-      ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'storage_table';
-  @override
-  VerificationContext validateIntegrity(Insertable<StorageTableData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('plant_type_id')) {
-      context.handle(
-          _plantTypeIdMeta,
-          plantTypeId.isAcceptableOrUnknown(
-              data['plant_type_id']!, _plantTypeIdMeta));
-    } else if (isInserting) {
-      context.missing(_plantTypeIdMeta);
-    }
-    if (data.containsKey('plant_shape_id')) {
-      context.handle(
-          _plantShapeIdMeta,
-          plantShapeId.isAcceptableOrUnknown(
-              data['plant_shape_id']!, _plantShapeIdMeta));
-    } else if (isInserting) {
-      context.missing(_plantShapeIdMeta);
-    }
-    if (data.containsKey('quantity')) {
-      context.handle(_quantityMeta,
-          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
-    } else if (isInserting) {
-      context.missing(_quantityMeta);
-    }
-    if (data.containsKey('parent_operation_id')) {
-      context.handle(
-          _parentOperationIdMeta,
-          parentOperationId.isAcceptableOrUnknown(
-              data['parent_operation_id']!, _parentOperationIdMeta));
-    }
-    if (data.containsKey('is_scheduled')) {
-      context.handle(
-          _isScheduledMeta,
-          isScheduled.isAcceptableOrUnknown(
-              data['is_scheduled']!, _isScheduledMeta));
-    }
-    if (data.containsKey('reservation_id')) {
-      context.handle(
-          _reservationIdMeta,
-          reservationId.isAcceptableOrUnknown(
-              data['reservation_id']!, _reservationIdMeta));
-    }
-    if (data.containsKey('notes')) {
-      context.handle(
-          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  StorageTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return StorageTableData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      plantTypeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}plant_type_id'])!,
-      plantShapeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}plant_shape_id'])!,
-      quantity: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
-      parentOperationId: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}parent_operation_id']),
-      isScheduled: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_scheduled'])!,
-      reservationId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}reservation_id']),
-      notes: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
-    );
-  }
-
-  @override
-  $StorageTableTable createAlias(String alias) {
-    return $StorageTableTable(attachedDatabase, alias);
-  }
-}
-
-class StorageTableData extends DataClass
-    implements Insertable<StorageTableData> {
-  final int id;
-  final int plantTypeId;
-  final int plantShapeId;
-  final int quantity;
-  final int? parentOperationId;
-  final bool isScheduled;
-  final int? reservationId;
-  final String? notes;
-  const StorageTableData(
-      {required this.id,
-      required this.plantTypeId,
-      required this.plantShapeId,
-      required this.quantity,
-      this.parentOperationId,
-      required this.isScheduled,
-      this.reservationId,
-      this.notes});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['plant_type_id'] = Variable<int>(plantTypeId);
-    map['plant_shape_id'] = Variable<int>(plantShapeId);
-    map['quantity'] = Variable<int>(quantity);
-    if (!nullToAbsent || parentOperationId != null) {
-      map['parent_operation_id'] = Variable<int>(parentOperationId);
-    }
-    map['is_scheduled'] = Variable<bool>(isScheduled);
-    if (!nullToAbsent || reservationId != null) {
-      map['reservation_id'] = Variable<int>(reservationId);
-    }
-    if (!nullToAbsent || notes != null) {
-      map['notes'] = Variable<String>(notes);
-    }
-    return map;
-  }
-
-  StorageTableCompanion toCompanion(bool nullToAbsent) {
-    return StorageTableCompanion(
-      id: Value(id),
-      plantTypeId: Value(plantTypeId),
-      plantShapeId: Value(plantShapeId),
-      quantity: Value(quantity),
-      parentOperationId: parentOperationId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(parentOperationId),
-      isScheduled: Value(isScheduled),
-      reservationId: reservationId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(reservationId),
-      notes:
-          notes == null && nullToAbsent ? const Value.absent() : Value(notes),
-    );
-  }
-
-  factory StorageTableData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return StorageTableData(
-      id: serializer.fromJson<int>(json['id']),
-      plantTypeId: serializer.fromJson<int>(json['plantTypeId']),
-      plantShapeId: serializer.fromJson<int>(json['plantShapeId']),
-      quantity: serializer.fromJson<int>(json['quantity']),
-      parentOperationId: serializer.fromJson<int?>(json['parentOperationId']),
-      isScheduled: serializer.fromJson<bool>(json['isScheduled']),
-      reservationId: serializer.fromJson<int?>(json['reservationId']),
-      notes: serializer.fromJson<String?>(json['notes']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'plantTypeId': serializer.toJson<int>(plantTypeId),
-      'plantShapeId': serializer.toJson<int>(plantShapeId),
-      'quantity': serializer.toJson<int>(quantity),
-      'parentOperationId': serializer.toJson<int?>(parentOperationId),
-      'isScheduled': serializer.toJson<bool>(isScheduled),
-      'reservationId': serializer.toJson<int?>(reservationId),
-      'notes': serializer.toJson<String?>(notes),
-    };
-  }
-
-  StorageTableData copyWith(
-          {int? id,
-          int? plantTypeId,
-          int? plantShapeId,
-          int? quantity,
-          Value<int?> parentOperationId = const Value.absent(),
-          bool? isScheduled,
-          Value<int?> reservationId = const Value.absent(),
-          Value<String?> notes = const Value.absent()}) =>
-      StorageTableData(
-        id: id ?? this.id,
-        plantTypeId: plantTypeId ?? this.plantTypeId,
-        plantShapeId: plantShapeId ?? this.plantShapeId,
-        quantity: quantity ?? this.quantity,
-        parentOperationId: parentOperationId.present
-            ? parentOperationId.value
-            : this.parentOperationId,
-        isScheduled: isScheduled ?? this.isScheduled,
-        reservationId:
-            reservationId.present ? reservationId.value : this.reservationId,
-        notes: notes.present ? notes.value : this.notes,
-      );
-  StorageTableData copyWithCompanion(StorageTableCompanion data) {
-    return StorageTableData(
-      id: data.id.present ? data.id.value : this.id,
-      plantTypeId:
-          data.plantTypeId.present ? data.plantTypeId.value : this.plantTypeId,
-      plantShapeId: data.plantShapeId.present
-          ? data.plantShapeId.value
-          : this.plantShapeId,
-      quantity: data.quantity.present ? data.quantity.value : this.quantity,
-      parentOperationId: data.parentOperationId.present
-          ? data.parentOperationId.value
-          : this.parentOperationId,
-      isScheduled:
-          data.isScheduled.present ? data.isScheduled.value : this.isScheduled,
-      reservationId: data.reservationId.present
-          ? data.reservationId.value
-          : this.reservationId,
-      notes: data.notes.present ? data.notes.value : this.notes,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('StorageTableData(')
-          ..write('id: $id, ')
-          ..write('plantTypeId: $plantTypeId, ')
-          ..write('plantShapeId: $plantShapeId, ')
-          ..write('quantity: $quantity, ')
-          ..write('parentOperationId: $parentOperationId, ')
-          ..write('isScheduled: $isScheduled, ')
-          ..write('reservationId: $reservationId, ')
-          ..write('notes: $notes')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, plantTypeId, plantShapeId, quantity,
-      parentOperationId, isScheduled, reservationId, notes);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is StorageTableData &&
-          other.id == this.id &&
-          other.plantTypeId == this.plantTypeId &&
-          other.plantShapeId == this.plantShapeId &&
-          other.quantity == this.quantity &&
-          other.parentOperationId == this.parentOperationId &&
-          other.isScheduled == this.isScheduled &&
-          other.reservationId == this.reservationId &&
-          other.notes == this.notes);
-}
-
-class StorageTableCompanion extends UpdateCompanion<StorageTableData> {
-  final Value<int> id;
-  final Value<int> plantTypeId;
-  final Value<int> plantShapeId;
-  final Value<int> quantity;
-  final Value<int?> parentOperationId;
-  final Value<bool> isScheduled;
-  final Value<int?> reservationId;
-  final Value<String?> notes;
-  const StorageTableCompanion({
-    this.id = const Value.absent(),
-    this.plantTypeId = const Value.absent(),
-    this.plantShapeId = const Value.absent(),
-    this.quantity = const Value.absent(),
-    this.parentOperationId = const Value.absent(),
-    this.isScheduled = const Value.absent(),
-    this.reservationId = const Value.absent(),
-    this.notes = const Value.absent(),
-  });
-  StorageTableCompanion.insert({
-    this.id = const Value.absent(),
-    required int plantTypeId,
-    required int plantShapeId,
-    required int quantity,
-    this.parentOperationId = const Value.absent(),
-    this.isScheduled = const Value.absent(),
-    this.reservationId = const Value.absent(),
-    this.notes = const Value.absent(),
-  })  : plantTypeId = Value(plantTypeId),
-        plantShapeId = Value(plantShapeId),
-        quantity = Value(quantity);
-  static Insertable<StorageTableData> custom({
-    Expression<int>? id,
-    Expression<int>? plantTypeId,
-    Expression<int>? plantShapeId,
-    Expression<int>? quantity,
-    Expression<int>? parentOperationId,
-    Expression<bool>? isScheduled,
-    Expression<int>? reservationId,
-    Expression<String>? notes,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (plantTypeId != null) 'plant_type_id': plantTypeId,
-      if (plantShapeId != null) 'plant_shape_id': plantShapeId,
-      if (quantity != null) 'quantity': quantity,
-      if (parentOperationId != null) 'parent_operation_id': parentOperationId,
-      if (isScheduled != null) 'is_scheduled': isScheduled,
-      if (reservationId != null) 'reservation_id': reservationId,
-      if (notes != null) 'notes': notes,
-    });
-  }
-
-  StorageTableCompanion copyWith(
-      {Value<int>? id,
-      Value<int>? plantTypeId,
-      Value<int>? plantShapeId,
-      Value<int>? quantity,
-      Value<int?>? parentOperationId,
-      Value<bool>? isScheduled,
-      Value<int?>? reservationId,
-      Value<String?>? notes}) {
-    return StorageTableCompanion(
-      id: id ?? this.id,
-      plantTypeId: plantTypeId ?? this.plantTypeId,
-      plantShapeId: plantShapeId ?? this.plantShapeId,
-      quantity: quantity ?? this.quantity,
-      parentOperationId: parentOperationId ?? this.parentOperationId,
-      isScheduled: isScheduled ?? this.isScheduled,
-      reservationId: reservationId ?? this.reservationId,
-      notes: notes ?? this.notes,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (plantTypeId.present) {
-      map['plant_type_id'] = Variable<int>(plantTypeId.value);
-    }
-    if (plantShapeId.present) {
-      map['plant_shape_id'] = Variable<int>(plantShapeId.value);
-    }
-    if (quantity.present) {
-      map['quantity'] = Variable<int>(quantity.value);
-    }
-    if (parentOperationId.present) {
-      map['parent_operation_id'] = Variable<int>(parentOperationId.value);
-    }
-    if (isScheduled.present) {
-      map['is_scheduled'] = Variable<bool>(isScheduled.value);
-    }
-    if (reservationId.present) {
-      map['reservation_id'] = Variable<int>(reservationId.value);
-    }
-    if (notes.present) {
-      map['notes'] = Variable<String>(notes.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('StorageTableCompanion(')
-          ..write('id: $id, ')
-          ..write('plantTypeId: $plantTypeId, ')
-          ..write('plantShapeId: $plantShapeId, ')
-          ..write('quantity: $quantity, ')
-          ..write('parentOperationId: $parentOperationId, ')
-          ..write('isScheduled: $isScheduled, ')
-          ..write('reservationId: $reservationId, ')
-          ..write('notes: $notes')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $PricesTableTable extends PricesTable
     with TableInfo<$PricesTableTable, PricesTableData> {
   @override
@@ -3117,6 +3070,1169 @@ class PricesTableCompanion extends UpdateCompanion<PricesTableData> {
   }
 }
 
+class $ChancesTableTable extends ChancesTable
+    with TableInfo<$ChancesTableTable, ChancesTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ChancesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _successRateMeta =
+      const VerificationMeta('successRate');
+  @override
+  late final GeneratedColumn<double> successRate = GeneratedColumn<double>(
+      'success_rate', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _shapeIdMeta =
+      const VerificationMeta('shapeId');
+  @override
+  late final GeneratedColumn<int> shapeId = GeneratedColumn<int>(
+      'shape_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES plant_shapes_table (id)'));
+  static const VerificationMeta _typeIdMeta = const VerificationMeta('typeId');
+  @override
+  late final GeneratedColumn<int> typeId = GeneratedColumn<int>(
+      'type_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES plant_types_table (id)'));
+  static const VerificationMeta _quantityMeta =
+      const VerificationMeta('quantity');
+  @override
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _maturityDateMeta =
+      const VerificationMeta('maturityDate');
+  @override
+  late final GeneratedColumn<DateTime> maturityDate = GeneratedColumn<DateTime>(
+      'maturity_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, successRate, shapeId, typeId, quantity, maturityDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'chances_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<ChancesTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('success_rate')) {
+      context.handle(
+          _successRateMeta,
+          successRate.isAcceptableOrUnknown(
+              data['success_rate']!, _successRateMeta));
+    } else if (isInserting) {
+      context.missing(_successRateMeta);
+    }
+    if (data.containsKey('shape_id')) {
+      context.handle(_shapeIdMeta,
+          shapeId.isAcceptableOrUnknown(data['shape_id']!, _shapeIdMeta));
+    } else if (isInserting) {
+      context.missing(_shapeIdMeta);
+    }
+    if (data.containsKey('type_id')) {
+      context.handle(_typeIdMeta,
+          typeId.isAcceptableOrUnknown(data['type_id']!, _typeIdMeta));
+    } else if (isInserting) {
+      context.missing(_typeIdMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    if (data.containsKey('maturity_date')) {
+      context.handle(
+          _maturityDateMeta,
+          maturityDate.isAcceptableOrUnknown(
+              data['maturity_date']!, _maturityDateMeta));
+    } else if (isInserting) {
+      context.missing(_maturityDateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChancesTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ChancesTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      successRate: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}success_rate'])!,
+      shapeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}shape_id'])!,
+      typeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}type_id'])!,
+      quantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
+      maturityDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}maturity_date'])!,
+    );
+  }
+
+  @override
+  $ChancesTableTable createAlias(String alias) {
+    return $ChancesTableTable(attachedDatabase, alias);
+  }
+}
+
+class ChancesTableData extends DataClass
+    implements Insertable<ChancesTableData> {
+  final int id;
+  final double successRate;
+  final int shapeId;
+  final int typeId;
+  final int quantity;
+  final DateTime maturityDate;
+  const ChancesTableData(
+      {required this.id,
+      required this.successRate,
+      required this.shapeId,
+      required this.typeId,
+      required this.quantity,
+      required this.maturityDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['success_rate'] = Variable<double>(successRate);
+    map['shape_id'] = Variable<int>(shapeId);
+    map['type_id'] = Variable<int>(typeId);
+    map['quantity'] = Variable<int>(quantity);
+    map['maturity_date'] = Variable<DateTime>(maturityDate);
+    return map;
+  }
+
+  ChancesTableCompanion toCompanion(bool nullToAbsent) {
+    return ChancesTableCompanion(
+      id: Value(id),
+      successRate: Value(successRate),
+      shapeId: Value(shapeId),
+      typeId: Value(typeId),
+      quantity: Value(quantity),
+      maturityDate: Value(maturityDate),
+    );
+  }
+
+  factory ChancesTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ChancesTableData(
+      id: serializer.fromJson<int>(json['id']),
+      successRate: serializer.fromJson<double>(json['successRate']),
+      shapeId: serializer.fromJson<int>(json['shapeId']),
+      typeId: serializer.fromJson<int>(json['typeId']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+      maturityDate: serializer.fromJson<DateTime>(json['maturityDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'successRate': serializer.toJson<double>(successRate),
+      'shapeId': serializer.toJson<int>(shapeId),
+      'typeId': serializer.toJson<int>(typeId),
+      'quantity': serializer.toJson<int>(quantity),
+      'maturityDate': serializer.toJson<DateTime>(maturityDate),
+    };
+  }
+
+  ChancesTableData copyWith(
+          {int? id,
+          double? successRate,
+          int? shapeId,
+          int? typeId,
+          int? quantity,
+          DateTime? maturityDate}) =>
+      ChancesTableData(
+        id: id ?? this.id,
+        successRate: successRate ?? this.successRate,
+        shapeId: shapeId ?? this.shapeId,
+        typeId: typeId ?? this.typeId,
+        quantity: quantity ?? this.quantity,
+        maturityDate: maturityDate ?? this.maturityDate,
+      );
+  ChancesTableData copyWithCompanion(ChancesTableCompanion data) {
+    return ChancesTableData(
+      id: data.id.present ? data.id.value : this.id,
+      successRate:
+          data.successRate.present ? data.successRate.value : this.successRate,
+      shapeId: data.shapeId.present ? data.shapeId.value : this.shapeId,
+      typeId: data.typeId.present ? data.typeId.value : this.typeId,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      maturityDate: data.maturityDate.present
+          ? data.maturityDate.value
+          : this.maturityDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChancesTableData(')
+          ..write('id: $id, ')
+          ..write('successRate: $successRate, ')
+          ..write('shapeId: $shapeId, ')
+          ..write('typeId: $typeId, ')
+          ..write('quantity: $quantity, ')
+          ..write('maturityDate: $maturityDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, successRate, shapeId, typeId, quantity, maturityDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ChancesTableData &&
+          other.id == this.id &&
+          other.successRate == this.successRate &&
+          other.shapeId == this.shapeId &&
+          other.typeId == this.typeId &&
+          other.quantity == this.quantity &&
+          other.maturityDate == this.maturityDate);
+}
+
+class ChancesTableCompanion extends UpdateCompanion<ChancesTableData> {
+  final Value<int> id;
+  final Value<double> successRate;
+  final Value<int> shapeId;
+  final Value<int> typeId;
+  final Value<int> quantity;
+  final Value<DateTime> maturityDate;
+  const ChancesTableCompanion({
+    this.id = const Value.absent(),
+    this.successRate = const Value.absent(),
+    this.shapeId = const Value.absent(),
+    this.typeId = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.maturityDate = const Value.absent(),
+  });
+  ChancesTableCompanion.insert({
+    this.id = const Value.absent(),
+    required double successRate,
+    required int shapeId,
+    required int typeId,
+    required int quantity,
+    required DateTime maturityDate,
+  })  : successRate = Value(successRate),
+        shapeId = Value(shapeId),
+        typeId = Value(typeId),
+        quantity = Value(quantity),
+        maturityDate = Value(maturityDate);
+  static Insertable<ChancesTableData> custom({
+    Expression<int>? id,
+    Expression<double>? successRate,
+    Expression<int>? shapeId,
+    Expression<int>? typeId,
+    Expression<int>? quantity,
+    Expression<DateTime>? maturityDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (successRate != null) 'success_rate': successRate,
+      if (shapeId != null) 'shape_id': shapeId,
+      if (typeId != null) 'type_id': typeId,
+      if (quantity != null) 'quantity': quantity,
+      if (maturityDate != null) 'maturity_date': maturityDate,
+    });
+  }
+
+  ChancesTableCompanion copyWith(
+      {Value<int>? id,
+      Value<double>? successRate,
+      Value<int>? shapeId,
+      Value<int>? typeId,
+      Value<int>? quantity,
+      Value<DateTime>? maturityDate}) {
+    return ChancesTableCompanion(
+      id: id ?? this.id,
+      successRate: successRate ?? this.successRate,
+      shapeId: shapeId ?? this.shapeId,
+      typeId: typeId ?? this.typeId,
+      quantity: quantity ?? this.quantity,
+      maturityDate: maturityDate ?? this.maturityDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (successRate.present) {
+      map['success_rate'] = Variable<double>(successRate.value);
+    }
+    if (shapeId.present) {
+      map['shape_id'] = Variable<int>(shapeId.value);
+    }
+    if (typeId.present) {
+      map['type_id'] = Variable<int>(typeId.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (maturityDate.present) {
+      map['maturity_date'] = Variable<DateTime>(maturityDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChancesTableCompanion(')
+          ..write('id: $id, ')
+          ..write('successRate: $successRate, ')
+          ..write('shapeId: $shapeId, ')
+          ..write('typeId: $typeId, ')
+          ..write('quantity: $quantity, ')
+          ..write('maturityDate: $maturityDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ParentChildChancesTableTable extends ParentChildChancesTable
+    with TableInfo<$ParentChildChancesTableTable, ParentChildChancesTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ParentChildChancesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _parentIdMeta =
+      const VerificationMeta('parentId');
+  @override
+  late final GeneratedColumn<int> parentId = GeneratedColumn<int>(
+      'parent_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES chances_table (id)'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES chances_table (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [parentId, childId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'parent_child_chances_table';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ParentChildChancesTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('parent_id')) {
+      context.handle(_parentIdMeta,
+          parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta));
+    } else if (isInserting) {
+      context.missing(_parentIdMeta);
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {parentId, childId};
+  @override
+  ParentChildChancesTableData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ParentChildChancesTableData(
+      parentId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}parent_id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+    );
+  }
+
+  @override
+  $ParentChildChancesTableTable createAlias(String alias) {
+    return $ParentChildChancesTableTable(attachedDatabase, alias);
+  }
+}
+
+class ParentChildChancesTableData extends DataClass
+    implements Insertable<ParentChildChancesTableData> {
+  final int parentId;
+  final int childId;
+  const ParentChildChancesTableData(
+      {required this.parentId, required this.childId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['parent_id'] = Variable<int>(parentId);
+    map['child_id'] = Variable<int>(childId);
+    return map;
+  }
+
+  ParentChildChancesTableCompanion toCompanion(bool nullToAbsent) {
+    return ParentChildChancesTableCompanion(
+      parentId: Value(parentId),
+      childId: Value(childId),
+    );
+  }
+
+  factory ParentChildChancesTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ParentChildChancesTableData(
+      parentId: serializer.fromJson<int>(json['parentId']),
+      childId: serializer.fromJson<int>(json['childId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'parentId': serializer.toJson<int>(parentId),
+      'childId': serializer.toJson<int>(childId),
+    };
+  }
+
+  ParentChildChancesTableData copyWith({int? parentId, int? childId}) =>
+      ParentChildChancesTableData(
+        parentId: parentId ?? this.parentId,
+        childId: childId ?? this.childId,
+      );
+  ParentChildChancesTableData copyWithCompanion(
+      ParentChildChancesTableCompanion data) {
+    return ParentChildChancesTableData(
+      parentId: data.parentId.present ? data.parentId.value : this.parentId,
+      childId: data.childId.present ? data.childId.value : this.childId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ParentChildChancesTableData(')
+          ..write('parentId: $parentId, ')
+          ..write('childId: $childId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(parentId, childId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ParentChildChancesTableData &&
+          other.parentId == this.parentId &&
+          other.childId == this.childId);
+}
+
+class ParentChildChancesTableCompanion
+    extends UpdateCompanion<ParentChildChancesTableData> {
+  final Value<int> parentId;
+  final Value<int> childId;
+  final Value<int> rowid;
+  const ParentChildChancesTableCompanion({
+    this.parentId = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ParentChildChancesTableCompanion.insert({
+    required int parentId,
+    required int childId,
+    this.rowid = const Value.absent(),
+  })  : parentId = Value(parentId),
+        childId = Value(childId);
+  static Insertable<ParentChildChancesTableData> custom({
+    Expression<int>? parentId,
+    Expression<int>? childId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (parentId != null) 'parent_id': parentId,
+      if (childId != null) 'child_id': childId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ParentChildChancesTableCompanion copyWith(
+      {Value<int>? parentId, Value<int>? childId, Value<int>? rowid}) {
+    return ParentChildChancesTableCompanion(
+      parentId: parentId ?? this.parentId,
+      childId: childId ?? this.childId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (parentId.present) {
+      map['parent_id'] = Variable<int>(parentId.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ParentChildChancesTableCompanion(')
+          ..write('parentId: $parentId, ')
+          ..write('childId: $childId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ReservationDetailsTableTable extends ReservationDetailsTable
+    with TableInfo<$ReservationDetailsTableTable, ReservationDetailsTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReservationDetailsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _reservationIdMeta =
+      const VerificationMeta('reservationId');
+  @override
+  late final GeneratedColumn<int> reservationId = GeneratedColumn<int>(
+      'reservation_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES reservations_table (id)'));
+  static const VerificationMeta _shapeIdMeta =
+      const VerificationMeta('shapeId');
+  @override
+  late final GeneratedColumn<int> shapeId = GeneratedColumn<int>(
+      'shape_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES plant_shapes_table (id)'));
+  static const VerificationMeta _typeIdMeta = const VerificationMeta('typeId');
+  @override
+  late final GeneratedColumn<int> typeId = GeneratedColumn<int>(
+      'type_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES plant_types_table (id)'));
+  static const VerificationMeta _quantityMeta =
+      const VerificationMeta('quantity');
+  @override
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  late final GeneratedColumnWithTypeConverter<ReservationStatus, int> status =
+      GeneratedColumn<int>('status', aliasedName, false,
+              type: DriftSqlType.int,
+              requiredDuringInsert: false,
+              defaultValue: const Constant(0))
+          .withConverter<ReservationStatus>(
+              $ReservationDetailsTableTable.$converterstatus);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, reservationId, shapeId, typeId, quantity, status];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'reservation_details_table';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ReservationDetailsTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('reservation_id')) {
+      context.handle(
+          _reservationIdMeta,
+          reservationId.isAcceptableOrUnknown(
+              data['reservation_id']!, _reservationIdMeta));
+    } else if (isInserting) {
+      context.missing(_reservationIdMeta);
+    }
+    if (data.containsKey('shape_id')) {
+      context.handle(_shapeIdMeta,
+          shapeId.isAcceptableOrUnknown(data['shape_id']!, _shapeIdMeta));
+    } else if (isInserting) {
+      context.missing(_shapeIdMeta);
+    }
+    if (data.containsKey('type_id')) {
+      context.handle(_typeIdMeta,
+          typeId.isAcceptableOrUnknown(data['type_id']!, _typeIdMeta));
+    } else if (isInserting) {
+      context.missing(_typeIdMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ReservationDetailsTableData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReservationDetailsTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      reservationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}reservation_id'])!,
+      shapeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}shape_id'])!,
+      typeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}type_id'])!,
+      quantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
+      status: $ReservationDetailsTableTable.$converterstatus.fromSql(
+          attachedDatabase.typeMapping
+              .read(DriftSqlType.int, data['${effectivePrefix}status'])!),
+    );
+  }
+
+  @override
+  $ReservationDetailsTableTable createAlias(String alias) {
+    return $ReservationDetailsTableTable(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<ReservationStatus, int, int> $converterstatus =
+      const EnumIndexConverter<ReservationStatus>(ReservationStatus.values);
+}
+
+class ReservationDetailsTableData extends DataClass
+    implements Insertable<ReservationDetailsTableData> {
+  final int id;
+  final int reservationId;
+  final int shapeId;
+  final int typeId;
+  final int quantity;
+  final ReservationStatus status;
+  const ReservationDetailsTableData(
+      {required this.id,
+      required this.reservationId,
+      required this.shapeId,
+      required this.typeId,
+      required this.quantity,
+      required this.status});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['reservation_id'] = Variable<int>(reservationId);
+    map['shape_id'] = Variable<int>(shapeId);
+    map['type_id'] = Variable<int>(typeId);
+    map['quantity'] = Variable<int>(quantity);
+    {
+      map['status'] = Variable<int>(
+          $ReservationDetailsTableTable.$converterstatus.toSql(status));
+    }
+    return map;
+  }
+
+  ReservationDetailsTableCompanion toCompanion(bool nullToAbsent) {
+    return ReservationDetailsTableCompanion(
+      id: Value(id),
+      reservationId: Value(reservationId),
+      shapeId: Value(shapeId),
+      typeId: Value(typeId),
+      quantity: Value(quantity),
+      status: Value(status),
+    );
+  }
+
+  factory ReservationDetailsTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReservationDetailsTableData(
+      id: serializer.fromJson<int>(json['id']),
+      reservationId: serializer.fromJson<int>(json['reservationId']),
+      shapeId: serializer.fromJson<int>(json['shapeId']),
+      typeId: serializer.fromJson<int>(json['typeId']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+      status: $ReservationDetailsTableTable.$converterstatus
+          .fromJson(serializer.fromJson<int>(json['status'])),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'reservationId': serializer.toJson<int>(reservationId),
+      'shapeId': serializer.toJson<int>(shapeId),
+      'typeId': serializer.toJson<int>(typeId),
+      'quantity': serializer.toJson<int>(quantity),
+      'status': serializer.toJson<int>(
+          $ReservationDetailsTableTable.$converterstatus.toJson(status)),
+    };
+  }
+
+  ReservationDetailsTableData copyWith(
+          {int? id,
+          int? reservationId,
+          int? shapeId,
+          int? typeId,
+          int? quantity,
+          ReservationStatus? status}) =>
+      ReservationDetailsTableData(
+        id: id ?? this.id,
+        reservationId: reservationId ?? this.reservationId,
+        shapeId: shapeId ?? this.shapeId,
+        typeId: typeId ?? this.typeId,
+        quantity: quantity ?? this.quantity,
+        status: status ?? this.status,
+      );
+  ReservationDetailsTableData copyWithCompanion(
+      ReservationDetailsTableCompanion data) {
+    return ReservationDetailsTableData(
+      id: data.id.present ? data.id.value : this.id,
+      reservationId: data.reservationId.present
+          ? data.reservationId.value
+          : this.reservationId,
+      shapeId: data.shapeId.present ? data.shapeId.value : this.shapeId,
+      typeId: data.typeId.present ? data.typeId.value : this.typeId,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      status: data.status.present ? data.status.value : this.status,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReservationDetailsTableData(')
+          ..write('id: $id, ')
+          ..write('reservationId: $reservationId, ')
+          ..write('shapeId: $shapeId, ')
+          ..write('typeId: $typeId, ')
+          ..write('quantity: $quantity, ')
+          ..write('status: $status')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, reservationId, shapeId, typeId, quantity, status);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReservationDetailsTableData &&
+          other.id == this.id &&
+          other.reservationId == this.reservationId &&
+          other.shapeId == this.shapeId &&
+          other.typeId == this.typeId &&
+          other.quantity == this.quantity &&
+          other.status == this.status);
+}
+
+class ReservationDetailsTableCompanion
+    extends UpdateCompanion<ReservationDetailsTableData> {
+  final Value<int> id;
+  final Value<int> reservationId;
+  final Value<int> shapeId;
+  final Value<int> typeId;
+  final Value<int> quantity;
+  final Value<ReservationStatus> status;
+  const ReservationDetailsTableCompanion({
+    this.id = const Value.absent(),
+    this.reservationId = const Value.absent(),
+    this.shapeId = const Value.absent(),
+    this.typeId = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.status = const Value.absent(),
+  });
+  ReservationDetailsTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int reservationId,
+    required int shapeId,
+    required int typeId,
+    required int quantity,
+    this.status = const Value.absent(),
+  })  : reservationId = Value(reservationId),
+        shapeId = Value(shapeId),
+        typeId = Value(typeId),
+        quantity = Value(quantity);
+  static Insertable<ReservationDetailsTableData> custom({
+    Expression<int>? id,
+    Expression<int>? reservationId,
+    Expression<int>? shapeId,
+    Expression<int>? typeId,
+    Expression<int>? quantity,
+    Expression<int>? status,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (reservationId != null) 'reservation_id': reservationId,
+      if (shapeId != null) 'shape_id': shapeId,
+      if (typeId != null) 'type_id': typeId,
+      if (quantity != null) 'quantity': quantity,
+      if (status != null) 'status': status,
+    });
+  }
+
+  ReservationDetailsTableCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? reservationId,
+      Value<int>? shapeId,
+      Value<int>? typeId,
+      Value<int>? quantity,
+      Value<ReservationStatus>? status}) {
+    return ReservationDetailsTableCompanion(
+      id: id ?? this.id,
+      reservationId: reservationId ?? this.reservationId,
+      shapeId: shapeId ?? this.shapeId,
+      typeId: typeId ?? this.typeId,
+      quantity: quantity ?? this.quantity,
+      status: status ?? this.status,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (reservationId.present) {
+      map['reservation_id'] = Variable<int>(reservationId.value);
+    }
+    if (shapeId.present) {
+      map['shape_id'] = Variable<int>(shapeId.value);
+    }
+    if (typeId.present) {
+      map['type_id'] = Variable<int>(typeId.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<int>(
+          $ReservationDetailsTableTable.$converterstatus.toSql(status.value));
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReservationDetailsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('reservationId: $reservationId, ')
+          ..write('shapeId: $shapeId, ')
+          ..write('typeId: $typeId, ')
+          ..write('quantity: $quantity, ')
+          ..write('status: $status')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $StorageReservationTableTable extends StorageReservationTable
+    with TableInfo<$StorageReservationTableTable, StorageReservationTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StorageReservationTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _storageIdMeta =
+      const VerificationMeta('storageId');
+  @override
+  late final GeneratedColumn<int> storageId = GeneratedColumn<int>(
+      'storage_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES storage_table (id)'));
+  static const VerificationMeta _reservationIdMeta =
+      const VerificationMeta('reservationId');
+  @override
+  late final GeneratedColumn<int> reservationId = GeneratedColumn<int>(
+      'reservation_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES reservations_table (id)'));
+  static const VerificationMeta _quantityMeta =
+      const VerificationMeta('quantity');
+  @override
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [storageId, reservationId, quantity];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'storage_reservation_table';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<StorageReservationTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('storage_id')) {
+      context.handle(_storageIdMeta,
+          storageId.isAcceptableOrUnknown(data['storage_id']!, _storageIdMeta));
+    } else if (isInserting) {
+      context.missing(_storageIdMeta);
+    }
+    if (data.containsKey('reservation_id')) {
+      context.handle(
+          _reservationIdMeta,
+          reservationId.isAcceptableOrUnknown(
+              data['reservation_id']!, _reservationIdMeta));
+    } else if (isInserting) {
+      context.missing(_reservationIdMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {storageId, reservationId};
+  @override
+  StorageReservationTableData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StorageReservationTableData(
+      storageId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}storage_id'])!,
+      reservationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}reservation_id'])!,
+      quantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
+    );
+  }
+
+  @override
+  $StorageReservationTableTable createAlias(String alias) {
+    return $StorageReservationTableTable(attachedDatabase, alias);
+  }
+}
+
+class StorageReservationTableData extends DataClass
+    implements Insertable<StorageReservationTableData> {
+  final int storageId;
+  final int reservationId;
+  final int quantity;
+  const StorageReservationTableData(
+      {required this.storageId,
+      required this.reservationId,
+      required this.quantity});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['storage_id'] = Variable<int>(storageId);
+    map['reservation_id'] = Variable<int>(reservationId);
+    map['quantity'] = Variable<int>(quantity);
+    return map;
+  }
+
+  StorageReservationTableCompanion toCompanion(bool nullToAbsent) {
+    return StorageReservationTableCompanion(
+      storageId: Value(storageId),
+      reservationId: Value(reservationId),
+      quantity: Value(quantity),
+    );
+  }
+
+  factory StorageReservationTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return StorageReservationTableData(
+      storageId: serializer.fromJson<int>(json['storageId']),
+      reservationId: serializer.fromJson<int>(json['reservationId']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'storageId': serializer.toJson<int>(storageId),
+      'reservationId': serializer.toJson<int>(reservationId),
+      'quantity': serializer.toJson<int>(quantity),
+    };
+  }
+
+  StorageReservationTableData copyWith(
+          {int? storageId, int? reservationId, int? quantity}) =>
+      StorageReservationTableData(
+        storageId: storageId ?? this.storageId,
+        reservationId: reservationId ?? this.reservationId,
+        quantity: quantity ?? this.quantity,
+      );
+  StorageReservationTableData copyWithCompanion(
+      StorageReservationTableCompanion data) {
+    return StorageReservationTableData(
+      storageId: data.storageId.present ? data.storageId.value : this.storageId,
+      reservationId: data.reservationId.present
+          ? data.reservationId.value
+          : this.reservationId,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StorageReservationTableData(')
+          ..write('storageId: $storageId, ')
+          ..write('reservationId: $reservationId, ')
+          ..write('quantity: $quantity')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(storageId, reservationId, quantity);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is StorageReservationTableData &&
+          other.storageId == this.storageId &&
+          other.reservationId == this.reservationId &&
+          other.quantity == this.quantity);
+}
+
+class StorageReservationTableCompanion
+    extends UpdateCompanion<StorageReservationTableData> {
+  final Value<int> storageId;
+  final Value<int> reservationId;
+  final Value<int> quantity;
+  final Value<int> rowid;
+  const StorageReservationTableCompanion({
+    this.storageId = const Value.absent(),
+    this.reservationId = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  StorageReservationTableCompanion.insert({
+    required int storageId,
+    required int reservationId,
+    required int quantity,
+    this.rowid = const Value.absent(),
+  })  : storageId = Value(storageId),
+        reservationId = Value(reservationId),
+        quantity = Value(quantity);
+  static Insertable<StorageReservationTableData> custom({
+    Expression<int>? storageId,
+    Expression<int>? reservationId,
+    Expression<int>? quantity,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (storageId != null) 'storage_id': storageId,
+      if (reservationId != null) 'reservation_id': reservationId,
+      if (quantity != null) 'quantity': quantity,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  StorageReservationTableCompanion copyWith(
+      {Value<int>? storageId,
+      Value<int>? reservationId,
+      Value<int>? quantity,
+      Value<int>? rowid}) {
+    return StorageReservationTableCompanion(
+      storageId: storageId ?? this.storageId,
+      reservationId: reservationId ?? this.reservationId,
+      quantity: quantity ?? this.quantity,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (storageId.present) {
+      map['storage_id'] = Variable<int>(storageId.value);
+    }
+    if (reservationId.present) {
+      map['reservation_id'] = Variable<int>(reservationId.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StorageReservationTableCompanion(')
+          ..write('storageId: $storageId, ')
+          ..write('reservationId: $reservationId, ')
+          ..write('quantity: $quantity, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$LocalDatabase extends GeneratedDatabase {
   _$LocalDatabase(QueryExecutor e) : super(e);
   $LocalDatabaseManager get managers => $LocalDatabaseManager(this);
@@ -3130,10 +4246,17 @@ abstract class _$LocalDatabase extends GeneratedDatabase {
       $OperationTypesTableTable(this);
   late final $OperationsTableTable operationsTable =
       $OperationsTableTable(this);
+  late final $StorageTableTable storageTable = $StorageTableTable(this);
   late final $ReservationsTableTable reservationsTable =
       $ReservationsTableTable(this);
-  late final $StorageTableTable storageTable = $StorageTableTable(this);
   late final $PricesTableTable pricesTable = $PricesTableTable(this);
+  late final $ChancesTableTable chancesTable = $ChancesTableTable(this);
+  late final $ParentChildChancesTableTable parentChildChancesTable =
+      $ParentChildChancesTableTable(this);
+  late final $ReservationDetailsTableTable reservationDetailsTable =
+      $ReservationDetailsTableTable(this);
+  late final $StorageReservationTableTable storageReservationTable =
+      $StorageReservationTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3144,9 +4267,13 @@ abstract class _$LocalDatabase extends GeneratedDatabase {
         plantShapesTable,
         operationTypesTable,
         operationsTable,
-        reservationsTable,
         storageTable,
-        pricesTable
+        reservationsTable,
+        pricesTable,
+        chancesTable,
+        parentChildChancesTable,
+        reservationDetailsTable,
+        storageReservationTable
       ];
 }
 
@@ -3446,6 +4573,21 @@ final class $$PlantTypesTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
+  static MultiTypedResultKey<$StorageTableTable, List<StorageTableData>>
+      _storageTableRefsTable(_$LocalDatabase db) =>
+          MultiTypedResultKey.fromTable(db.storageTable,
+              aliasName: $_aliasNameGenerator(
+                  db.plantTypesTable.id, db.storageTable.plantTypeId));
+
+  $$StorageTableTableProcessedTableManager get storageTableRefs {
+    final manager = $$StorageTableTableTableManager($_db, $_db.storageTable)
+        .filter((f) => f.plantTypeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_storageTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
   static MultiTypedResultKey<$ReservationsTableTable,
       List<ReservationsTableData>> _reservationsTableRefsTable(
           _$LocalDatabase db) =>
@@ -3464,21 +4606,6 @@ final class $$PlantTypesTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$StorageTableTable, List<StorageTableData>>
-      _storageTableRefsTable(_$LocalDatabase db) =>
-          MultiTypedResultKey.fromTable(db.storageTable,
-              aliasName: $_aliasNameGenerator(
-                  db.plantTypesTable.id, db.storageTable.plantTypeId));
-
-  $$StorageTableTableProcessedTableManager get storageTableRefs {
-    final manager = $$StorageTableTableTableManager($_db, $_db.storageTable)
-        .filter((f) => f.plantTypeId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_storageTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
   static MultiTypedResultKey<$PricesTableTable, List<PricesTableData>>
       _pricesTableRefsTable(_$LocalDatabase db) =>
           MultiTypedResultKey.fromTable(db.pricesTable,
@@ -3490,6 +4617,40 @@ final class $$PlantTypesTableTableReferences extends BaseReferences<
         .filter((f) => f.plantTypeId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_pricesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChancesTableTable, List<ChancesTableData>>
+      _chancesTableRefsTable(_$LocalDatabase db) =>
+          MultiTypedResultKey.fromTable(db.chancesTable,
+              aliasName: $_aliasNameGenerator(
+                  db.plantTypesTable.id, db.chancesTable.typeId));
+
+  $$ChancesTableTableProcessedTableManager get chancesTableRefs {
+    final manager = $$ChancesTableTableTableManager($_db, $_db.chancesTable)
+        .filter((f) => f.typeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_chancesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ReservationDetailsTableTable,
+      List<ReservationDetailsTableData>> _reservationDetailsTableRefsTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.reservationDetailsTable,
+          aliasName: $_aliasNameGenerator(
+              db.plantTypesTable.id, db.reservationDetailsTable.typeId));
+
+  $$ReservationDetailsTableTableProcessedTableManager
+      get reservationDetailsTableRefs {
+    final manager = $$ReservationDetailsTableTableTableManager(
+            $_db, $_db.reservationDetailsTable)
+        .filter((f) => f.typeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_reservationDetailsTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -3552,27 +4713,6 @@ class $$PlantTypesTableTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> reservationsTableRefs(
-      Expression<bool> Function($$ReservationsTableTableFilterComposer f) f) {
-    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.reservationsTable,
-        getReferencedColumn: (t) => t.plantTypeId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$ReservationsTableTableFilterComposer(
-              $db: $db,
-              $table: $db.reservationsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-
   Expression<bool> storageTableRefs(
       Expression<bool> Function($$StorageTableTableFilterComposer f) f) {
     final $$StorageTableTableFilterComposer composer = $composerBuilder(
@@ -3586,6 +4726,27 @@ class $$PlantTypesTableTableFilterComposer
             $$StorageTableTableFilterComposer(
               $db: $db,
               $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> reservationsTableRefs(
+      Expression<bool> Function($$ReservationsTableTableFilterComposer f) f) {
+    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.plantTypeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -3612,6 +4773,50 @@ class $$PlantTypesTableTableFilterComposer
               $removeJoinBuilderFromRootComposer:
                   $removeJoinBuilderFromRootComposer,
             ));
+    return f(composer);
+  }
+
+  Expression<bool> chancesTableRefs(
+      Expression<bool> Function($$ChancesTableTableFilterComposer f) f) {
+    final $$ChancesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.typeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> reservationDetailsTableRefs(
+      Expression<bool> Function($$ReservationDetailsTableTableFilterComposer f)
+          f) {
+    final $$ReservationDetailsTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.reservationDetailsTable,
+            getReferencedColumn: (t) => t.typeId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationDetailsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.reservationDetailsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 }
@@ -3689,6 +4894,27 @@ class $$PlantTypesTableTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> storageTableRefs<T extends Object>(
+      Expression<T> Function($$StorageTableTableAnnotationComposer a) f) {
+    final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.storageTable,
+        getReferencedColumn: (t) => t.plantTypeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StorageTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
   Expression<T> reservationsTableRefs<T extends Object>(
       Expression<T> Function($$ReservationsTableTableAnnotationComposer a) f) {
     final $$ReservationsTableTableAnnotationComposer composer =
@@ -3708,27 +4934,6 @@ class $$PlantTypesTableTableAnnotationComposer
                   $removeJoinBuilderFromRootComposer:
                       $removeJoinBuilderFromRootComposer,
                 ));
-    return f(composer);
-  }
-
-  Expression<T> storageTableRefs<T extends Object>(
-      Expression<T> Function($$StorageTableTableAnnotationComposer a) f) {
-    final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.storageTable,
-        getReferencedColumn: (t) => t.plantTypeId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$StorageTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.storageTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
     return f(composer);
   }
 
@@ -3752,6 +4957,50 @@ class $$PlantTypesTableTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> chancesTableRefs<T extends Object>(
+      Expression<T> Function($$ChancesTableTableAnnotationComposer a) f) {
+    final $$ChancesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.typeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> reservationDetailsTableRefs<T extends Object>(
+      Expression<T> Function($$ReservationDetailsTableTableAnnotationComposer a)
+          f) {
+    final $$ReservationDetailsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.reservationDetailsTable,
+            getReferencedColumn: (t) => t.typeId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationDetailsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.reservationDetailsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$PlantTypesTableTableTableManager extends RootTableManager<
@@ -3768,9 +5017,11 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
     PrefetchHooks Function(
         {bool firstTypeRelation,
         bool secondTypeRelation,
-        bool reservationsTableRefs,
         bool storageTableRefs,
-        bool pricesTableRefs})> {
+        bool reservationsTableRefs,
+        bool pricesTableRefs,
+        bool chancesTableRefs,
+        bool reservationDetailsTableRefs})> {
   $$PlantTypesTableTableTableManager(
       _$LocalDatabase db, $PlantTypesTableTable table)
       : super(TableManagerState(
@@ -3807,17 +5058,21 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
           prefetchHooksCallback: (
               {firstTypeRelation = false,
               secondTypeRelation = false,
-              reservationsTableRefs = false,
               storageTableRefs = false,
-              pricesTableRefs = false}) {
+              reservationsTableRefs = false,
+              pricesTableRefs = false,
+              chancesTableRefs = false,
+              reservationDetailsTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (firstTypeRelation) db.operationsTable,
                 if (secondTypeRelation) db.operationsTable,
-                if (reservationsTableRefs) db.reservationsTable,
                 if (storageTableRefs) db.storageTable,
-                if (pricesTableRefs) db.pricesTable
+                if (reservationsTableRefs) db.reservationsTable,
+                if (pricesTableRefs) db.pricesTable,
+                if (chancesTableRefs) db.chancesTable,
+                if (reservationDetailsTableRefs) db.reservationDetailsTable
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -3848,19 +5103,6 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.secondTypeId == item.id),
                         typedResults: items),
-                  if (reservationsTableRefs)
-                    await $_getPrefetchedData<PlantTypesTableData,
-                            $PlantTypesTableTable, ReservationsTableData>(
-                        currentTable: table,
-                        referencedTable: $$PlantTypesTableTableReferences
-                            ._reservationsTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$PlantTypesTableTableReferences(db, table, p0)
-                                .reservationsTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.plantTypeId == item.id),
-                        typedResults: items),
                   if (storageTableRefs)
                     await $_getPrefetchedData<PlantTypesTableData,
                             $PlantTypesTableTable, StorageTableData>(
@@ -3870,6 +5112,19 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$PlantTypesTableTableReferences(db, table, p0)
                                 .storageTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.plantTypeId == item.id),
+                        typedResults: items),
+                  if (reservationsTableRefs)
+                    await $_getPrefetchedData<PlantTypesTableData,
+                            $PlantTypesTableTable, ReservationsTableData>(
+                        currentTable: table,
+                        referencedTable: $$PlantTypesTableTableReferences
+                            ._reservationsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlantTypesTableTableReferences(db, table, p0)
+                                .reservationsTableRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.plantTypeId == item.id),
@@ -3886,6 +5141,32 @@ class $$PlantTypesTableTableTableManager extends RootTableManager<
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.plantTypeId == item.id),
+                        typedResults: items),
+                  if (chancesTableRefs)
+                    await $_getPrefetchedData<PlantTypesTableData,
+                            $PlantTypesTableTable, ChancesTableData>(
+                        currentTable: table,
+                        referencedTable: $$PlantTypesTableTableReferences
+                            ._chancesTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlantTypesTableTableReferences(db, table, p0)
+                                .chancesTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.typeId == item.id),
+                        typedResults: items),
+                  if (reservationDetailsTableRefs)
+                    await $_getPrefetchedData<PlantTypesTableData,
+                            $PlantTypesTableTable, ReservationDetailsTableData>(
+                        currentTable: table,
+                        referencedTable: $$PlantTypesTableTableReferences
+                            ._reservationDetailsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlantTypesTableTableReferences(db, table, p0)
+                                .reservationDetailsTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.typeId == item.id),
                         typedResults: items)
                 ];
               },
@@ -3908,9 +5189,11 @@ typedef $$PlantTypesTableTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function(
         {bool firstTypeRelation,
         bool secondTypeRelation,
-        bool reservationsTableRefs,
         bool storageTableRefs,
-        bool pricesTableRefs})>;
+        bool reservationsTableRefs,
+        bool pricesTableRefs,
+        bool chancesTableRefs,
+        bool reservationDetailsTableRefs})>;
 typedef $$PlantShapesTableTableCreateCompanionBuilder
     = PlantShapesTableCompanion Function({
   Value<int> id,
@@ -3962,6 +5245,21 @@ final class $$PlantShapesTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
+  static MultiTypedResultKey<$StorageTableTable, List<StorageTableData>>
+      _storageTableRefsTable(_$LocalDatabase db) =>
+          MultiTypedResultKey.fromTable(db.storageTable,
+              aliasName: $_aliasNameGenerator(
+                  db.plantShapesTable.id, db.storageTable.plantShapeId));
+
+  $$StorageTableTableProcessedTableManager get storageTableRefs {
+    final manager = $$StorageTableTableTableManager($_db, $_db.storageTable)
+        .filter((f) => f.plantShapeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_storageTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
   static MultiTypedResultKey<$ReservationsTableTable,
       List<ReservationsTableData>> _reservationsTableRefsTable(
           _$LocalDatabase db) =>
@@ -3980,21 +5278,6 @@ final class $$PlantShapesTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$StorageTableTable, List<StorageTableData>>
-      _storageTableRefsTable(_$LocalDatabase db) =>
-          MultiTypedResultKey.fromTable(db.storageTable,
-              aliasName: $_aliasNameGenerator(
-                  db.plantShapesTable.id, db.storageTable.plantShapeId));
-
-  $$StorageTableTableProcessedTableManager get storageTableRefs {
-    final manager = $$StorageTableTableTableManager($_db, $_db.storageTable)
-        .filter((f) => f.plantShapeId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_storageTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-
   static MultiTypedResultKey<$PricesTableTable, List<PricesTableData>>
       _pricesTableRefsTable(_$LocalDatabase db) =>
           MultiTypedResultKey.fromTable(db.pricesTable,
@@ -4006,6 +5289,40 @@ final class $$PlantShapesTableTableReferences extends BaseReferences<
         .filter((f) => f.plantShapeId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_pricesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ChancesTableTable, List<ChancesTableData>>
+      _chancesTableRefsTable(_$LocalDatabase db) =>
+          MultiTypedResultKey.fromTable(db.chancesTable,
+              aliasName: $_aliasNameGenerator(
+                  db.plantShapesTable.id, db.chancesTable.shapeId));
+
+  $$ChancesTableTableProcessedTableManager get chancesTableRefs {
+    final manager = $$ChancesTableTableTableManager($_db, $_db.chancesTable)
+        .filter((f) => f.shapeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_chancesTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ReservationDetailsTableTable,
+      List<ReservationDetailsTableData>> _reservationDetailsTableRefsTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.reservationDetailsTable,
+          aliasName: $_aliasNameGenerator(
+              db.plantShapesTable.id, db.reservationDetailsTable.shapeId));
+
+  $$ReservationDetailsTableTableProcessedTableManager
+      get reservationDetailsTableRefs {
+    final manager = $$ReservationDetailsTableTableTableManager(
+            $_db, $_db.reservationDetailsTable)
+        .filter((f) => f.shapeId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_reservationDetailsTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -4071,27 +5388,6 @@ class $$PlantShapesTableTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> reservationsTableRefs(
-      Expression<bool> Function($$ReservationsTableTableFilterComposer f) f) {
-    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.reservationsTable,
-        getReferencedColumn: (t) => t.plantShapeId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$ReservationsTableTableFilterComposer(
-              $db: $db,
-              $table: $db.reservationsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-
   Expression<bool> storageTableRefs(
       Expression<bool> Function($$StorageTableTableFilterComposer f) f) {
     final $$StorageTableTableFilterComposer composer = $composerBuilder(
@@ -4105,6 +5401,27 @@ class $$PlantShapesTableTableFilterComposer
             $$StorageTableTableFilterComposer(
               $db: $db,
               $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> reservationsTableRefs(
+      Expression<bool> Function($$ReservationsTableTableFilterComposer f) f) {
+    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.plantShapeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -4131,6 +5448,50 @@ class $$PlantShapesTableTableFilterComposer
               $removeJoinBuilderFromRootComposer:
                   $removeJoinBuilderFromRootComposer,
             ));
+    return f(composer);
+  }
+
+  Expression<bool> chancesTableRefs(
+      Expression<bool> Function($$ChancesTableTableFilterComposer f) f) {
+    final $$ChancesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.shapeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> reservationDetailsTableRefs(
+      Expression<bool> Function($$ReservationDetailsTableTableFilterComposer f)
+          f) {
+    final $$ReservationDetailsTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.reservationDetailsTable,
+            getReferencedColumn: (t) => t.shapeId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationDetailsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.reservationDetailsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 }
@@ -4215,6 +5576,27 @@ class $$PlantShapesTableTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> storageTableRefs<T extends Object>(
+      Expression<T> Function($$StorageTableTableAnnotationComposer a) f) {
+    final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.storageTable,
+        getReferencedColumn: (t) => t.plantShapeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StorageTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
   Expression<T> reservationsTableRefs<T extends Object>(
       Expression<T> Function($$ReservationsTableTableAnnotationComposer a) f) {
     final $$ReservationsTableTableAnnotationComposer composer =
@@ -4234,27 +5616,6 @@ class $$PlantShapesTableTableAnnotationComposer
                   $removeJoinBuilderFromRootComposer:
                       $removeJoinBuilderFromRootComposer,
                 ));
-    return f(composer);
-  }
-
-  Expression<T> storageTableRefs<T extends Object>(
-      Expression<T> Function($$StorageTableTableAnnotationComposer a) f) {
-    final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.storageTable,
-        getReferencedColumn: (t) => t.plantShapeId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$StorageTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.storageTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
     return f(composer);
   }
 
@@ -4278,6 +5639,50 @@ class $$PlantShapesTableTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> chancesTableRefs<T extends Object>(
+      Expression<T> Function($$ChancesTableTableAnnotationComposer a) f) {
+    final $$ChancesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.shapeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> reservationDetailsTableRefs<T extends Object>(
+      Expression<T> Function($$ReservationDetailsTableTableAnnotationComposer a)
+          f) {
+    final $$ReservationDetailsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.reservationDetailsTable,
+            getReferencedColumn: (t) => t.shapeId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationDetailsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.reservationDetailsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$PlantShapesTableTableTableManager extends RootTableManager<
@@ -4294,9 +5699,11 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
     PrefetchHooks Function(
         {bool firstShapeRelation,
         bool secondShapeRelation,
-        bool reservationsTableRefs,
         bool storageTableRefs,
-        bool pricesTableRefs})> {
+        bool reservationsTableRefs,
+        bool pricesTableRefs,
+        bool chancesTableRefs,
+        bool reservationDetailsTableRefs})> {
   $$PlantShapesTableTableTableManager(
       _$LocalDatabase db, $PlantShapesTableTable table)
       : super(TableManagerState(
@@ -4337,17 +5744,21 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
           prefetchHooksCallback: (
               {firstShapeRelation = false,
               secondShapeRelation = false,
-              reservationsTableRefs = false,
               storageTableRefs = false,
-              pricesTableRefs = false}) {
+              reservationsTableRefs = false,
+              pricesTableRefs = false,
+              chancesTableRefs = false,
+              reservationDetailsTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (firstShapeRelation) db.operationsTable,
                 if (secondShapeRelation) db.operationsTable,
-                if (reservationsTableRefs) db.reservationsTable,
                 if (storageTableRefs) db.storageTable,
-                if (pricesTableRefs) db.pricesTable
+                if (reservationsTableRefs) db.reservationsTable,
+                if (pricesTableRefs) db.pricesTable,
+                if (chancesTableRefs) db.chancesTable,
+                if (reservationDetailsTableRefs) db.reservationDetailsTable
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -4378,19 +5789,6 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.secondShapeId == item.id),
                         typedResults: items),
-                  if (reservationsTableRefs)
-                    await $_getPrefetchedData<PlantShapesTableData,
-                            $PlantShapesTableTable, ReservationsTableData>(
-                        currentTable: table,
-                        referencedTable: $$PlantShapesTableTableReferences
-                            ._reservationsTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$PlantShapesTableTableReferences(db, table, p0)
-                                .reservationsTableRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.plantShapeId == item.id),
-                        typedResults: items),
                   if (storageTableRefs)
                     await $_getPrefetchedData<PlantShapesTableData,
                             $PlantShapesTableTable, StorageTableData>(
@@ -4400,6 +5798,19 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$PlantShapesTableTableReferences(db, table, p0)
                                 .storageTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.plantShapeId == item.id),
+                        typedResults: items),
+                  if (reservationsTableRefs)
+                    await $_getPrefetchedData<PlantShapesTableData,
+                            $PlantShapesTableTable, ReservationsTableData>(
+                        currentTable: table,
+                        referencedTable: $$PlantShapesTableTableReferences
+                            ._reservationsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlantShapesTableTableReferences(db, table, p0)
+                                .reservationsTableRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.plantShapeId == item.id),
@@ -4416,6 +5827,34 @@ class $$PlantShapesTableTableTableManager extends RootTableManager<
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.plantShapeId == item.id),
+                        typedResults: items),
+                  if (chancesTableRefs)
+                    await $_getPrefetchedData<PlantShapesTableData,
+                            $PlantShapesTableTable, ChancesTableData>(
+                        currentTable: table,
+                        referencedTable: $$PlantShapesTableTableReferences
+                            ._chancesTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlantShapesTableTableReferences(db, table, p0)
+                                .chancesTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.shapeId == item.id),
+                        typedResults: items),
+                  if (reservationDetailsTableRefs)
+                    await $_getPrefetchedData<
+                            PlantShapesTableData,
+                            $PlantShapesTableTable,
+                            ReservationDetailsTableData>(
+                        currentTable: table,
+                        referencedTable: $$PlantShapesTableTableReferences
+                            ._reservationDetailsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$PlantShapesTableTableReferences(db, table, p0)
+                                .reservationDetailsTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.shapeId == item.id),
                         typedResults: items)
                 ];
               },
@@ -4438,9 +5877,11 @@ typedef $$PlantShapesTableTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function(
         {bool firstShapeRelation,
         bool secondShapeRelation,
-        bool reservationsTableRefs,
         bool storageTableRefs,
-        bool pricesTableRefs})>;
+        bool reservationsTableRefs,
+        bool pricesTableRefs,
+        bool chancesTableRefs,
+        bool reservationDetailsTableRefs})>;
 typedef $$OperationTypesTableTableCreateCompanionBuilder
     = OperationTypesTableCompanion Function({
   Value<int> id,
@@ -5452,6 +6893,554 @@ typedef $$OperationsTableTableProcessedTableManager = ProcessedTableManager<
         bool secondTypeId,
         bool secondShapeId,
         bool storageTableRefs})>;
+typedef $$StorageTableTableCreateCompanionBuilder = StorageTableCompanion
+    Function({
+  Value<int> id,
+  required int plantTypeId,
+  required int plantShapeId,
+  required int quantity,
+  Value<int?> parentOperationId,
+  Value<bool> isScheduled,
+  Value<String?> notes,
+});
+typedef $$StorageTableTableUpdateCompanionBuilder = StorageTableCompanion
+    Function({
+  Value<int> id,
+  Value<int> plantTypeId,
+  Value<int> plantShapeId,
+  Value<int> quantity,
+  Value<int?> parentOperationId,
+  Value<bool> isScheduled,
+  Value<String?> notes,
+});
+
+final class $$StorageTableTableReferences extends BaseReferences<
+    _$LocalDatabase, $StorageTableTable, StorageTableData> {
+  $$StorageTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $PlantTypesTableTable _plantTypeIdTable(_$LocalDatabase db) =>
+      db.plantTypesTable.createAlias($_aliasNameGenerator(
+          db.storageTable.plantTypeId, db.plantTypesTable.id));
+
+  $$PlantTypesTableTableProcessedTableManager get plantTypeId {
+    final $_column = $_itemColumn<int>('plant_type_id')!;
+
+    final manager =
+        $$PlantTypesTableTableTableManager($_db, $_db.plantTypesTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_plantTypeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $PlantShapesTableTable _plantShapeIdTable(_$LocalDatabase db) =>
+      db.plantShapesTable.createAlias($_aliasNameGenerator(
+          db.storageTable.plantShapeId, db.plantShapesTable.id));
+
+  $$PlantShapesTableTableProcessedTableManager get plantShapeId {
+    final $_column = $_itemColumn<int>('plant_shape_id')!;
+
+    final manager =
+        $$PlantShapesTableTableTableManager($_db, $_db.plantShapesTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_plantShapeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $OperationsTableTable _parentOperationIdTable(_$LocalDatabase db) =>
+      db.operationsTable.createAlias($_aliasNameGenerator(
+          db.storageTable.parentOperationId, db.operationsTable.id));
+
+  $$OperationsTableTableProcessedTableManager? get parentOperationId {
+    final $_column = $_itemColumn<int>('parent_operation_id');
+    if ($_column == null) return null;
+    final manager =
+        $$OperationsTableTableTableManager($_db, $_db.operationsTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_parentOperationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$StorageReservationTableTable,
+      List<StorageReservationTableData>> _storageReservationTableRefsTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.storageReservationTable,
+          aliasName: $_aliasNameGenerator(
+              db.storageTable.id, db.storageReservationTable.storageId));
+
+  $$StorageReservationTableTableProcessedTableManager
+      get storageReservationTableRefs {
+    final manager = $$StorageReservationTableTableTableManager(
+            $_db, $_db.storageReservationTable)
+        .filter((f) => f.storageId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_storageReservationTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$StorageTableTableFilterComposer
+    extends Composer<_$LocalDatabase, $StorageTableTable> {
+  $$StorageTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isScheduled => $composableBuilder(
+      column: $table.isScheduled, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnFilters(column));
+
+  $$PlantTypesTableTableFilterComposer get plantTypeId {
+    final $$PlantTypesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantTypeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableFilterComposer get plantShapeId {
+    final $$PlantShapesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantShapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$OperationsTableTableFilterComposer get parentOperationId {
+    final $$OperationsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentOperationId,
+        referencedTable: $db.operationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$OperationsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.operationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> storageReservationTableRefs(
+      Expression<bool> Function($$StorageReservationTableTableFilterComposer f)
+          f) {
+    final $$StorageReservationTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.storageReservationTable,
+            getReferencedColumn: (t) => t.storageId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$StorageReservationTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.storageReservationTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$StorageTableTableOrderingComposer
+    extends Composer<_$LocalDatabase, $StorageTableTable> {
+  $$StorageTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isScheduled => $composableBuilder(
+      column: $table.isScheduled, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnOrderings(column));
+
+  $$PlantTypesTableTableOrderingComposer get plantTypeId {
+    final $$PlantTypesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantTypeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableOrderingComposer get plantShapeId {
+    final $$PlantShapesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantShapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$OperationsTableTableOrderingComposer get parentOperationId {
+    final $$OperationsTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentOperationId,
+        referencedTable: $db.operationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$OperationsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.operationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$StorageTableTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $StorageTableTable> {
+  $$StorageTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<bool> get isScheduled => $composableBuilder(
+      column: $table.isScheduled, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  $$PlantTypesTableTableAnnotationComposer get plantTypeId {
+    final $$PlantTypesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantTypeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableAnnotationComposer get plantShapeId {
+    final $$PlantShapesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.plantShapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$OperationsTableTableAnnotationComposer get parentOperationId {
+    final $$OperationsTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentOperationId,
+        referencedTable: $db.operationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$OperationsTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.operationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> storageReservationTableRefs<T extends Object>(
+      Expression<T> Function($$StorageReservationTableTableAnnotationComposer a)
+          f) {
+    final $$StorageReservationTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.storageReservationTable,
+            getReferencedColumn: (t) => t.storageId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$StorageReservationTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.storageReservationTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$StorageTableTableTableManager extends RootTableManager<
+    _$LocalDatabase,
+    $StorageTableTable,
+    StorageTableData,
+    $$StorageTableTableFilterComposer,
+    $$StorageTableTableOrderingComposer,
+    $$StorageTableTableAnnotationComposer,
+    $$StorageTableTableCreateCompanionBuilder,
+    $$StorageTableTableUpdateCompanionBuilder,
+    (StorageTableData, $$StorageTableTableReferences),
+    StorageTableData,
+    PrefetchHooks Function(
+        {bool plantTypeId,
+        bool plantShapeId,
+        bool parentOperationId,
+        bool storageReservationTableRefs})> {
+  $$StorageTableTableTableManager(_$LocalDatabase db, $StorageTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StorageTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$StorageTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$StorageTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> plantTypeId = const Value.absent(),
+            Value<int> plantShapeId = const Value.absent(),
+            Value<int> quantity = const Value.absent(),
+            Value<int?> parentOperationId = const Value.absent(),
+            Value<bool> isScheduled = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+          }) =>
+              StorageTableCompanion(
+            id: id,
+            plantTypeId: plantTypeId,
+            plantShapeId: plantShapeId,
+            quantity: quantity,
+            parentOperationId: parentOperationId,
+            isScheduled: isScheduled,
+            notes: notes,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int plantTypeId,
+            required int plantShapeId,
+            required int quantity,
+            Value<int?> parentOperationId = const Value.absent(),
+            Value<bool> isScheduled = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+          }) =>
+              StorageTableCompanion.insert(
+            id: id,
+            plantTypeId: plantTypeId,
+            plantShapeId: plantShapeId,
+            quantity: quantity,
+            parentOperationId: parentOperationId,
+            isScheduled: isScheduled,
+            notes: notes,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$StorageTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {plantTypeId = false,
+              plantShapeId = false,
+              parentOperationId = false,
+              storageReservationTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (storageReservationTableRefs) db.storageReservationTable
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (plantTypeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.plantTypeId,
+                    referencedTable:
+                        $$StorageTableTableReferences._plantTypeIdTable(db),
+                    referencedColumn:
+                        $$StorageTableTableReferences._plantTypeIdTable(db).id,
+                  ) as T;
+                }
+                if (plantShapeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.plantShapeId,
+                    referencedTable:
+                        $$StorageTableTableReferences._plantShapeIdTable(db),
+                    referencedColumn:
+                        $$StorageTableTableReferences._plantShapeIdTable(db).id,
+                  ) as T;
+                }
+                if (parentOperationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.parentOperationId,
+                    referencedTable: $$StorageTableTableReferences
+                        ._parentOperationIdTable(db),
+                    referencedColumn: $$StorageTableTableReferences
+                        ._parentOperationIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (storageReservationTableRefs)
+                    await $_getPrefetchedData<StorageTableData,
+                            $StorageTableTable, StorageReservationTableData>(
+                        currentTable: table,
+                        referencedTable: $$StorageTableTableReferences
+                            ._storageReservationTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$StorageTableTableReferences(db, table, p0)
+                                .storageReservationTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.storageId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$StorageTableTableProcessedTableManager = ProcessedTableManager<
+    _$LocalDatabase,
+    $StorageTableTable,
+    StorageTableData,
+    $$StorageTableTableFilterComposer,
+    $$StorageTableTableOrderingComposer,
+    $$StorageTableTableAnnotationComposer,
+    $$StorageTableTableCreateCompanionBuilder,
+    $$StorageTableTableUpdateCompanionBuilder,
+    (StorageTableData, $$StorageTableTableReferences),
+    StorageTableData,
+    PrefetchHooks Function(
+        {bool plantTypeId,
+        bool plantShapeId,
+        bool parentOperationId,
+        bool storageReservationTableRefs})>;
 typedef $$ReservationsTableTableCreateCompanionBuilder
     = ReservationsTableCompanion Function({
   Value<int> id,
@@ -5520,17 +7509,40 @@ final class $$ReservationsTableTableReferences extends BaseReferences<
         manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static MultiTypedResultKey<$StorageTableTable, List<StorageTableData>>
-      _storageTableRefsTable(_$LocalDatabase db) =>
-          MultiTypedResultKey.fromTable(db.storageTable,
-              aliasName: $_aliasNameGenerator(
-                  db.reservationsTable.id, db.storageTable.reservationId));
+  static MultiTypedResultKey<$ReservationDetailsTableTable,
+      List<ReservationDetailsTableData>> _reservationDetailsTableRefsTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.reservationDetailsTable,
+          aliasName: $_aliasNameGenerator(db.reservationsTable.id,
+              db.reservationDetailsTable.reservationId));
 
-  $$StorageTableTableProcessedTableManager get storageTableRefs {
-    final manager = $$StorageTableTableTableManager($_db, $_db.storageTable)
+  $$ReservationDetailsTableTableProcessedTableManager
+      get reservationDetailsTableRefs {
+    final manager = $$ReservationDetailsTableTableTableManager(
+            $_db, $_db.reservationDetailsTable)
         .filter((f) => f.reservationId.id.sqlEquals($_itemColumn<int>('id')!));
 
-    final cache = $_typedResult.readTableOrNull(_storageTableRefsTable($_db));
+    final cache =
+        $_typedResult.readTableOrNull(_reservationDetailsTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$StorageReservationTableTable,
+      List<StorageReservationTableData>> _storageReservationTableRefsTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.storageReservationTable,
+          aliasName: $_aliasNameGenerator(db.reservationsTable.id,
+              db.storageReservationTable.reservationId));
+
+  $$StorageReservationTableTableProcessedTableManager
+      get storageReservationTableRefs {
+    final manager = $$StorageReservationTableTableTableManager(
+            $_db, $_db.storageReservationTable)
+        .filter((f) => f.reservationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_storageReservationTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -5616,24 +7628,49 @@ class $$ReservationsTableTableFilterComposer
     return composer;
   }
 
-  Expression<bool> storageTableRefs(
-      Expression<bool> Function($$StorageTableTableFilterComposer f) f) {
-    final $$StorageTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.storageTable,
-        getReferencedColumn: (t) => t.reservationId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$StorageTableTableFilterComposer(
-              $db: $db,
-              $table: $db.storageTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+  Expression<bool> reservationDetailsTableRefs(
+      Expression<bool> Function($$ReservationDetailsTableTableFilterComposer f)
+          f) {
+    final $$ReservationDetailsTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.reservationDetailsTable,
+            getReferencedColumn: (t) => t.reservationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationDetailsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.reservationDetailsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<bool> storageReservationTableRefs(
+      Expression<bool> Function($$StorageReservationTableTableFilterComposer f)
+          f) {
+    final $$StorageReservationTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.storageReservationTable,
+            getReferencedColumn: (t) => t.reservationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$StorageReservationTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.storageReservationTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 }
@@ -5799,24 +7836,49 @@ class $$ReservationsTableTableAnnotationComposer
     return composer;
   }
 
-  Expression<T> storageTableRefs<T extends Object>(
-      Expression<T> Function($$StorageTableTableAnnotationComposer a) f) {
-    final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.storageTable,
-        getReferencedColumn: (t) => t.reservationId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$StorageTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.storageTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
+  Expression<T> reservationDetailsTableRefs<T extends Object>(
+      Expression<T> Function($$ReservationDetailsTableTableAnnotationComposer a)
+          f) {
+    final $$ReservationDetailsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.reservationDetailsTable,
+            getReferencedColumn: (t) => t.reservationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationDetailsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.reservationDetailsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> storageReservationTableRefs<T extends Object>(
+      Expression<T> Function($$StorageReservationTableTableAnnotationComposer a)
+          f) {
+    final $$StorageReservationTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.storageReservationTable,
+            getReferencedColumn: (t) => t.reservationId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$StorageReservationTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.storageReservationTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 }
@@ -5833,7 +7895,10 @@ class $$ReservationsTableTableTableManager extends RootTableManager<
     (ReservationsTableData, $$ReservationsTableTableReferences),
     ReservationsTableData,
     PrefetchHooks Function(
-        {bool plantTypeId, bool plantShapeId, bool storageTableRefs})> {
+        {bool plantTypeId,
+        bool plantShapeId,
+        bool reservationDetailsTableRefs,
+        bool storageReservationTableRefs})> {
   $$ReservationsTableTableTableManager(
       _$LocalDatabase db, $ReservationsTableTable table)
       : super(TableManagerState(
@@ -5911,10 +7976,14 @@ class $$ReservationsTableTableTableManager extends RootTableManager<
           prefetchHooksCallback: (
               {plantTypeId = false,
               plantShapeId = false,
-              storageTableRefs = false}) {
+              reservationDetailsTableRefs = false,
+              storageReservationTableRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (storageTableRefs) db.storageTable],
+              explicitlyWatchedTables: [
+                if (reservationDetailsTableRefs) db.reservationDetailsTable,
+                if (storageReservationTableRefs) db.storageReservationTable
+              ],
               addJoins: <
                   T extends TableManagerState<
                       dynamic,
@@ -5955,15 +8024,32 @@ class $$ReservationsTableTableTableManager extends RootTableManager<
               },
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (storageTableRefs)
-                    await $_getPrefetchedData<ReservationsTableData,
-                            $ReservationsTableTable, StorageTableData>(
+                  if (reservationDetailsTableRefs)
+                    await $_getPrefetchedData<
+                            ReservationsTableData,
+                            $ReservationsTableTable,
+                            ReservationDetailsTableData>(
                         currentTable: table,
                         referencedTable: $$ReservationsTableTableReferences
-                            ._storageTableRefsTable(db),
+                            ._reservationDetailsTableRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$ReservationsTableTableReferences(db, table, p0)
-                                .storageTableRefs,
+                                .reservationDetailsTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.reservationId == item.id),
+                        typedResults: items),
+                  if (storageReservationTableRefs)
+                    await $_getPrefetchedData<
+                            ReservationsTableData,
+                            $ReservationsTableTable,
+                            StorageReservationTableData>(
+                        currentTable: table,
+                        referencedTable: $$ReservationsTableTableReferences
+                            ._storageReservationTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ReservationsTableTableReferences(db, table, p0)
+                                .storageReservationTableRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.reservationId == item.id),
@@ -5987,568 +8073,10 @@ typedef $$ReservationsTableTableProcessedTableManager = ProcessedTableManager<
     (ReservationsTableData, $$ReservationsTableTableReferences),
     ReservationsTableData,
     PrefetchHooks Function(
-        {bool plantTypeId, bool plantShapeId, bool storageTableRefs})>;
-typedef $$StorageTableTableCreateCompanionBuilder = StorageTableCompanion
-    Function({
-  Value<int> id,
-  required int plantTypeId,
-  required int plantShapeId,
-  required int quantity,
-  Value<int?> parentOperationId,
-  Value<bool> isScheduled,
-  Value<int?> reservationId,
-  Value<String?> notes,
-});
-typedef $$StorageTableTableUpdateCompanionBuilder = StorageTableCompanion
-    Function({
-  Value<int> id,
-  Value<int> plantTypeId,
-  Value<int> plantShapeId,
-  Value<int> quantity,
-  Value<int?> parentOperationId,
-  Value<bool> isScheduled,
-  Value<int?> reservationId,
-  Value<String?> notes,
-});
-
-final class $$StorageTableTableReferences extends BaseReferences<
-    _$LocalDatabase, $StorageTableTable, StorageTableData> {
-  $$StorageTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static $PlantTypesTableTable _plantTypeIdTable(_$LocalDatabase db) =>
-      db.plantTypesTable.createAlias($_aliasNameGenerator(
-          db.storageTable.plantTypeId, db.plantTypesTable.id));
-
-  $$PlantTypesTableTableProcessedTableManager get plantTypeId {
-    final $_column = $_itemColumn<int>('plant_type_id')!;
-
-    final manager =
-        $$PlantTypesTableTableTableManager($_db, $_db.plantTypesTable)
-            .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_plantTypeIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static $PlantShapesTableTable _plantShapeIdTable(_$LocalDatabase db) =>
-      db.plantShapesTable.createAlias($_aliasNameGenerator(
-          db.storageTable.plantShapeId, db.plantShapesTable.id));
-
-  $$PlantShapesTableTableProcessedTableManager get plantShapeId {
-    final $_column = $_itemColumn<int>('plant_shape_id')!;
-
-    final manager =
-        $$PlantShapesTableTableTableManager($_db, $_db.plantShapesTable)
-            .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_plantShapeIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static $OperationsTableTable _parentOperationIdTable(_$LocalDatabase db) =>
-      db.operationsTable.createAlias($_aliasNameGenerator(
-          db.storageTable.parentOperationId, db.operationsTable.id));
-
-  $$OperationsTableTableProcessedTableManager? get parentOperationId {
-    final $_column = $_itemColumn<int>('parent_operation_id');
-    if ($_column == null) return null;
-    final manager =
-        $$OperationsTableTableTableManager($_db, $_db.operationsTable)
-            .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_parentOperationIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static $ReservationsTableTable _reservationIdTable(_$LocalDatabase db) =>
-      db.reservationsTable.createAlias($_aliasNameGenerator(
-          db.storageTable.reservationId, db.reservationsTable.id));
-
-  $$ReservationsTableTableProcessedTableManager? get reservationId {
-    final $_column = $_itemColumn<int>('reservation_id');
-    if ($_column == null) return null;
-    final manager =
-        $$ReservationsTableTableTableManager($_db, $_db.reservationsTable)
-            .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_reservationIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-}
-
-class $$StorageTableTableFilterComposer
-    extends Composer<_$LocalDatabase, $StorageTableTable> {
-  $$StorageTableTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<int> get quantity => $composableBuilder(
-      column: $table.quantity, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<bool> get isScheduled => $composableBuilder(
-      column: $table.isScheduled, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnFilters(column));
-
-  $$PlantTypesTableTableFilterComposer get plantTypeId {
-    final $$PlantTypesTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.plantTypeId,
-        referencedTable: $db.plantTypesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantTypesTableTableFilterComposer(
-              $db: $db,
-              $table: $db.plantTypesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$PlantShapesTableTableFilterComposer get plantShapeId {
-    final $$PlantShapesTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.plantShapeId,
-        referencedTable: $db.plantShapesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantShapesTableTableFilterComposer(
-              $db: $db,
-              $table: $db.plantShapesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$OperationsTableTableFilterComposer get parentOperationId {
-    final $$OperationsTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.parentOperationId,
-        referencedTable: $db.operationsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$OperationsTableTableFilterComposer(
-              $db: $db,
-              $table: $db.operationsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$ReservationsTableTableFilterComposer get reservationId {
-    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.reservationId,
-        referencedTable: $db.reservationsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$ReservationsTableTableFilterComposer(
-              $db: $db,
-              $table: $db.reservationsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-}
-
-class $$StorageTableTableOrderingComposer
-    extends Composer<_$LocalDatabase, $StorageTableTable> {
-  $$StorageTableTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<int> get quantity => $composableBuilder(
-      column: $table.quantity, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<bool> get isScheduled => $composableBuilder(
-      column: $table.isScheduled, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get notes => $composableBuilder(
-      column: $table.notes, builder: (column) => ColumnOrderings(column));
-
-  $$PlantTypesTableTableOrderingComposer get plantTypeId {
-    final $$PlantTypesTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.plantTypeId,
-        referencedTable: $db.plantTypesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantTypesTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.plantTypesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$PlantShapesTableTableOrderingComposer get plantShapeId {
-    final $$PlantShapesTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.plantShapeId,
-        referencedTable: $db.plantShapesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantShapesTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.plantShapesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$OperationsTableTableOrderingComposer get parentOperationId {
-    final $$OperationsTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.parentOperationId,
-        referencedTable: $db.operationsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$OperationsTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.operationsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$ReservationsTableTableOrderingComposer get reservationId {
-    final $$ReservationsTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.reservationId,
-        referencedTable: $db.reservationsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$ReservationsTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.reservationsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-}
-
-class $$StorageTableTableAnnotationComposer
-    extends Composer<_$LocalDatabase, $StorageTableTable> {
-  $$StorageTableTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<int> get quantity =>
-      $composableBuilder(column: $table.quantity, builder: (column) => column);
-
-  GeneratedColumn<bool> get isScheduled => $composableBuilder(
-      column: $table.isScheduled, builder: (column) => column);
-
-  GeneratedColumn<String> get notes =>
-      $composableBuilder(column: $table.notes, builder: (column) => column);
-
-  $$PlantTypesTableTableAnnotationComposer get plantTypeId {
-    final $$PlantTypesTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.plantTypeId,
-        referencedTable: $db.plantTypesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantTypesTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.plantTypesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$PlantShapesTableTableAnnotationComposer get plantShapeId {
-    final $$PlantShapesTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.plantShapeId,
-        referencedTable: $db.plantShapesTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$PlantShapesTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.plantShapesTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$OperationsTableTableAnnotationComposer get parentOperationId {
-    final $$OperationsTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.parentOperationId,
-        referencedTable: $db.operationsTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$OperationsTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.operationsTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$ReservationsTableTableAnnotationComposer get reservationId {
-    final $$ReservationsTableTableAnnotationComposer composer =
-        $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.reservationId,
-            referencedTable: $db.reservationsTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$ReservationsTableTableAnnotationComposer(
-                  $db: $db,
-                  $table: $db.reservationsTable,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
-    return composer;
-  }
-}
-
-class $$StorageTableTableTableManager extends RootTableManager<
-    _$LocalDatabase,
-    $StorageTableTable,
-    StorageTableData,
-    $$StorageTableTableFilterComposer,
-    $$StorageTableTableOrderingComposer,
-    $$StorageTableTableAnnotationComposer,
-    $$StorageTableTableCreateCompanionBuilder,
-    $$StorageTableTableUpdateCompanionBuilder,
-    (StorageTableData, $$StorageTableTableReferences),
-    StorageTableData,
-    PrefetchHooks Function(
         {bool plantTypeId,
         bool plantShapeId,
-        bool parentOperationId,
-        bool reservationId})> {
-  $$StorageTableTableTableManager(_$LocalDatabase db, $StorageTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$StorageTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$StorageTableTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$StorageTableTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<int> plantTypeId = const Value.absent(),
-            Value<int> plantShapeId = const Value.absent(),
-            Value<int> quantity = const Value.absent(),
-            Value<int?> parentOperationId = const Value.absent(),
-            Value<bool> isScheduled = const Value.absent(),
-            Value<int?> reservationId = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-          }) =>
-              StorageTableCompanion(
-            id: id,
-            plantTypeId: plantTypeId,
-            plantShapeId: plantShapeId,
-            quantity: quantity,
-            parentOperationId: parentOperationId,
-            isScheduled: isScheduled,
-            reservationId: reservationId,
-            notes: notes,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required int plantTypeId,
-            required int plantShapeId,
-            required int quantity,
-            Value<int?> parentOperationId = const Value.absent(),
-            Value<bool> isScheduled = const Value.absent(),
-            Value<int?> reservationId = const Value.absent(),
-            Value<String?> notes = const Value.absent(),
-          }) =>
-              StorageTableCompanion.insert(
-            id: id,
-            plantTypeId: plantTypeId,
-            plantShapeId: plantShapeId,
-            quantity: quantity,
-            parentOperationId: parentOperationId,
-            isScheduled: isScheduled,
-            reservationId: reservationId,
-            notes: notes,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$StorageTableTableReferences(db, table, e)
-                  ))
-              .toList(),
-          prefetchHooksCallback: (
-              {plantTypeId = false,
-              plantShapeId = false,
-              parentOperationId = false,
-              reservationId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (plantTypeId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.plantTypeId,
-                    referencedTable:
-                        $$StorageTableTableReferences._plantTypeIdTable(db),
-                    referencedColumn:
-                        $$StorageTableTableReferences._plantTypeIdTable(db).id,
-                  ) as T;
-                }
-                if (plantShapeId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.plantShapeId,
-                    referencedTable:
-                        $$StorageTableTableReferences._plantShapeIdTable(db),
-                    referencedColumn:
-                        $$StorageTableTableReferences._plantShapeIdTable(db).id,
-                  ) as T;
-                }
-                if (parentOperationId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.parentOperationId,
-                    referencedTable: $$StorageTableTableReferences
-                        ._parentOperationIdTable(db),
-                    referencedColumn: $$StorageTableTableReferences
-                        ._parentOperationIdTable(db)
-                        .id,
-                  ) as T;
-                }
-                if (reservationId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.reservationId,
-                    referencedTable:
-                        $$StorageTableTableReferences._reservationIdTable(db),
-                    referencedColumn: $$StorageTableTableReferences
-                        ._reservationIdTable(db)
-                        .id,
-                  ) as T;
-                }
-
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [];
-              },
-            );
-          },
-        ));
-}
-
-typedef $$StorageTableTableProcessedTableManager = ProcessedTableManager<
-    _$LocalDatabase,
-    $StorageTableTable,
-    StorageTableData,
-    $$StorageTableTableFilterComposer,
-    $$StorageTableTableOrderingComposer,
-    $$StorageTableTableAnnotationComposer,
-    $$StorageTableTableCreateCompanionBuilder,
-    $$StorageTableTableUpdateCompanionBuilder,
-    (StorageTableData, $$StorageTableTableReferences),
-    StorageTableData,
-    PrefetchHooks Function(
-        {bool plantTypeId,
-        bool plantShapeId,
-        bool parentOperationId,
-        bool reservationId})>;
+        bool reservationDetailsTableRefs,
+        bool storageReservationTableRefs})>;
 typedef $$PricesTableTableCreateCompanionBuilder = PricesTableCompanion
     Function({
   Value<int> id,
@@ -6881,6 +8409,1635 @@ typedef $$PricesTableTableProcessedTableManager = ProcessedTableManager<
     (PricesTableData, $$PricesTableTableReferences),
     PricesTableData,
     PrefetchHooks Function({bool plantTypeId, bool plantShapeId})>;
+typedef $$ChancesTableTableCreateCompanionBuilder = ChancesTableCompanion
+    Function({
+  Value<int> id,
+  required double successRate,
+  required int shapeId,
+  required int typeId,
+  required int quantity,
+  required DateTime maturityDate,
+});
+typedef $$ChancesTableTableUpdateCompanionBuilder = ChancesTableCompanion
+    Function({
+  Value<int> id,
+  Value<double> successRate,
+  Value<int> shapeId,
+  Value<int> typeId,
+  Value<int> quantity,
+  Value<DateTime> maturityDate,
+});
+
+final class $$ChancesTableTableReferences extends BaseReferences<
+    _$LocalDatabase, $ChancesTableTable, ChancesTableData> {
+  $$ChancesTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $PlantShapesTableTable _shapeIdTable(_$LocalDatabase db) =>
+      db.plantShapesTable.createAlias($_aliasNameGenerator(
+          db.chancesTable.shapeId, db.plantShapesTable.id));
+
+  $$PlantShapesTableTableProcessedTableManager get shapeId {
+    final $_column = $_itemColumn<int>('shape_id')!;
+
+    final manager =
+        $$PlantShapesTableTableTableManager($_db, $_db.plantShapesTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_shapeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $PlantTypesTableTable _typeIdTable(_$LocalDatabase db) =>
+      db.plantTypesTable.createAlias(
+          $_aliasNameGenerator(db.chancesTable.typeId, db.plantTypesTable.id));
+
+  $$PlantTypesTableTableProcessedTableManager get typeId {
+    final $_column = $_itemColumn<int>('type_id')!;
+
+    final manager =
+        $$PlantTypesTableTableTableManager($_db, $_db.plantTypesTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_typeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$ParentChildChancesTableTable,
+      List<ParentChildChancesTableData>> _parentChanceTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.parentChildChancesTable,
+          aliasName: $_aliasNameGenerator(
+              db.chancesTable.id, db.parentChildChancesTable.parentId));
+
+  $$ParentChildChancesTableTableProcessedTableManager get parentChance {
+    final manager = $$ParentChildChancesTableTableTableManager(
+            $_db, $_db.parentChildChancesTable)
+        .filter((f) => f.parentId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_parentChanceTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$ParentChildChancesTableTable,
+      List<ParentChildChancesTableData>> _childChanceTable(
+          _$LocalDatabase db) =>
+      MultiTypedResultKey.fromTable(db.parentChildChancesTable,
+          aliasName: $_aliasNameGenerator(
+              db.chancesTable.id, db.parentChildChancesTable.childId));
+
+  $$ParentChildChancesTableTableProcessedTableManager get childChance {
+    final manager = $$ParentChildChancesTableTableTableManager(
+            $_db, $_db.parentChildChancesTable)
+        .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_childChanceTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$ChancesTableTableFilterComposer
+    extends Composer<_$LocalDatabase, $ChancesTableTable> {
+  $$ChancesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get successRate => $composableBuilder(
+      column: $table.successRate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get maturityDate => $composableBuilder(
+      column: $table.maturityDate, builder: (column) => ColumnFilters(column));
+
+  $$PlantShapesTableTableFilterComposer get shapeId {
+    final $$PlantShapesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.shapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantTypesTableTableFilterComposer get typeId {
+    final $$PlantTypesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.typeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> parentChance(
+      Expression<bool> Function($$ParentChildChancesTableTableFilterComposer f)
+          f) {
+    final $$ParentChildChancesTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.parentChildChancesTable,
+            getReferencedColumn: (t) => t.parentId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ParentChildChancesTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.parentChildChancesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<bool> childChance(
+      Expression<bool> Function($$ParentChildChancesTableTableFilterComposer f)
+          f) {
+    final $$ParentChildChancesTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.parentChildChancesTable,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ParentChildChancesTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.parentChildChancesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$ChancesTableTableOrderingComposer
+    extends Composer<_$LocalDatabase, $ChancesTableTable> {
+  $$ChancesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get successRate => $composableBuilder(
+      column: $table.successRate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get maturityDate => $composableBuilder(
+      column: $table.maturityDate,
+      builder: (column) => ColumnOrderings(column));
+
+  $$PlantShapesTableTableOrderingComposer get shapeId {
+    final $$PlantShapesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.shapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantTypesTableTableOrderingComposer get typeId {
+    final $$PlantTypesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.typeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ChancesTableTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $ChancesTableTable> {
+  $$ChancesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<double> get successRate => $composableBuilder(
+      column: $table.successRate, builder: (column) => column);
+
+  GeneratedColumn<int> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get maturityDate => $composableBuilder(
+      column: $table.maturityDate, builder: (column) => column);
+
+  $$PlantShapesTableTableAnnotationComposer get shapeId {
+    final $$PlantShapesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.shapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantTypesTableTableAnnotationComposer get typeId {
+    final $$PlantTypesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.typeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> parentChance<T extends Object>(
+      Expression<T> Function($$ParentChildChancesTableTableAnnotationComposer a)
+          f) {
+    final $$ParentChildChancesTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.parentChildChancesTable,
+            getReferencedColumn: (t) => t.parentId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ParentChildChancesTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.parentChildChancesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> childChance<T extends Object>(
+      Expression<T> Function($$ParentChildChancesTableTableAnnotationComposer a)
+          f) {
+    final $$ParentChildChancesTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.parentChildChancesTable,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ParentChildChancesTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.parentChildChancesTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$ChancesTableTableTableManager extends RootTableManager<
+    _$LocalDatabase,
+    $ChancesTableTable,
+    ChancesTableData,
+    $$ChancesTableTableFilterComposer,
+    $$ChancesTableTableOrderingComposer,
+    $$ChancesTableTableAnnotationComposer,
+    $$ChancesTableTableCreateCompanionBuilder,
+    $$ChancesTableTableUpdateCompanionBuilder,
+    (ChancesTableData, $$ChancesTableTableReferences),
+    ChancesTableData,
+    PrefetchHooks Function(
+        {bool shapeId, bool typeId, bool parentChance, bool childChance})> {
+  $$ChancesTableTableTableManager(_$LocalDatabase db, $ChancesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ChancesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ChancesTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ChancesTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<double> successRate = const Value.absent(),
+            Value<int> shapeId = const Value.absent(),
+            Value<int> typeId = const Value.absent(),
+            Value<int> quantity = const Value.absent(),
+            Value<DateTime> maturityDate = const Value.absent(),
+          }) =>
+              ChancesTableCompanion(
+            id: id,
+            successRate: successRate,
+            shapeId: shapeId,
+            typeId: typeId,
+            quantity: quantity,
+            maturityDate: maturityDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required double successRate,
+            required int shapeId,
+            required int typeId,
+            required int quantity,
+            required DateTime maturityDate,
+          }) =>
+              ChancesTableCompanion.insert(
+            id: id,
+            successRate: successRate,
+            shapeId: shapeId,
+            typeId: typeId,
+            quantity: quantity,
+            maturityDate: maturityDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ChancesTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {shapeId = false,
+              typeId = false,
+              parentChance = false,
+              childChance = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (parentChance) db.parentChildChancesTable,
+                if (childChance) db.parentChildChancesTable
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (shapeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.shapeId,
+                    referencedTable:
+                        $$ChancesTableTableReferences._shapeIdTable(db),
+                    referencedColumn:
+                        $$ChancesTableTableReferences._shapeIdTable(db).id,
+                  ) as T;
+                }
+                if (typeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.typeId,
+                    referencedTable:
+                        $$ChancesTableTableReferences._typeIdTable(db),
+                    referencedColumn:
+                        $$ChancesTableTableReferences._typeIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (parentChance)
+                    await $_getPrefetchedData<ChancesTableData,
+                            $ChancesTableTable, ParentChildChancesTableData>(
+                        currentTable: table,
+                        referencedTable: $$ChancesTableTableReferences
+                            ._parentChanceTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChancesTableTableReferences(db, table, p0)
+                                .parentChance,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.parentId == item.id),
+                        typedResults: items),
+                  if (childChance)
+                    await $_getPrefetchedData<ChancesTableData,
+                            $ChancesTableTable, ParentChildChancesTableData>(
+                        currentTable: table,
+                        referencedTable:
+                            $$ChancesTableTableReferences._childChanceTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChancesTableTableReferences(db, table, p0)
+                                .childChance,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ChancesTableTableProcessedTableManager = ProcessedTableManager<
+    _$LocalDatabase,
+    $ChancesTableTable,
+    ChancesTableData,
+    $$ChancesTableTableFilterComposer,
+    $$ChancesTableTableOrderingComposer,
+    $$ChancesTableTableAnnotationComposer,
+    $$ChancesTableTableCreateCompanionBuilder,
+    $$ChancesTableTableUpdateCompanionBuilder,
+    (ChancesTableData, $$ChancesTableTableReferences),
+    ChancesTableData,
+    PrefetchHooks Function(
+        {bool shapeId, bool typeId, bool parentChance, bool childChance})>;
+typedef $$ParentChildChancesTableTableCreateCompanionBuilder
+    = ParentChildChancesTableCompanion Function({
+  required int parentId,
+  required int childId,
+  Value<int> rowid,
+});
+typedef $$ParentChildChancesTableTableUpdateCompanionBuilder
+    = ParentChildChancesTableCompanion Function({
+  Value<int> parentId,
+  Value<int> childId,
+  Value<int> rowid,
+});
+
+final class $$ParentChildChancesTableTableReferences extends BaseReferences<
+    _$LocalDatabase,
+    $ParentChildChancesTableTable,
+    ParentChildChancesTableData> {
+  $$ParentChildChancesTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChancesTableTable _parentIdTable(_$LocalDatabase db) =>
+      db.chancesTable.createAlias($_aliasNameGenerator(
+          db.parentChildChancesTable.parentId, db.chancesTable.id));
+
+  $$ChancesTableTableProcessedTableManager get parentId {
+    final $_column = $_itemColumn<int>('parent_id')!;
+
+    final manager = $$ChancesTableTableTableManager($_db, $_db.chancesTable)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_parentIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $ChancesTableTable _childIdTable(_$LocalDatabase db) =>
+      db.chancesTable.createAlias($_aliasNameGenerator(
+          db.parentChildChancesTable.childId, db.chancesTable.id));
+
+  $$ChancesTableTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
+    final manager = $$ChancesTableTableTableManager($_db, $_db.chancesTable)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$ParentChildChancesTableTableFilterComposer
+    extends Composer<_$LocalDatabase, $ParentChildChancesTableTable> {
+  $$ParentChildChancesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$ChancesTableTableFilterComposer get parentId {
+    final $$ChancesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentId,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ChancesTableTableFilterComposer get childId {
+    final $$ChancesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ParentChildChancesTableTableOrderingComposer
+    extends Composer<_$LocalDatabase, $ParentChildChancesTableTable> {
+  $$ParentChildChancesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$ChancesTableTableOrderingComposer get parentId {
+    final $$ChancesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentId,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ChancesTableTableOrderingComposer get childId {
+    final $$ChancesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ParentChildChancesTableTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $ParentChildChancesTableTable> {
+  $$ParentChildChancesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$ChancesTableTableAnnotationComposer get parentId {
+    final $$ChancesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentId,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ChancesTableTableAnnotationComposer get childId {
+    final $$ChancesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.chancesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChancesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.chancesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ParentChildChancesTableTableTableManager extends RootTableManager<
+    _$LocalDatabase,
+    $ParentChildChancesTableTable,
+    ParentChildChancesTableData,
+    $$ParentChildChancesTableTableFilterComposer,
+    $$ParentChildChancesTableTableOrderingComposer,
+    $$ParentChildChancesTableTableAnnotationComposer,
+    $$ParentChildChancesTableTableCreateCompanionBuilder,
+    $$ParentChildChancesTableTableUpdateCompanionBuilder,
+    (ParentChildChancesTableData, $$ParentChildChancesTableTableReferences),
+    ParentChildChancesTableData,
+    PrefetchHooks Function({bool parentId, bool childId})> {
+  $$ParentChildChancesTableTableTableManager(
+      _$LocalDatabase db, $ParentChildChancesTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ParentChildChancesTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ParentChildChancesTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ParentChildChancesTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> parentId = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ParentChildChancesTableCompanion(
+            parentId: parentId,
+            childId: childId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int parentId,
+            required int childId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ParentChildChancesTableCompanion.insert(
+            parentId: parentId,
+            childId: childId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ParentChildChancesTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({parentId = false, childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (parentId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.parentId,
+                    referencedTable: $$ParentChildChancesTableTableReferences
+                        ._parentIdTable(db),
+                    referencedColumn: $$ParentChildChancesTableTableReferences
+                        ._parentIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable: $$ParentChildChancesTableTableReferences
+                        ._childIdTable(db),
+                    referencedColumn: $$ParentChildChancesTableTableReferences
+                        ._childIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ParentChildChancesTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$LocalDatabase,
+        $ParentChildChancesTableTable,
+        ParentChildChancesTableData,
+        $$ParentChildChancesTableTableFilterComposer,
+        $$ParentChildChancesTableTableOrderingComposer,
+        $$ParentChildChancesTableTableAnnotationComposer,
+        $$ParentChildChancesTableTableCreateCompanionBuilder,
+        $$ParentChildChancesTableTableUpdateCompanionBuilder,
+        (ParentChildChancesTableData, $$ParentChildChancesTableTableReferences),
+        ParentChildChancesTableData,
+        PrefetchHooks Function({bool parentId, bool childId})>;
+typedef $$ReservationDetailsTableTableCreateCompanionBuilder
+    = ReservationDetailsTableCompanion Function({
+  Value<int> id,
+  required int reservationId,
+  required int shapeId,
+  required int typeId,
+  required int quantity,
+  Value<ReservationStatus> status,
+});
+typedef $$ReservationDetailsTableTableUpdateCompanionBuilder
+    = ReservationDetailsTableCompanion Function({
+  Value<int> id,
+  Value<int> reservationId,
+  Value<int> shapeId,
+  Value<int> typeId,
+  Value<int> quantity,
+  Value<ReservationStatus> status,
+});
+
+final class $$ReservationDetailsTableTableReferences extends BaseReferences<
+    _$LocalDatabase,
+    $ReservationDetailsTableTable,
+    ReservationDetailsTableData> {
+  $$ReservationDetailsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ReservationsTableTable _reservationIdTable(_$LocalDatabase db) =>
+      db.reservationsTable.createAlias($_aliasNameGenerator(
+          db.reservationDetailsTable.reservationId, db.reservationsTable.id));
+
+  $$ReservationsTableTableProcessedTableManager get reservationId {
+    final $_column = $_itemColumn<int>('reservation_id')!;
+
+    final manager =
+        $$ReservationsTableTableTableManager($_db, $_db.reservationsTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_reservationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $PlantShapesTableTable _shapeIdTable(_$LocalDatabase db) =>
+      db.plantShapesTable.createAlias($_aliasNameGenerator(
+          db.reservationDetailsTable.shapeId, db.plantShapesTable.id));
+
+  $$PlantShapesTableTableProcessedTableManager get shapeId {
+    final $_column = $_itemColumn<int>('shape_id')!;
+
+    final manager =
+        $$PlantShapesTableTableTableManager($_db, $_db.plantShapesTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_shapeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $PlantTypesTableTable _typeIdTable(_$LocalDatabase db) =>
+      db.plantTypesTable.createAlias($_aliasNameGenerator(
+          db.reservationDetailsTable.typeId, db.plantTypesTable.id));
+
+  $$PlantTypesTableTableProcessedTableManager get typeId {
+    final $_column = $_itemColumn<int>('type_id')!;
+
+    final manager =
+        $$PlantTypesTableTableTableManager($_db, $_db.plantTypesTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_typeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$ReservationDetailsTableTableFilterComposer
+    extends Composer<_$LocalDatabase, $ReservationDetailsTableTable> {
+  $$ReservationDetailsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<ReservationStatus, ReservationStatus, int>
+      get status => $composableBuilder(
+          column: $table.status,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  $$ReservationsTableTableFilterComposer get reservationId {
+    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.reservationId,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableFilterComposer get shapeId {
+    final $$PlantShapesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.shapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantTypesTableTableFilterComposer get typeId {
+    final $$PlantTypesTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.typeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableFilterComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ReservationDetailsTableTableOrderingComposer
+    extends Composer<_$LocalDatabase, $ReservationDetailsTableTable> {
+  $$ReservationDetailsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get status => $composableBuilder(
+      column: $table.status, builder: (column) => ColumnOrderings(column));
+
+  $$ReservationsTableTableOrderingComposer get reservationId {
+    final $$ReservationsTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.reservationId,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableOrderingComposer get shapeId {
+    final $$PlantShapesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.shapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantTypesTableTableOrderingComposer get typeId {
+    final $$PlantTypesTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.typeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ReservationDetailsTableTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $ReservationDetailsTableTable> {
+  $$ReservationDetailsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<ReservationStatus, int> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  $$ReservationsTableTableAnnotationComposer get reservationId {
+    final $$ReservationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.reservationId,
+            referencedTable: $db.reservationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.reservationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+
+  $$PlantShapesTableTableAnnotationComposer get shapeId {
+    final $$PlantShapesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.shapeId,
+        referencedTable: $db.plantShapesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantShapesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plantShapesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$PlantTypesTableTableAnnotationComposer get typeId {
+    final $$PlantTypesTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.typeId,
+        referencedTable: $db.plantTypesTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$PlantTypesTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.plantTypesTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$ReservationDetailsTableTableTableManager extends RootTableManager<
+    _$LocalDatabase,
+    $ReservationDetailsTableTable,
+    ReservationDetailsTableData,
+    $$ReservationDetailsTableTableFilterComposer,
+    $$ReservationDetailsTableTableOrderingComposer,
+    $$ReservationDetailsTableTableAnnotationComposer,
+    $$ReservationDetailsTableTableCreateCompanionBuilder,
+    $$ReservationDetailsTableTableUpdateCompanionBuilder,
+    (ReservationDetailsTableData, $$ReservationDetailsTableTableReferences),
+    ReservationDetailsTableData,
+    PrefetchHooks Function({bool reservationId, bool shapeId, bool typeId})> {
+  $$ReservationDetailsTableTableTableManager(
+      _$LocalDatabase db, $ReservationDetailsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ReservationDetailsTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ReservationDetailsTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ReservationDetailsTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> reservationId = const Value.absent(),
+            Value<int> shapeId = const Value.absent(),
+            Value<int> typeId = const Value.absent(),
+            Value<int> quantity = const Value.absent(),
+            Value<ReservationStatus> status = const Value.absent(),
+          }) =>
+              ReservationDetailsTableCompanion(
+            id: id,
+            reservationId: reservationId,
+            shapeId: shapeId,
+            typeId: typeId,
+            quantity: quantity,
+            status: status,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int reservationId,
+            required int shapeId,
+            required int typeId,
+            required int quantity,
+            Value<ReservationStatus> status = const Value.absent(),
+          }) =>
+              ReservationDetailsTableCompanion.insert(
+            id: id,
+            reservationId: reservationId,
+            shapeId: shapeId,
+            typeId: typeId,
+            quantity: quantity,
+            status: status,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$ReservationDetailsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {reservationId = false, shapeId = false, typeId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (reservationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.reservationId,
+                    referencedTable: $$ReservationDetailsTableTableReferences
+                        ._reservationIdTable(db),
+                    referencedColumn: $$ReservationDetailsTableTableReferences
+                        ._reservationIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (shapeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.shapeId,
+                    referencedTable: $$ReservationDetailsTableTableReferences
+                        ._shapeIdTable(db),
+                    referencedColumn: $$ReservationDetailsTableTableReferences
+                        ._shapeIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (typeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.typeId,
+                    referencedTable: $$ReservationDetailsTableTableReferences
+                        ._typeIdTable(db),
+                    referencedColumn: $$ReservationDetailsTableTableReferences
+                        ._typeIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ReservationDetailsTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$LocalDatabase,
+        $ReservationDetailsTableTable,
+        ReservationDetailsTableData,
+        $$ReservationDetailsTableTableFilterComposer,
+        $$ReservationDetailsTableTableOrderingComposer,
+        $$ReservationDetailsTableTableAnnotationComposer,
+        $$ReservationDetailsTableTableCreateCompanionBuilder,
+        $$ReservationDetailsTableTableUpdateCompanionBuilder,
+        (ReservationDetailsTableData, $$ReservationDetailsTableTableReferences),
+        ReservationDetailsTableData,
+        PrefetchHooks Function(
+            {bool reservationId, bool shapeId, bool typeId})>;
+typedef $$StorageReservationTableTableCreateCompanionBuilder
+    = StorageReservationTableCompanion Function({
+  required int storageId,
+  required int reservationId,
+  required int quantity,
+  Value<int> rowid,
+});
+typedef $$StorageReservationTableTableUpdateCompanionBuilder
+    = StorageReservationTableCompanion Function({
+  Value<int> storageId,
+  Value<int> reservationId,
+  Value<int> quantity,
+  Value<int> rowid,
+});
+
+final class $$StorageReservationTableTableReferences extends BaseReferences<
+    _$LocalDatabase,
+    $StorageReservationTableTable,
+    StorageReservationTableData> {
+  $$StorageReservationTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $StorageTableTable _storageIdTable(_$LocalDatabase db) =>
+      db.storageTable.createAlias($_aliasNameGenerator(
+          db.storageReservationTable.storageId, db.storageTable.id));
+
+  $$StorageTableTableProcessedTableManager get storageId {
+    final $_column = $_itemColumn<int>('storage_id')!;
+
+    final manager = $$StorageTableTableTableManager($_db, $_db.storageTable)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_storageIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $ReservationsTableTable _reservationIdTable(_$LocalDatabase db) =>
+      db.reservationsTable.createAlias($_aliasNameGenerator(
+          db.storageReservationTable.reservationId, db.reservationsTable.id));
+
+  $$ReservationsTableTableProcessedTableManager get reservationId {
+    final $_column = $_itemColumn<int>('reservation_id')!;
+
+    final manager =
+        $$ReservationsTableTableTableManager($_db, $_db.reservationsTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_reservationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$StorageReservationTableTableFilterComposer
+    extends Composer<_$LocalDatabase, $StorageReservationTableTable> {
+  $$StorageReservationTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnFilters(column));
+
+  $$StorageTableTableFilterComposer get storageId {
+    final $$StorageTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.storageId,
+        referencedTable: $db.storageTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StorageTableTableFilterComposer(
+              $db: $db,
+              $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ReservationsTableTableFilterComposer get reservationId {
+    final $$ReservationsTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.reservationId,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableFilterComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$StorageReservationTableTableOrderingComposer
+    extends Composer<_$LocalDatabase, $StorageReservationTableTable> {
+  $$StorageReservationTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get quantity => $composableBuilder(
+      column: $table.quantity, builder: (column) => ColumnOrderings(column));
+
+  $$StorageTableTableOrderingComposer get storageId {
+    final $$StorageTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.storageId,
+        referencedTable: $db.storageTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StorageTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ReservationsTableTableOrderingComposer get reservationId {
+    final $$ReservationsTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.reservationId,
+        referencedTable: $db.reservationsTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ReservationsTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.reservationsTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$StorageReservationTableTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $StorageReservationTableTable> {
+  $$StorageReservationTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  $$StorageTableTableAnnotationComposer get storageId {
+    final $$StorageTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.storageId,
+        referencedTable: $db.storageTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StorageTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.storageTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ReservationsTableTableAnnotationComposer get reservationId {
+    final $$ReservationsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.reservationId,
+            referencedTable: $db.reservationsTable,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ReservationsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.reservationsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$StorageReservationTableTableTableManager extends RootTableManager<
+    _$LocalDatabase,
+    $StorageReservationTableTable,
+    StorageReservationTableData,
+    $$StorageReservationTableTableFilterComposer,
+    $$StorageReservationTableTableOrderingComposer,
+    $$StorageReservationTableTableAnnotationComposer,
+    $$StorageReservationTableTableCreateCompanionBuilder,
+    $$StorageReservationTableTableUpdateCompanionBuilder,
+    (StorageReservationTableData, $$StorageReservationTableTableReferences),
+    StorageReservationTableData,
+    PrefetchHooks Function({bool storageId, bool reservationId})> {
+  $$StorageReservationTableTableTableManager(
+      _$LocalDatabase db, $StorageReservationTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StorageReservationTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$StorageReservationTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$StorageReservationTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> storageId = const Value.absent(),
+            Value<int> reservationId = const Value.absent(),
+            Value<int> quantity = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              StorageReservationTableCompanion(
+            storageId: storageId,
+            reservationId: reservationId,
+            quantity: quantity,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int storageId,
+            required int reservationId,
+            required int quantity,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              StorageReservationTableCompanion.insert(
+            storageId: storageId,
+            reservationId: reservationId,
+            quantity: quantity,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$StorageReservationTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({storageId = false, reservationId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (storageId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.storageId,
+                    referencedTable: $$StorageReservationTableTableReferences
+                        ._storageIdTable(db),
+                    referencedColumn: $$StorageReservationTableTableReferences
+                        ._storageIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (reservationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.reservationId,
+                    referencedTable: $$StorageReservationTableTableReferences
+                        ._reservationIdTable(db),
+                    referencedColumn: $$StorageReservationTableTableReferences
+                        ._reservationIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$StorageReservationTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$LocalDatabase,
+        $StorageReservationTableTable,
+        StorageReservationTableData,
+        $$StorageReservationTableTableFilterComposer,
+        $$StorageReservationTableTableOrderingComposer,
+        $$StorageReservationTableTableAnnotationComposer,
+        $$StorageReservationTableTableCreateCompanionBuilder,
+        $$StorageReservationTableTableUpdateCompanionBuilder,
+        (StorageReservationTableData, $$StorageReservationTableTableReferences),
+        StorageReservationTableData,
+        PrefetchHooks Function({bool storageId, bool reservationId})>;
 
 class $LocalDatabaseManager {
   final _$LocalDatabase _db;
@@ -6895,10 +10052,21 @@ class $LocalDatabaseManager {
       $$OperationTypesTableTableTableManager(_db, _db.operationTypesTable);
   $$OperationsTableTableTableManager get operationsTable =>
       $$OperationsTableTableTableManager(_db, _db.operationsTable);
-  $$ReservationsTableTableTableManager get reservationsTable =>
-      $$ReservationsTableTableTableManager(_db, _db.reservationsTable);
   $$StorageTableTableTableManager get storageTable =>
       $$StorageTableTableTableManager(_db, _db.storageTable);
+  $$ReservationsTableTableTableManager get reservationsTable =>
+      $$ReservationsTableTableTableManager(_db, _db.reservationsTable);
   $$PricesTableTableTableManager get pricesTable =>
       $$PricesTableTableTableManager(_db, _db.pricesTable);
+  $$ChancesTableTableTableManager get chancesTable =>
+      $$ChancesTableTableTableManager(_db, _db.chancesTable);
+  $$ParentChildChancesTableTableTableManager get parentChildChancesTable =>
+      $$ParentChildChancesTableTableTableManager(
+          _db, _db.parentChildChancesTable);
+  $$ReservationDetailsTableTableTableManager get reservationDetailsTable =>
+      $$ReservationDetailsTableTableTableManager(
+          _db, _db.reservationDetailsTable);
+  $$StorageReservationTableTableTableManager get storageReservationTable =>
+      $$StorageReservationTableTableTableManager(
+          _db, _db.storageReservationTable);
 }

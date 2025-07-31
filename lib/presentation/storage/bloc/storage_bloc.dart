@@ -18,8 +18,8 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
   StorageBloc( this.storageRepository) : super(StorageInitial()) {
     on<LoadAllStorages>(_onLoadAllStorages);
     on<LoadStorageById>(_onLoadStorageById);
-    on<AddStorage>(_onAddStorage);
-    on<UpdateStorage>(_onUpdateStorage);
+   // on<AddStorage>(_onAddStorage);
+  //  on<UpdateStorage>(_onUpdateStorage);
     on<DeleteStorage>(_onDeleteStorage);
     on<IncreaseQuantity>(_onIncreaseQuantity);
     on<DecreaseQuantity>(_onDecreaseQuantity);
@@ -46,26 +46,26 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
     final result = await storageRepository.getStorageById(event.id);
     emit(_handleStorageResult(result));
   }
-
-  /// إضافة تخزين جديد
-  Future<void> _onAddStorage(
-      AddStorage event,
-      Emitter<StorageState> emit,
-      ) async {
-    emit(StorageOperationInProgress());
-    final result = await storageRepository.addStorage(event.storage);
-    emit(_handleStorageOperationResult(result));
-  }
-
-  /// تحديث تخزين موجود
-  Future<void> _onUpdateStorage(
-      UpdateStorage event,
-      Emitter<StorageState> emit,
-      ) async {
-    emit(StorageOperationInProgress());
-    final result = await storageRepository.updateStorage(event.storage);
-    emit(_handleStorageOperationResult(result));
-  }
+  //
+  // /// إضافة تخزين جديد
+  // Future<void> _onAddStorage(
+  //     AddStorage event,
+  //     Emitter<StorageState> emit,
+  //     ) async {
+  //   emit(StorageOperationInProgress());
+  //   final result = await storageRepository.addStorage(event.storage);
+  //   emit(_handleStorageOperationResult(result));
+  // }
+  //
+  // /// تحديث تخزين موجود
+  // Future<void> _onUpdateStorage(
+  //     UpdateStorage event,
+  //     Emitter<StorageState> emit,
+  //     ) async {
+  //   emit(StorageOperationInProgress());
+  //   final result = await storageRepository.updateStorage(event.storage);
+  //   emit(_handleStorageOperationResult(result));
+  // }
 
   /// حذف تخزين
   Future<void> _onDeleteStorage(
@@ -110,8 +110,8 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       ) async {
     emit(StorageLoading());
     final result = await storageRepository.searchStorages(
-      plantType: event.plantType,
-      plantShape: event.plantShape,
+      plantTypeName: event.plantTypeName,
+      plantShapeName: event.plantShapeName,
     );
     emit(_handleStorageListResult(result));
   }

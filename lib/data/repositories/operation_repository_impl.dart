@@ -3,20 +3,19 @@ import 'package:drift/drift.dart';
 import 'package:local_tammoz_chat/core/injection/service_locator.dart';
 import 'package:local_tammoz_chat/data/mappers/operation_mapper.dart';
 import 'package:local_tammoz_chat/data/mappers/operation_type_mapper.dart';
-import 'package:local_tammoz_chat/data/mappers/plant_type_mapper.dart';
 import 'package:local_tammoz_chat/domain/repositories/operation_repository.dart';
 
 import '../../domain/entities/operation.dart';
 import '../../domain/entities/operation_type.dart';
-import '../../domain/entities/plant_shape.dart';
-import '../../domain/entities/plant_type.dart';
 import '../../domain/failures/failures.dart';
 import '../../domain/failures/operation_failures.dart';
 import '../local/local_database.dart';
 import '../mappers/plant_shape_mapper.dart';
+import '../mappers/plant_type_mapper.dart';
 
 class OperationRepositoryImpl implements OperationRepository {
   final LocalDatabase _db = getIt<LocalDatabase>();
+
 
   @override
   Future<Either<Failure, List<Operation>>> getAllOperations() async {
@@ -35,6 +34,9 @@ class OperationRepositoryImpl implements OperationRepository {
             secondType.id.equalsExp(_db.operationsTable.secondTypeId)),
         leftOuterJoin(secondShape,
             secondShape.id.equalsExp(_db.operationsTable.secondShapeId)),
+
+        leftOuterJoin(_db.reservationsTable,
+            _db.reservationsTable.id.equalsExp(_db.operationsTable.reservationId)),
       ]);
 
       final rows = await query.get();
@@ -47,6 +49,7 @@ class OperationRepositoryImpl implements OperationRepository {
           row.readTable(_db.plantShapesTable),
           row.readTableOrNull(secondType),
           row.readTableOrNull(secondShape),
+          row.readTableOrNull(_db.reservationsTable),
         )
         );
       }).toList();
@@ -56,6 +59,8 @@ class OperationRepositoryImpl implements OperationRepository {
       return Left(OperationDatabaseFailure(message: 'حدث خطأ في قاعدة البيانات: ${e.toString()}', stackTrace: st));
     }
   }
+
+
 
   @override
   Future<Either<Failure, Operation>> getOperationById(int id) async {
@@ -74,6 +79,8 @@ class OperationRepositoryImpl implements OperationRepository {
             secondType.id.equalsExp(_db.operationsTable.secondTypeId)),
         leftOuterJoin(secondShape,
             secondShape.id.equalsExp(_db.operationsTable.secondShapeId)),
+        leftOuterJoin(_db.reservationsTable,
+            _db.reservationsTable.id.equalsExp(_db.operationsTable.reservationId)),
       ])
         ..where(_db.operationsTable.id.equals(id));
 
@@ -91,6 +98,7 @@ class OperationRepositoryImpl implements OperationRepository {
         row.readTable(_db.plantShapesTable),
         row.readTableOrNull(secondType),
         row.readTableOrNull(secondShape),
+        row.readTableOrNull(_db.reservationsTable),
       ));
 
       return Right(operation);
@@ -171,45 +179,6 @@ class OperationRepositoryImpl implements OperationRepository {
                 return OperationTypeMapper.toEntity(OperationTypeMapper.fromTableData(row));
               }).toList();
       return Right(operationTypes);
-    } catch (e, st) {
-      return Left(OperationDatabaseFailure(message: 'حدث خطأ في قاعدة البيانات: ${e.toString()}', stackTrace: st));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<PlantShape>>> getAllPlantShapes() async {
-    try {
-      final rows = await _db.select(_db.plantShapesTable).get();
-      final  plantShapes = rows.map(
-          (row){
-            return PlantShapeMapper.toEntity(PlantShapeMapper.fromTableData(row));
-          }).toList();
-      return Right(plantShapes);
-    } catch (e, st) {
-      return Left(OperationDatabaseFailure(message: 'حدث خطأ في قاعدة البيانات: ${e.toString()}', stackTrace: st));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<PlantType>>> getAllPlantTypes() async {
-    try {
-      final rows = await _db.select(_db.plantTypesTable).get();
-      final plantTypes = rows.map(
-          (row) {
-            return PlantTypeMapper.toEntity(PlantTypeMapper.fromTableData(row));
-          }).toList();
-      return Right(plantTypes);
-    } catch (e, st) {
-      return Left(OperationDatabaseFailure(message: 'حدث خطأ في قاعدة البيانات: ${e.toString()}', stackTrace: st));
-    }
-  }
-
-  @override
-  Future<Either<Failure, int>> addPlantType(PlantType plantType) async {
-    try {
-      final companion = PlantTypeMapper.toCompanion(PlantTypeMapper.fromEntity( plantType));
-      final id = await _db.into(_db.plantTypesTable).insert(companion);
-      return Right(id);
     } catch (e, st) {
       return Left(OperationDatabaseFailure(message: 'حدث خطأ في قاعدة البيانات: ${e.toString()}', stackTrace: st));
     }

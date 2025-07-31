@@ -55,8 +55,8 @@ class StorageSearchBarState extends State<StorageSearchBar> {
 
   void _search() {
     context.read<StorageBloc>().add(SearchStorages(
-      plantType: _plantTypeController.text.isNotEmpty ? _plantTypeController.text : null,
-      plantShape: _plantShapeController.text.isNotEmpty ? _plantShapeController.text : null,
+      plantTypeName: _plantTypeController.text.isNotEmpty ? _plantTypeController.text : null,
+      plantShapeName: _plantShapeController.text.isNotEmpty ? _plantShapeController.text : null,
     ));
   }
 }

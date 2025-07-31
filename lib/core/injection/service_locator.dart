@@ -17,12 +17,13 @@ import 'package:local_tammoz_chat/domain/repositories/setup_expense_repository.d
 import 'package:local_tammoz_chat/domain/usecases/add_setup_expense.dart';
 import 'package:local_tammoz_chat/domain/usecases/delete_setup_expense.dart';
 import 'package:local_tammoz_chat/domain/usecases/get_all_setup_expenses.dart';
-import 'package:local_tammoz_chat/domain/usecases/operation/add_operation.dart';
+import 'package:local_tammoz_chat/domain/usecases/operation/add_operation_usecase.dart';
 import 'package:local_tammoz_chat/domain/usecases/operation/find_operation_type_usecase.dart';
-import 'package:local_tammoz_chat/domain/usecases/reservation/create_reservation.dart';
-import 'package:local_tammoz_chat/domain/usecases/reservation/get_all_reservations.dart';
-import 'package:local_tammoz_chat/domain/usecases/reservation/get_all_slim_reservation.dart';
-import 'package:local_tammoz_chat/domain/usecases/reservation/get_reservation_by_id.dart';
+import 'package:local_tammoz_chat/domain/usecases/reservation/create_reservation_usecase.dart';
+import 'package:local_tammoz_chat/domain/usecases/reservation/get_all_reservations_usecase.dart';
+import 'package:local_tammoz_chat/domain/usecases/reservation/get_all_slim_reservation_usecase.dart';
+import 'package:local_tammoz_chat/domain/usecases/reservation/get_reservation_by_id_usecase.dart';
+import 'package:local_tammoz_chat/domain/usecases/storage/add_storage_usecase.dart';
 import 'package:local_tammoz_chat/presentation/Prices/bloc/price_bloc.dart';
 import 'package:local_tammoz_chat/presentation/expenses/bloc/setup_expense_bloc.dart';
 import 'package:local_tammoz_chat/presentation/operation/bloc/operation_bloc.dart';
@@ -83,17 +84,23 @@ getIt.registerLazySingleton<StorageRepository>(
   // تسجيل حالات الاستخدام
   getIt.registerLazySingleton(() => AddOperationAndUpdateStorageUseCase(
       operationRepository: getIt<OperationRepository>(),
-      storageRepository: getIt<StorageRepository>()));
+      storageRepository: getIt<StorageRepository>(),
+  plantShapeRepository: getIt<PlantShapeRepository>(),
+  plantTypeRerpository: getIt<PlantTypeRerpository>(),
+    addStorageUseCase: getIt<AddStorageUseCase>(),));
   getIt.registerLazySingleton(() => FindOperationTypeUseCase());
   getIt.registerLazySingleton(() => AddSetupExpense(getIt<SetupExpenseRepository>()));
   getIt.registerLazySingleton(() => DeleteSetupExpense(getIt<SetupExpenseRepository>()));
   getIt.registerLazySingleton(() => GetAllSetupExpenses(getIt<SetupExpenseRepository>()));
   getIt.registerLazySingleton(() => UpdateSetupExpense(getIt<SetupExpenseRepository>()));
-  getIt.registerLazySingleton(() => CreateReservation(getIt()));
-  getIt.registerLazySingleton(() => GetReservationById(getIt()));
-  getIt.registerLazySingleton(() => GetAllReservations(getIt()));
-  getIt.registerLazySingleton(() => GetAllSlimReservations(getIt()));
-
+  getIt.registerLazySingleton(() => CreateReservationUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetReservationByIdUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetAllReservationsUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetAllSlimReservationsUseCase(getIt()));
+  getIt.registerLazySingleton(() => AddStorageUseCase(
+      plantShapeRepository: getIt<PlantShapeRepository>(),
+      storageRepository: getIt<StorageRepository>())
+  );
   
   // blocs (and cubits)
   getIt.registerFactory<OperationBloc>(() => OperationBloc(
@@ -110,7 +117,10 @@ getIt.registerLazySingleton<StorageRepository>(
   );
 
 
-  getIt.registerFactory<OperationRelatedDataCubit>(() => OperationRelatedDataCubit(getIt<OperationRepository>()));
+  getIt.registerFactory<OperationRelatedDataCubit>(() => OperationRelatedDataCubit(
+      getIt<OperationRepository>(),
+      getIt<PlantTypeRerpository>(),
+      getIt<PlantShapeRepository>()));
 
 
   getIt.registerFactory(() => ReservationBloc(

@@ -21,13 +21,13 @@ class StorageDetailsDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildDetailRow('نوع النبات', storage.plantType),
-            _buildDetailRow('شكل النبات', storage.plantShape),
+            _buildDetailRow('نوع النبات', storage.plantType.name),
+            _buildDetailRow('شكل النبات', storage.plantShape.name),
             _buildDetailRow('الكمية', storage.quantity.toString()),
-            _buildDetailRow('العملية الأم', storage.parentOperationName),
+            //_buildDetailRow('العملية الأم', storage.parentOperationName),
             _buildDetailRow(
               'تاريخ العملية',
-              storage.parentOperationDate.toLocal().toString(),
+              storage.parentOperation.operationDate.toLocal().toString(),
             ),
             if (storage.notes?.isNotEmpty ?? false)
               _buildDetailRow('ملاحظات', storage.notes!),

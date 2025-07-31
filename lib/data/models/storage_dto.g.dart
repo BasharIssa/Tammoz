@@ -8,18 +8,17 @@ part of 'storage_dto.dart';
 
 StorageDto _$StorageDtoFromJson(Map<String, dynamic> json) => StorageDto(
       id: (json['id'] as num?)?.toInt(),
-      plantTypeId: (json['plantTypeId'] as num).toInt(),
-      plantTypeName: json['plantTypeName'] as String,
-      plantShapeId: (json['plantShapeId'] as num).toInt(),
-      plantShapeName: json['plantShapeName'] as String,
+      plantTypeDto:
+          PlantTypeDto.fromJson(json['plantTypeDto'] as Map<String, dynamic>),
+      plantShapeDto:
+          PlantShapeDto.fromJson(json['plantShapeDto'] as Map<String, dynamic>),
       quantity: (json['quantity'] as num).toInt(),
-      parentOperationId: (json['parentOperationId'] as num?)?.toInt(),
-      parentOperationDate: json['parentOperationDate'] == null
+      parentOperation: OperationBriefDto.fromJson(
+          json['parentOperation'] as Map<String, dynamic>),
+      reservation: json['reservation'] == null
           ? null
-          : DateTime.parse(json['parentOperationDate'] as String),
-      parentOperationName: json['parentOperationName'] as String?,
-      reservationId: (json['reservationId'] as num?)?.toInt(),
-      reserverFullName: json['reserverFullName'] as String?,
+          : ReservationBriefDto.fromJson(
+              json['reservation'] as Map<String, dynamic>),
       isScheduled: json['isScheduled'] as bool,
       notes: json['notes'] as String?,
     );
@@ -27,16 +26,11 @@ StorageDto _$StorageDtoFromJson(Map<String, dynamic> json) => StorageDto(
 Map<String, dynamic> _$StorageDtoToJson(StorageDto instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'plantTypeId': instance.plantTypeId,
-      'plantTypeName': instance.plantTypeName,
-      'plantShapeId': instance.plantShapeId,
-      'plantShapeName': instance.plantShapeName,
+      'plantTypeDto': instance.plantTypeDto,
+      'plantShapeDto': instance.plantShapeDto,
       'quantity': instance.quantity,
-      'parentOperationId': instance.parentOperationId,
-      'parentOperationDate': instance.parentOperationDate?.toIso8601String(),
-      'parentOperationName': instance.parentOperationName,
-      'reservationId': instance.reservationId,
-      'reserverFullName': instance.reserverFullName,
+      'parentOperation': instance.parentOperation,
+      'reservation': instance.reservation,
       'isScheduled': instance.isScheduled,
       'notes': instance.notes,
     };

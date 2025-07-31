@@ -28,8 +28,8 @@ abstract class StorageRepository {
   });
 
   Future<Either<Failure, List<Storage>>> searchStorages({
-    String? plantType,
-    String? plantShape,
+    String? plantTypeName,
+    String? plantShapeName,
   });
 
   Future<Either<Failure, bool>> checkQuantityAvailability({
